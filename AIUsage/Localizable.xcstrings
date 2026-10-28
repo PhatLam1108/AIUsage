@@ -1,0 +1,2824 @@
+{
+  "sourceLanguage": "vi",
+  "strings": {
+    "": {},
+    " ": {},
+    "% trên tổng 7 ngày": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "% of the 7-day total"
+          }
+        }
+      }
+    },
+    "%@ %@: còn %lld%%": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@: %lld%% left"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ %2$@: còn %3$lld%%"
+          }
+        }
+      }
+    },
+    "%@ %@: dự kiến hết %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@: expected to run out %@"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ %2$@: dự kiến hết %3$@"
+          }
+        }
+      }
+    },
+    "%@ %lld%%": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %lld%%"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ %2$lld%%"
+          }
+        }
+      }
+    },
+    "%@ - %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ - %@"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ - %2$@"
+          }
+        }
+      }
+    },
+    "%@ / %@ để lên tier kế tiếp": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ / %@ to the next tier"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ / %2$@ để lên tier kế tiếp"
+          }
+        }
+      }
+    },
+    "%@ chưa kết nối": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is not connected"
+          }
+        }
+      }
+    },
+    "%@ còn %lld%%": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %lld%% left"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ còn %2$lld%%"
+          }
+        }
+      }
+    },
+    "%@ cần đăng nhập lại": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ needs signing in again"
+          }
+        }
+      }
+    },
+    "%@ hết %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ runs out %@"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ hết %2$@"
+          }
+        }
+      }
+    },
+    "%@ · 5 giờ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · 5 hours"
+          }
+        }
+      }
+    },
+    "%@ · tuần": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · week"
+          }
+        }
+      }
+    },
+    "%@%%/giờ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@%%/hour"
+          }
+        }
+      }
+    },
+    "%@%%/ngày": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@%%/day"
+          }
+        }
+      }
+    },
+    "%@, gấp %@ lần mức trung bình.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@ times the average."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@, gấp %2$@ lần mức trung bình."
+          }
+        }
+      }
+    },
+    "%@: %@ token": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@ tokens"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@: %2$@ token"
+          }
+        }
+      }
+    },
+    "%@: còn %lld%%": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %lld%% left"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@: còn %2$lld%%"
+          }
+        }
+      }
+    },
+    "%@: còn %lld%%, reset sau %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %lld%% left, resets in %@"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@: còn %2$lld%%, reset sau %3$@"
+          }
+        }
+      }
+    },
+    "%@: dự kiến hết %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: expected to run out %@"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@: dự kiến hết %2$@"
+          }
+        }
+      }
+    },
+    "%@: đã dùng %lld%%, reset lúc %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %lld%% used, resets at %@."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@: đã dùng %2$lld%%, reset lúc %3$@."
+          }
+        }
+      }
+    },
+    "%lld": {},
+    "%lld lượt xong, %lld lỗi, %lld bị ngắt, %lld lệnh shell, %lld file sửa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld completed, %lld failed, %lld interrupted, %lld shell commands, %lld files changed"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld lượt xong, %2$lld lỗi, %3$lld bị ngắt, %4$lld lệnh shell, %5$lld file sửa"
+          }
+        }
+      }
+    },
+    "%lld phiên, %lld phản hồi": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld sessions, %lld responses"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld phiên, %2$lld phản hồi"
+          }
+        }
+      }
+    },
+    "%lld req, %@ vào, %@ ra, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld req, %@ in, %@ out, %@"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld req, %2$@ vào, %3$@ ra, %4$@"
+          }
+        }
+      }
+    },
+    "%lld request, %lld phiên": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld requests, %lld sessions"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld request, %2$lld phiên"
+          }
+        }
+      }
+    },
+    "%lld%%": {},
+    "22": {},
+    "24 giờ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 hours"
+          }
+        }
+      }
+    },
+    "24 giờ qua": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "last 24 hours"
+          }
+        }
+      }
+    },
+    "30 ngày qua: được cấp %lld, đã dùng %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last 30 days: %lld granted, %lld used"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "30 ngày qua: được cấp %1$lld, đã dùng %2$lld"
+          }
+        }
+      }
+    },
+    "30 ngày, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "30 days, %@"
+          }
+        }
+      }
+    },
+    "5 giờ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5 hours"
+          }
+        }
+      }
+    },
+    "7 ngày": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 days"
+          }
+        }
+      }
+    },
+    "999+": {},
+    "AI Studio báo %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI Studio reports %@"
+          }
+        }
+      }
+    },
+    "AI Usage": {},
+    "AIUsage: cài khoá SSH lên %@. Nhập mật khẩu của máy chủ khi được hỏi.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AIUsage: installing an SSH key on %@. Type the server password when asked."
+          }
+        }
+      }
+    },
+    "API credit": {},
+    "API credit Anthropic còn $%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anthropic API credit: $%@ left"
+          }
+        }
+      }
+    },
+    "Anthropic Console": {},
+    "Antigravity": {},
+    "Billing account": {},
+    "Billing account (tuỳ chọn, để mở đúng tài khoản trả tiền trên AI Studio): Billing > Account management, mã dạng 0123AB-456CDE-789F01.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Billing account (optional, so AI Studio opens the right paying account): Billing > Account management, in the form 0123AB-456CDE-789F01."
+          }
+        }
+      }
+    },
+    "Bảng BigQuery": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BigQuery table"
+          }
+        }
+      }
+    },
+    "Bảng BigQuery (tuỳ chọn, cho chi phí chính xác): Billing > Billing export > BigQuery export > Standard usage cost, chọn một dataset. Sau vài giờ sẽ có bảng gcp_billing_export_v1_…; điền dạng project.dataset.bảng.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BigQuery table (optional, for exact cost): Billing > Billing export > BigQuery export > Standard usage cost, pick a dataset. A gcp_billing_export_v1_… table appears after a few hours; enter it as project.dataset.table."
+          }
+        }
+      }
+    },
+    "Bảng BigQuery là tuỳ chọn, cho chi phí chính xác (đã gồm chiết khấu cache).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The BigQuery table is optional and gives exact cost (cache discounts included)."
+          }
+        }
+      }
+    },
+    "Bấm \"Thêm khoá service account…\" ở trên và chọn file đó. AIUsage cất khoá vào Keychain và tự điền Project ID; sau đó xoá file JSON trong Downloads.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click \"Add service account key…\" above and pick that file. AIUsage stores the key in the Keychain and fills in the Project ID; then delete the JSON file from Downloads."
+          }
+        }
+      }
+    },
+    "Bật những dịch vụ bạn dùng và đăng nhập từng cái. Mật khẩu và mã xác nhận luôn do bạn tự nhập trong cửa sổ của dịch vụ; AIUsage chỉ đọc số liệu sử dụng và lưu trên máy này.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn on the services you use and sign in to each one. You always type passwords and confirmation codes yourself, in the service's own window; AIUsage only reads usage numbers and keeps them on this Mac."
+          }
+        }
+      }
+    },
+    "CN": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sunday"
+          }
+        }
+      }
+    },
+    "ChatGPT / Codex": {},
+    "Chi Gemini hôm nay cao bất thường": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unusually high Gemini spend today"
+          }
+        }
+      }
+    },
+    "Chi phí ước tính từ token nhân bảng giá Google, có thể cao hơn AI Studio khoảng 10% vì token cache. Số chính xác lấy từ Billing export khi có.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cost is estimated as tokens times Google's prices and may run about 10% above AI Studio because of cached tokens. Exact figures come from the Billing export when available."
+          }
+        }
+      }
+    },
+    "Chi tháng này %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This month %@"
+          }
+        }
+      }
+    },
+    "Chưa có dữ liệu.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No data yet."
+          }
+        }
+      }
+    },
+    "Chưa có dữ liệu. Bấm làm mới.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No data yet. Click refresh."
+          }
+        }
+      }
+    },
+    "Chưa có lượt nào trong 24 giờ qua.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No turns in the last 24 hours."
+          }
+        }
+      }
+    },
+    "Chưa có lượt nào trong 7 ngày qua.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No turns in the last 7 days."
+          }
+        }
+      }
+    },
+    "Chưa có nhật ký Claude Code trong ~/.claude.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Claude Code logs in ~/.claude yet."
+          }
+        }
+      }
+    },
+    "Chưa có số liệu": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No data yet"
+          }
+        }
+      }
+    },
+    "Chưa có số liệu. Kiểm tra khoá service account trong cửa sổ Tài khoản.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No data yet. Check the service account key in the Accounts window."
+          }
+        }
+      }
+    },
+    "Chưa có số liệu. Đăng nhập trong cửa sổ Tài khoản.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No data yet. Sign in from the Accounts window."
+          }
+        }
+      }
+    },
+    "Chưa thiết lập": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not set up"
+          }
+        }
+      }
+    },
+    "Chưa thấy Codex CLI trên máy này.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Codex CLI not found on this Mac."
+          }
+        }
+      }
+    },
+    "Chưa thấy lệnh agy của Antigravity.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Antigravity's agy command not found."
+          }
+        }
+      }
+    },
+    "Chưa đăng nhập Codex trên máy này.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Codex is not signed in on this Mac."
+          }
+        }
+      }
+    },
+    "Chậm hơn nhịp %lld điểm": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld point behind pace"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld points behind pace"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Chỉ còn số cũ: lần gần nhất không kết nối được.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Old numbers only: the last attempt could not connect."
+          }
+        }
+      }
+    },
+    "Chỉ dùng được khi chạm giới hạn": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only usable at a limit"
+          }
+        }
+      }
+    },
+    "Chỉ dùng được khi đang chạm giới hạn.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only usable while at a limit."
+          }
+        }
+      }
+    },
+    "Chọn Continue with email; đăng nhập Google bị chặn trong cửa sổ nhúng. Dán mã xác nhận bằng Cmd+V.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose Continue with email; Google sign-in is blocked in an embedded window. Paste the confirmation code with Cmd+V."
+          }
+        }
+      }
+    },
+    "Chọn file JSON khoá service account của Google Cloud": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose the Google Cloud service account JSON key file"
+          }
+        }
+      }
+    },
+    "Chọn file khoá riêng (private key) dùng cho máy chủ này": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose the private key file for this server"
+          }
+        }
+      }
+    },
+    "Chọn khoá…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose key…"
+          }
+        }
+      }
+    },
+    "Claude": {},
+    "Claude Code": {},
+    "Claude theo giờ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude by hour"
+          }
+        }
+      }
+    },
+    "Claude/GPT · 5 giờ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude/GPT · 5 hours"
+          }
+        }
+      }
+    },
+    "Claude/GPT · tuần": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude/GPT · week"
+          }
+        }
+      }
+    },
+    "Codex CLI": {},
+    "Codex theo ngày và model": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Codex by day and model"
+          }
+        }
+      }
+    },
+    "Codex đang tắt.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Codex is off."
+          }
+        }
+      }
+    },
+    "Credit được cấp lại khi gia hạn gói Max.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Credit is refilled when the Max plan renews."
+          }
+        }
+      }
+    },
+    "Cuối tháng khoảng %@, trung bình %@/ngày": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About %@ by month end, %@/day on average"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Cuối tháng khoảng %1$@, trung bình %2$@/ngày"
+          }
+        }
+      }
+    },
+    "Cài Codex CLI": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Install Codex CLI"
+          }
+        }
+      }
+    },
+    "Cài Command Line Tools": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Install Command Line Tools"
+          }
+        }
+      }
+    },
+    "Cài khoá SSH…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Install SSH key…"
+          }
+        }
+      }
+    },
+    "Cài lại phần chạy nền": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reinstall background runtime"
+          }
+        }
+      }
+    },
+    "Các khung 5 giờ gần đây": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recent 5-hour windows"
+          }
+        }
+      }
+    },
+    "Còn %lld lượt reset": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld limit reset left"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld limit resets left"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Còn %lld lượt reset Claude": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Claude limit reset left"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Claude limit resets left"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Còn %lld lượt reset Codex": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Codex limit reset left"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Codex limit resets left"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Còn dùng được %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Room for %@"
+          }
+        }
+      }
+    },
+    "Cấp lại khi gia hạn Max": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refilled on Max renewal"
+          }
+        }
+      }
+    },
+    "Cấp quyền chỉ đọc cho service account: Monitoring Viewer. Nếu dùng BigQuery thì thêm BigQuery Data Viewer và BigQuery Job User.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Give the service account read-only roles: Monitoring Viewer. If you use BigQuery, add BigQuery Data Viewer and BigQuery Job User."
+          }
+        }
+      }
+    },
+    "Cấu hình lưu ở ~/Library/Application Support/AIUsage/config.json": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings are saved in ~/Library/Application Support/AIUsage/config.json"
+          }
+        }
+      }
+    },
+    "Cần Python 3 từ Command Line Tools của Apple.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Python 3 from Apple's Command Line Tools is required."
+          }
+        }
+      }
+    },
+    "Cần đăng nhập": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign-in needed"
+          }
+        }
+      }
+    },
+    "Cập nhật lúc %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Updated at %@"
+          }
+        }
+      }
+    },
+    "Dùng /compact giữa chừng, /clear khi đổi việc.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use /compact midway, /clear when switching tasks."
+          }
+        }
+      }
+    },
+    "Dùng 1 lượt reset Codex?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use 1 Codex limit reset?"
+          }
+        }
+      }
+    },
+    "Dùng lượt reset": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use reset"
+          }
+        }
+      }
+    },
+    "Dùng trên trang usage của claude.ai": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Used on claude.ai's usage page"
+          }
+        }
+      }
+    },
+    "Dùng được ngay": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usable now"
+          }
+        }
+      }
+    },
+    "Dùng được ngay.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usable now."
+          }
+        }
+      }
+    },
+    "Dùng ở mục Limit resets trên trang usage của claude.ai.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use it under Limit resets on claude.ai's usage page."
+          }
+        }
+      }
+    },
+    "Dư dả": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comfortable"
+          }
+        }
+      }
+    },
+    "Dư dả, dùng chậm hơn nhịp": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comfortable, below the even pace"
+          }
+        }
+      }
+    },
+    "Dịch vụ chưa báo số này": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not reported by the service"
+          }
+        }
+      }
+    },
+    "Dữ liệu cũ: lần lấy số thành công gần nhất của nguồn này": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stale data: the last successful fetch of this source"
+          }
+        }
+      }
+    },
+    "File này không phải khoá service account của Google Cloud.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This file is not a Google Cloud service account key."
+          }
+        }
+      }
+    },
+    "Gemini API": {},
+    "Gemini theo ngày": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gemini by day"
+          }
+        }
+      }
+    },
+    "Giới hạn tuần và 5 giờ của Codex sẽ được đặt lại ngay. Sau lần này còn %lld lượt.": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Codex's weekly and 5-hour limits will be reset now. %lld reset will be left after this."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Codex's weekly and 5-hour limits will be reset now. %lld resets will be left after this."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Giữ dưới %@ để không chạm trần trước giờ reset.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stay under %@ to avoid the limit before the reset."
+          }
+        }
+      }
+    },
+    "Google AI Studio cần đăng nhập lại": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Google AI Studio needs signing in again"
+          }
+        }
+      }
+    },
+    "Huỷ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "Hướng dẫn tạo khoá service account (5 phút)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How to create a service account key (5 minutes)"
+          }
+        }
+      }
+    },
+    "Hạn mức 5 giờ và tuần, lượt reset, lịch sử 7 ngày, qua tài khoản ChatGPT của Codex.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5-hour and weekly limits, limit resets, 7-day history, through Codex's ChatGPT account."
+          }
+        }
+      }
+    },
+    "Hạn mức 5 giờ và tuần, đọc từ claude.ai/settings/usage.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5-hour and weekly limits, read from claude.ai/settings/usage."
+          }
+        }
+      }
+    },
+    "Hạn mức Gemini và Claude+GPT trong Antigravity, đọc bằng lệnh agy.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gemini and Claude+GPT limits in Antigravity, read with the agy command."
+          }
+        }
+      }
+    },
+    "Hết hạn %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expires %@"
+          }
+        }
+      }
+    },
+    "Hết lượt reset": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No limit resets left"
+          }
+        }
+      }
+    },
+    "Khoá chỉ có quyền đọc số liệu, không tạo hay xoá được gì. Có thể thu hồi bất cứ lúc nào ở tab Keys.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The key can only read usage data; it cannot create or delete anything. Revoke it at any time in the Keys tab."
+          }
+        }
+      }
+    },
+    "Khoá: mặc định của ssh": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Key: ssh default"
+          }
+        }
+      }
+    },
+    "Khoảng thời gian": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Period"
+          }
+        }
+      }
+    },
+    "Khoảng thời gian cho phần phân tích Claude Code và Codex CLI": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Period for the Claude Code and Codex CLI analytics"
+          }
+        }
+      }
+    },
+    "Không SSH được bằng khoá. Bấm Cài khoá SSH để cài khoá lên máy này.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Key-based SSH failed. Click Install SSH key to put a key on this server."
+          }
+        }
+      }
+    },
+    "Không chạy subagent nào.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No subagents ran."
+          }
+        }
+      }
+    },
+    "Không có phiên Claude Code nào trong 24 giờ qua.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Claude Code sessions in the last 24 hours."
+          }
+        }
+      }
+    },
+    "Không có phiên Claude Code nào trong 7 ngày qua.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Claude Code sessions in the last 7 days."
+          }
+        }
+      }
+    },
+    "Không kết nối được máy %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not reach %@"
+          }
+        }
+      }
+    },
+    "Không đọc được config.json nên AIUsage sẽ không ghi đè nó. Bản gốc được giữ ở config.json.unreadable; sửa hoặc xoá file rồi mở lại cửa sổ này.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "config.json could not be read, so AIUsage will not overwrite it. The original is kept as config.json.unreadable; fix or delete the file, then reopen this window."
+          }
+        }
+      }
+    },
+    "Không đọc được số dư credit.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not read the credit balance."
+          }
+        }
+      }
+    },
+    "Kiểm tra": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check"
+          }
+        }
+      }
+    },
+    "Kết nối được. Đang lấy số liệu từ máy này.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected. Fetching data from this server."
+          }
+        }
+      }
+    },
+    "Làm mới": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh"
+          }
+        }
+      }
+    },
+    "Làm mới %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh %@"
+          }
+        }
+      }
+    },
+    "Làm mới tất cả nguồn": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh all sources"
+          }
+        }
+      }
+    },
+    "Lưu": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        }
+      }
+    },
+    "Lượt gần nhất hết hạn %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The next one expires %@."
+          }
+        }
+      }
+    },
+    "Lượt này đã được dùng trước đó.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This reset had already been used."
+          }
+        }
+      }
+    },
+    "Lấy số ngay": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fetch now"
+          }
+        }
+      }
+    },
+    "Lần cuối: %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last: %@."
+          }
+        }
+      }
+    },
+    "Lần lấy số liệu gần nhất": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last fetch"
+          }
+        }
+      }
+    },
+    "Lần lấy thành công gần nhất: %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last successful fetch: %@."
+          }
+        }
+      }
+    },
+    "Lần đầu chạy, agy hướng dẫn đăng nhập Google. Đăng nhập xong thoát agy rồi bấm làm mới.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On first run agy walks you through Google sign-in. Once signed in, quit agy and click refresh."
+          }
+        }
+      }
+    },
+    "Lệnh codex login mở trình duyệt để đăng nhập ChatGPT. Xong thì bấm làm mới.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "codex login opens the browser to sign in to ChatGPT. Then click refresh."
+          }
+        }
+      }
+    },
+    "Lịch làm mới nền chưa chạy.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The background refresh schedule is not running."
+          }
+        }
+      }
+    },
+    "Máy chủ từ xa (SSH)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remote servers (SSH)"
+          }
+        }
+      }
+    },
+    "Mọi thứ ổn: không hạn mức nào sắp chạm trần, số liệu đều mới.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All good: no limit is close to running out and all data is fresh."
+          }
+        }
+      }
+    },
+    "Mỗi máy chủ đăng nhập bằng khoá SSH riêng, không lưu mật khẩu. Chưa có khoá thì bấm Cài khoá SSH: Terminal mở ra để bạn nhập mật khẩu máy chủ một lần. Có thể điền tên trong ~/.ssh/config vào ô Địa chỉ.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each server signs in with its own SSH key; no passwords are stored. No key yet? Click Install SSH key: Terminal opens so you can type the server password once. You can enter a name from ~/.ssh/config as the address."
+          }
+        }
+      }
+    },
+    "Mở AI Studio · API keys": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open AI Studio · API keys"
+          }
+        }
+      }
+    },
+    "Mở Billing": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Billing"
+          }
+        }
+      }
+    },
+    "Mở Billing export": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Billing export"
+          }
+        }
+      }
+    },
+    "Mở Google AI Studio, trang API keys, xem project chứa khoá API bạn đang dùng. Ghi lại Project ID (dạng gen-lang-client-0123456789).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Google AI Studio, API keys page, and find the project that holds the API key you use. Note its Project ID (like gen-lang-client-0123456789)."
+          }
+        }
+      }
+    },
+    "Mở Service Accounts": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Service Accounts"
+          }
+        }
+      }
+    },
+    "Mở Tài khoản": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Accounts"
+          }
+        }
+      }
+    },
+    "Mở agy để đăng nhập": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open agy to sign in"
+          }
+        }
+      }
+    },
+    "Mở service account vừa tạo > tab Keys > Add key > Create new key > JSON. File JSON được tải về máy.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the new service account > Keys tab > Add key > Create new key > JSON. The JSON file is downloaded."
+          }
+        }
+      }
+    },
+    "Mở thư mục": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open folder"
+          }
+        }
+      }
+    },
+    "Mở thư viện API": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open API library"
+          }
+        }
+      }
+    },
+    "Mở trang reset": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open reset page"
+          }
+        }
+      }
+    },
+    "Nguồn này đang tắt trong cửa sổ Tài khoản.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This source is switched off in the Accounts window."
+          }
+        }
+      }
+    },
+    "Nguồn: ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sources: "
+          }
+        }
+      }
+    },
+    "Nhanh hơn nhịp %lld điểm": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld point ahead of pace"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld points ahead of pace"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Nếu dùng đều, lúc này mới tới %lld%%.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At an even pace you would be at %lld%% now."
+          }
+        }
+      }
+    },
+    "Phiên dài và phiên chạy nền cộng dồn rất nhanh.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Long and background sessions add up fast."
+          }
+        }
+      }
+    },
+    "Phiên đăng nhập đã hết hạn nên số liệu không cập nhật.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The session expired, so the numbers are not updating."
+          }
+        }
+      }
+    },
+    "Phân tích Claude Code và Codex": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude Code and Codex analytics"
+          }
+        }
+      }
+    },
+    "Phân tích Claude Code đang tắt.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude Code analytics is off."
+          }
+        }
+      }
+    },
+    "Phần chạy nền": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Background runtime"
+          }
+        }
+      }
+    },
+    "Project ID": {},
+    "Reset Codex thất bại: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Codex reset failed: %@"
+          }
+        }
+      }
+    },
+    "Reset sau %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resets in %@."
+          }
+        }
+      }
+    },
+    "SSH được nhưng máy này chưa có python3.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SSH works but this server has no python3."
+          }
+        }
+      }
+    },
+    "Script làm mới mỗi 5 phút và khi bấm làm mới.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scripts refresh every 5 minutes and when you click refresh."
+          }
+        }
+      }
+    },
+    "Số dư Gemini còn đủ khoảng %lld ngày": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Gemini balance lasts about %lld more day"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Gemini balance lasts about %lld more days"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Số dư chia cho mức chi trung bình 7 ngày": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Balance divided by the 7-day average spend"
+          }
+        }
+      }
+    },
+    "Số dư credit": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Credit balance"
+          }
+        }
+      }
+    },
+    "Số dư credit trên Google AI Studio; chi phí theo ngày và model khi có khoá service account.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Credit balance on Google AI Studio; cost by day and model with a service account key."
+          }
+        }
+      }
+    },
+    "Số dư credit, số cũ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Credit balance, old figure"
+          }
+        }
+      }
+    },
+    "Số dư tín dụng API (gói Max tặng 200 USD mỗi tháng), đọc từ platform.claude.com.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API credit balance (the Max plan grants USD 200 a month), read from platform.claude.com."
+          }
+        }
+      }
+    },
+    "Số liệu %@ đã cũ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ data is stale"
+          }
+        }
+      }
+    },
+    "Số liệu Claude Code của máy này đang là số cũ.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude Code numbers from this server are old."
+          }
+        }
+      }
+    },
+    "Số mới có ở lần làm mới tới": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New numbers arrive with the next refresh"
+          }
+        }
+      }
+    },
+    "T2": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mon"
+          }
+        }
+      }
+    },
+    "T3": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tue"
+          }
+        }
+      }
+    },
+    "T4": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wed"
+          }
+        }
+      }
+    },
+    "T5": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thu"
+          }
+        }
+      }
+    },
+    "T6": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fri"
+          }
+        }
+      }
+    },
+    "T7": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sat"
+          }
+        }
+      }
+    },
+    "Thay khoá service account…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replace service account key…"
+          }
+        }
+      }
+    },
+    "Theo mức chi trung bình 7 ngày: %@/ngày.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At the 7-day average spend: %@/day."
+          }
+        }
+      }
+    },
+    "Thêm khoá service account…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add service account key…"
+          }
+        }
+      }
+    },
+    "Thêm máy chủ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add server"
+          }
+        }
+      }
+    },
+    "Tiền tệ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Currency"
+          }
+        }
+      }
+    },
+    "Trong Google Cloud Console, chọn đúng project đó, bật ba API: Cloud Monitoring API, Cloud Billing API, BigQuery API.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the Google Cloud Console, select that project and enable three APIs: Cloud Monitoring API, Cloud Billing API, BigQuery API."
+          }
+        }
+      }
+    },
+    "Tuần": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week"
+          }
+        }
+      }
+    },
+    "Tài khoản": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accounts"
+          }
+        }
+      }
+    },
+    "Tên (tuỳ chọn)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name (optional)"
+          }
+        }
+      }
+    },
+    "Tải Antigravity": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download Antigravity"
+          }
+        }
+      }
+    },
+    "Vào IAM & Admin > Service Accounts > Create service account. Đặt tên, ví dụ aiusage-reader.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go to IAM & Admin > Service Accounts > Create service account. Name it, for example aiusage-reader."
+          }
+        }
+      }
+    },
+    "Xong. Quay lại AIUsage và bấm Kiểm tra.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done. Go back to AIUsage and click Check."
+          }
+        }
+      }
+    },
+    "Xoá máy chủ này": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove this server"
+          }
+        }
+      }
+    },
+    "calendar.sun": {
+      "comment": "Sunday column of the spending calendar",
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sun"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "CN"
+          }
+        }
+      }
+    },
+    "cao nhất %@h, %lld%%": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "peak at %@h, %lld%%"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "cao nhất %1$@h, %2$lld%%"
+          }
+        }
+      }
+    },
+    "chiều %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ afternoon"
+          }
+        }
+      }
+    },
+    "chiều mai": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tomorrow afternoon"
+          }
+        }
+      }
+    },
+    "chính xác tới %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "exact up to %@"
+          }
+        }
+      }
+    },
+    "chưa có giá": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "no price yet"
+          }
+        }
+      }
+    },
+    "chạm trần %lld/%lld lần, 7 ngày": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "hit the limit %lld/%lld times, 7 days"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "chạm trần %1$lld/%2$lld lần, 7 ngày"
+          }
+        }
+      }
+    },
+    "context max": {},
+    "còn %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ left"
+          }
+        }
+      }
+    },
+    "hôm nay": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "today"
+          }
+        }
+      }
+    },
+    "hôm nay, ước tính": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "today, estimated"
+          }
+        }
+      }
+    },
+    "khác": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "other"
+          }
+        }
+      }
+    },
+    "lúc %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "at %@"
+          }
+        }
+      }
+    },
+    "lượt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "turns"
+          }
+        }
+      }
+    },
+    "lần gần nhất %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "last on %@"
+          }
+        }
+      }
+    },
+    "máy này": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "this Mac"
+          }
+        }
+      }
+    },
+    "mỗi lượt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "per turn"
+          }
+        }
+      }
+    },
+    "ngày còn đủ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "days left"
+          }
+        }
+      }
+    },
+    "nhiều": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "more"
+          }
+        }
+      }
+    },
+    "sáng %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ morning"
+          }
+        }
+      }
+    },
+    "sáng mai": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tomorrow morning"
+          }
+        }
+      }
+    },
+    "số chính xác": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "exact figures"
+          }
+        }
+      }
+    },
+    "số cũ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "old figures"
+          }
+        }
+      }
+    },
+    "tháng này": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "this month"
+          }
+        }
+      }
+    },
+    "thứ 2": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monday"
+          }
+        }
+      }
+    },
+    "thứ 3": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuesday"
+          }
+        }
+      }
+    },
+    "thứ 4": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wednesday"
+          }
+        }
+      }
+    },
+    "thứ 5": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thursday"
+          }
+        }
+      }
+    },
+    "thứ 6": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friday"
+          }
+        }
+      }
+    },
+    "thứ 7": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saturday"
+          }
+        }
+      }
+    },
+    "token": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tokens"
+          }
+        }
+      }
+    },
+    "trên %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "of %@"
+          }
+        }
+      }
+    },
+    "tối %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ evening"
+          }
+        }
+      }
+    },
+    "tối mai": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tomorrow evening"
+          }
+        }
+      }
+    },
+    "từ phiên chạy liên tục 8 giờ trở lên": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "from sessions running 8 hours or more"
+          }
+        }
+      }
+    },
+    "từ phiên dùng nhiều subagent": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "from sessions with many subagents"
+          }
+        }
+      }
+    },
+    "user": {},
+    "ít": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "less"
+          }
+        }
+      }
+    },
+    "Đang chờ lần lấy số đầu tiên.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for the first fetch."
+          }
+        }
+      }
+    },
+    "Đang chờ lần phân tích đầu tiên.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for the first analysis."
+          }
+        }
+      }
+    },
+    "Đang chờ đăng nhập": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for sign-in"
+          }
+        }
+      }
+    },
+    "Đang dùng %lld%%, nhanh hơn nhịp đều.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At %lld%%, ahead of the even pace."
+          }
+        }
+      }
+    },
+    "Đang lấy số liệu…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fetching data…"
+          }
+        }
+      }
+    },
+    "Đang mở cửa sổ đăng nhập…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opening the sign-in window…"
+          }
+        }
+      }
+    },
+    "Đang tắt. Bật và nhập khoá service account trong cửa sổ Tài khoản (có hướng dẫn từng bước).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off. Turn it on and add a service account key in the Accounts window (step-by-step guide included)."
+          }
+        }
+      }
+    },
+    "Đang đọc được.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading fine."
+          }
+        }
+      }
+    },
+    "Điều gì đang ăn quota": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What is eating the quota"
+          }
+        }
+      }
+    },
+    "Đã cài lại phần chạy nền.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Background runtime reinstalled."
+          }
+        }
+      }
+    },
+    "Đã kết nối": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected"
+          }
+        }
+      }
+    },
+    "Đã lưu khoá vào Keychain.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Key saved to the Keychain."
+          }
+        }
+      }
+    },
+    "Đã reset giới hạn Codex.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Codex limits reset."
+          }
+        }
+      }
+    },
+    "Đã tắt": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
+          }
+        }
+      }
+    },
+    "Đã tới giờ reset": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset time reached"
+          }
+        }
+      }
+    },
+    "Đã đăng nhập, đang chờ lần lấy số đầu tiên.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signed in, waiting for the first fetch."
+          }
+        }
+      }
+    },
+    "Đúng nhịp đều": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On the even pace"
+          }
+        }
+      }
+    },
+    "Đăng nhập": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in"
+          }
+        }
+      }
+    },
+    "Đăng nhập Anthropic Console để thấy số dư tín dụng API.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to the Anthropic Console to see the API credit balance."
+          }
+        }
+      }
+    },
+    "Đăng nhập Console": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to Console"
+          }
+        }
+      }
+    },
+    "Đăng nhập Google AI Studio": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to Google AI Studio"
+          }
+        }
+      }
+    },
+    "Đăng nhập Google AI Studio, thêm khoá service account nếu muốn có chi phí theo model.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to Google AI Studio, and add a service account key for cost by model."
+          }
+        }
+      }
+    },
+    "Đăng nhập claude.ai": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to claude.ai"
+          }
+        }
+      }
+    },
+    "Đăng nhập claude.ai một lần trong cửa sổ của AIUsage.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to claude.ai once in AIUsage's window."
+          }
+        }
+      }
+    },
+    "Đăng nhập lại": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in again"
+          }
+        }
+      }
+    },
+    "Đăng nhập lại trong cửa sổ Tài khoản.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in again from the Accounts window."
+          }
+        }
+      }
+    },
+    "Đăng nhập trong Terminal": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in in Terminal"
+          }
+        }
+      }
+    },
+    "Địa chỉ hoặc alias": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Address or alias"
+          }
+        }
+      }
+    },
+    "Đọc nhật ký phiên trên máy này, trong Cowork và trên máy chủ từ xa qua SSH. Không cần đăng nhập.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reads session logs on this Mac, in Cowork and on remote servers over SSH. No sign-in needed."
+          }
+        }
+      }
+    },
+    "đang reset": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "resetting"
+          }
+        }
+      }
+    },
+    "Ước tính từ các phiên Claude Code; không gồm chat trên claude.ai.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estimated from Claude Code sessions; claude.ai chats are not included."
+          }
+        }
+      }
+    },
+    "ước tính": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "estimated"
+          }
+        }
+      }
+    },
+    "ở context trên 150k token": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in contexts above 150k tokens"
+          }
+        }
+      }
+    },
+    "–": {}
+  },
+  "version": "1.0"
+}

@@ -1,0 +1,437 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 110;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5A11ED000000000000000062 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 5A11ED000000000000000061 /* Localizable.xcstrings */; };
+		5A11ED000000000000000064 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 5A11ED000000000000000063 /* Localizable.xcstrings */; };
+		5A11ED000000000000000054 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A11ED000000000000000053 /* Components.swift */; };
+		5A11ED000000000000000052 /* DashboardStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A11ED000000000000000051 /* DashboardStore.swift */; };
+		001BC1EC8C174E3C9BF6ED16 /* AIUsageWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93214E15640F4060B9484EBC /* AIUsageWidget.swift */; };
+		527F2AD3EF3B4EB99F7A7BCA /* AIUsageWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A3D3956385664B319A3EBE17 /* AIUsageWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		65D4A614872A4C18BE5E6305 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B8140DD086D440B7B28A4EE9 /* Assets.xcassets */; };
+		98142AF55601424DABA82BC4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B945657F95EB49DFBFDEB943 /* Assets.xcassets */; };
+		DA8A7E0DB91149BC9F974A2A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBBC214D71C4315A41DCE26 /* ContentView.swift */; };
+		F63712EDD9F9476DB9A4D93E /* AIUsageApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A185CF2FD65C44F5B2C887A7 /* AIUsageApp.swift */; };
+		5A11ED000000000000000002 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A11ED000000000000000001 /* Shared.swift */; };
+		5A11ED000000000000000003 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A11ED000000000000000001 /* Shared.swift */; };
+		5A11ED000000000000000012 /* Runtime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A11ED000000000000000011 /* Runtime.swift */; };
+		5A11ED000000000000000022 /* AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A11ED000000000000000021 /* AccountsView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		814E3094257D49FDB433AC2C /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "";
+			dstSubfolder = PlugIns;
+			files = (
+				527F2AD3EF3B4EB99F7A7BCA /* AIUsageWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		5A11ED000000000000000061 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		5A11ED000000000000000063 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		5A11ED000000000000000053 /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		5A11ED000000000000000051 /* DashboardStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardStore.swift; sourceTree = "<group>"; };
+		1CE62EABBB024D17B1263C32 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2DBBC214D71C4315A41DCE26 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		5A11ED000000000000000001 /* Shared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
+		7A1F3C2D4B8E4A9F8C1D2E3F /* AIUsageWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AIUsageWidget.entitlements; sourceTree = "<group>"; };
+		93214E15640F4060B9484EBC /* AIUsageWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIUsageWidget.swift; sourceTree = "<group>"; };
+		9D27A2AFBF524E0487D10840 /* AIUsage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIUsage.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A185CF2FD65C44F5B2C887A7 /* AIUsageApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIUsageApp.swift; sourceTree = "<group>"; };
+		A3D3956385664B319A3EBE17 /* AIUsageWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AIUsageWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		B8140DD086D440B7B28A4EE9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B945657F95EB49DFBFDEB943 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5A11ED000000000000000011 /* Runtime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runtime.swift; sourceTree = "<group>"; };
+		5A11ED000000000000000021 /* AccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		19B522A864FB46D6A04C0B78 /* AIUsage */ = {
+			isa = PBXGroup;
+			children = (
+				A185CF2FD65C44F5B2C887A7 /* AIUsageApp.swift */,
+				2DBBC214D71C4315A41DCE26 /* ContentView.swift */,
+				5A11ED000000000000000001 /* Shared.swift */,
+				5A11ED000000000000000011 /* Runtime.swift */,
+				5A11ED000000000000000021 /* AccountsView.swift */,
+				5A11ED000000000000000053 /* Components.swift */,
+				5A11ED000000000000000051 /* DashboardStore.swift */,
+				B945657F95EB49DFBFDEB943 /* Assets.xcassets */,
+				5A11ED000000000000000061 /* Localizable.xcstrings */,
+			);
+			path = AIUsage;
+			sourceTree = "<group>";
+		};
+		2D45605B85574DCEAB240288 = {
+			isa = PBXGroup;
+			children = (
+				19B522A864FB46D6A04C0B78 /* AIUsage */,
+				39FC0930B5854CF38DC59AEB /* AIUsageWidget */,
+				F74F475E159F43BDAC8E1A36 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		39FC0930B5854CF38DC59AEB /* AIUsageWidget */ = {
+			isa = PBXGroup;
+			children = (
+				93214E15640F4060B9484EBC /* AIUsageWidget.swift */,
+				B8140DD086D440B7B28A4EE9 /* Assets.xcassets */,
+				5A11ED000000000000000063 /* Localizable.xcstrings */,
+				1CE62EABBB024D17B1263C32 /* Info.plist */,
+				7A1F3C2D4B8E4A9F8C1D2E3F /* AIUsageWidget.entitlements */,
+			);
+			path = AIUsageWidget;
+			sourceTree = "<group>";
+		};
+		F74F475E159F43BDAC8E1A36 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9D27A2AFBF524E0487D10840 /* AIUsage.app */,
+				A3D3956385664B319A3EBE17 /* AIUsageWidgetExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BE52108D0708423F94F59A2E /* AIUsage */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EAF6267C15B84F15A09A99BD /* Build configuration list for PBXNativeTarget "AIUsage" */;
+			buildPhases = (
+				36EE2668CA7A4517A648F18E /* Sources */,
+				F5453B49C330463DB8BA5C8A /* Resources */,
+				5A11ED000000000000000031 /* Bundle runtime */,
+				814E3094257D49FDB433AC2C /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			name = AIUsage;
+			productName = AIUsage;
+			productReference = 9D27A2AFBF524E0487D10840 /* AIUsage.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E63E22B982414DAB84F7E18F /* AIUsageWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C6EC973866E4485CACDE282A /* Build configuration list for PBXNativeTarget "AIUsageWidgetExtension" */;
+			buildPhases = (
+				C5340DD6ED894BECA850FF15 /* Sources */,
+				6661A675D26F412A8F5DF7B5 /* Resources */,
+			);
+			buildRules = (
+			);
+			name = AIUsageWidgetExtension;
+			productName = AIUsageWidgetExtension;
+			productReference = A3D3956385664B319A3EBE17 /* AIUsageWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4A6163AEE6C74B128C50A99F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					BE52108D0708423F94F59A2E = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					E63E22B982414DAB84F7E18F = {
+						CreatedOnToolsVersion = 15.4;
+					};
+				};
+			};
+			buildConfigurationList = F42B77BFBAEC43D4BE594C74 /* Build configuration list for PBXProject "AIUsage" */;
+			developmentRegion = vi;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				vi,
+				en,
+				Base,
+			);
+			mainGroup = 2D45605B85574DCEAB240288;
+			preferredProjectObjectVersion = 110;
+			productRefGroup = F74F475E159F43BDAC8E1A36 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BE52108D0708423F94F59A2E /* AIUsage */,
+				E63E22B982414DAB84F7E18F /* AIUsageWidgetExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6661A675D26F412A8F5DF7B5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+				65D4A614872A4C18BE5E6305 /* Assets.xcassets in Resources */,
+				5A11ED000000000000000064 /* Localizable.xcstrings in Resources */,
+			);
+		};
+		F5453B49C330463DB8BA5C8A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+				98142AF55601424DABA82BC4 /* Assets.xcassets in Resources */,
+				5A11ED000000000000000062 /* Localizable.xcstrings in Resources */,
+			);
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5A11ED000000000000000031 /* Bundle runtime */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle runtime";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "\"$PROJECT_DIR/scripts/bundle-runtime.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		36EE2668CA7A4517A648F18E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+				DA8A7E0DB91149BC9F974A2A /* ContentView.swift in Sources */,
+				F63712EDD9F9476DB9A4D93E /* AIUsageApp.swift in Sources */,
+				5A11ED000000000000000002 /* Shared.swift in Sources */,
+				5A11ED000000000000000012 /* Runtime.swift in Sources */,
+				5A11ED000000000000000022 /* AccountsView.swift in Sources */,
+				5A11ED000000000000000054 /* Components.swift in Sources */,
+				5A11ED000000000000000052 /* DashboardStore.swift in Sources */,
+			);
+		};
+		C5340DD6ED894BECA850FF15 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+				001BC1EC8C174E3C9BF6ED16 /* AIUsageWidget.swift in Sources */,
+				5A11ED000000000000000003 /* Shared.swift in Sources */,
+			);
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		09F844C45FFA4FE586F8C1EB /* Debug configuration for PBXNativeTarget "AIUsage" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSDIR = "$(PROJECT_DIR)/$(BUILT_PRODUCTS_DIR)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "AIUsage connects over SSH to the servers you add in Accounts to read Claude Code and Codex session statistics.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LE_SWIFT_VERSION = 5.0;
+				MARKETING_VERSION = 0.9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stevenlam.AIUsage;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		4C9496D35966405CA67AC7D9 /* Debug configuration for PBXProject "AIUsage" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSET_CATALOG_COMPILER_OPTIMIZATION = space;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = ZWT6AC4CDC;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		86F56DFE96A5427B851DDD52 /* Release configuration for PBXProject "AIUsage" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSET_CATALOG_COMPILER_OPTIMIZATION = space;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = ZWT6AC4CDC;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+			};
+			name = Release;
+		};
+		8FB153F6B06448C489B916F7 /* Release configuration for PBXNativeTarget "AIUsage" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "AIUsage connects over SSH to the servers you add in Accounts to read Claude Code and Codex session statistics.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LE_SWIFT_VERSION = 5.0;
+				MARKETING_VERSION = 0.9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stevenlam.AIUsage;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		B320F5DCA04D46C2AA581769 /* Debug configuration for PBXNativeTarget "AIUsageWidgetExtension" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AIUsageWidget/AIUsageWidget.entitlements;
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AIUsageWidget/Info.plist;
+				LE_SWIFT_VERSION = 5.0;
+				MARKETING_VERSION = 0.9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stevenlam.AIUsage.AIUsageWidgetV2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		B5F1233A09FA415BB6999F41 /* Release configuration for PBXNativeTarget "AIUsageWidgetExtension" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = AIUsageWidget/AIUsageWidget.entitlements;
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = AIUsageWidget/Info.plist;
+				LE_SWIFT_VERSION = 5.0;
+				MARKETING_VERSION = 0.9.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stevenlam.AIUsage.AIUsageWidgetV2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C6EC973866E4485CACDE282A /* Build configuration list for PBXNativeTarget "AIUsageWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B320F5DCA04D46C2AA581769 /* Debug configuration for PBXNativeTarget "AIUsageWidgetExtension" */,
+				B5F1233A09FA415BB6999F41 /* Release configuration for PBXNativeTarget "AIUsageWidgetExtension" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		EAF6267C15B84F15A09A99BD /* Build configuration list for PBXNativeTarget "AIUsage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				09F844C45FFA4FE586F8C1EB /* Debug configuration for PBXNativeTarget "AIUsage" */,
+				8FB153F6B06448C489B916F7 /* Release configuration for PBXNativeTarget "AIUsage" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		F42B77BFBAEC43D4BE594C74 /* Build configuration list for PBXProject "AIUsage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C9496D35966405CA67AC7D9 /* Debug configuration for PBXProject "AIUsage" */,
+				86F56DFE96A5427B851DDD52 /* Release configuration for PBXProject "AIUsage" */,
+			);
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4A6163AEE6C74B128C50A99F /* Project object */;
+}

@@ -1,0 +1,323 @@
+{
+  "sourceLanguage": "vi",
+  "strings": {
+    "": {},
+    "%@ còn %lld%%": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %lld%% left"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ còn %2$lld%%"
+          }
+        }
+      }
+    },
+    "%@ hết %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ runs out %@"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ hết %2$@"
+          }
+        }
+      }
+    },
+    "%@: còn %lld%%": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %lld%% left"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@: còn %2$lld%%"
+          }
+        }
+      }
+    },
+    "%@: còn %lld%%, reset sau %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %lld%% left, resets in %@"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@: còn %2$lld%%, reset sau %3$@"
+          }
+        }
+      }
+    },
+    "%@: dự kiến hết %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: expected to run out %@"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@: dự kiến hết %2$@"
+          }
+        }
+      }
+    },
+    "%lld%%": {},
+    "AI Usage": {},
+    "CN": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sunday"
+          }
+        }
+      }
+    },
+    "Chưa kết nối · mở AIUsage để đăng nhập": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not connected · open AIUsage to sign in"
+          }
+        }
+      }
+    },
+    "Claude · ChatGPT · Antigravity usage": {},
+    "Dư dả": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comfortable"
+          }
+        }
+      }
+    },
+    "Dư dả, dùng chậm hơn nhịp": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comfortable, below the even pace"
+          }
+        }
+      }
+    },
+    "Dữ liệu cũ: lần lấy số thành công gần nhất của nguồn này": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stale data: the last successful fetch of this source"
+          }
+        }
+      }
+    },
+    "Fetch latest AI usage data": {},
+    "Mở cửa sổ đăng nhập claude.ai": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the claude.ai sign-in window"
+          }
+        }
+      }
+    },
+    "Refresh AI Usage": {},
+    "chiều %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ afternoon"
+          }
+        }
+      }
+    },
+    "chiều mai": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tomorrow afternoon"
+          }
+        }
+      }
+    },
+    "lúc %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "at %@"
+          }
+        }
+      }
+    },
+    "sáng %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ morning"
+          }
+        }
+      }
+    },
+    "sáng mai": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tomorrow morning"
+          }
+        }
+      }
+    },
+    "thứ 2": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monday"
+          }
+        }
+      }
+    },
+    "thứ 3": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuesday"
+          }
+        }
+      }
+    },
+    "thứ 4": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wednesday"
+          }
+        }
+      }
+    },
+    "thứ 5": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thursday"
+          }
+        }
+      }
+    },
+    "thứ 6": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friday"
+          }
+        }
+      }
+    },
+    "thứ 7": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saturday"
+          }
+        }
+      }
+    },
+    "tối %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ evening"
+          }
+        }
+      }
+    },
+    "tối mai": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tomorrow evening"
+          }
+        }
+      }
+    },
+    "Đã tắt trong AIUsage": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off in AIUsage"
+          }
+        }
+      }
+    },
+    "Đăng nhập lại": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in again"
+          }
+        }
+      }
+    },
+    "Đăng nhập lại Claude": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in to Claude again"
+          }
+        }
+      }
+    },
+    "đang reset": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "resetting"
+          }
+        }
+      }
+    },
+    "—": {}
+  },
+  "version": "1.0"
+}

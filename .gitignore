@@ -1,0 +1,8 @@
+.DS_Store
+*.xcuserstate
+AIUsage.xcodeproj/xcuserdata/
+AIUsage.xcodeproj/project.xcworkspace/xcuserdata/
+__pycache__/
+*.pyc
+build/
+dist/
