@@ -47,6 +47,7 @@ struct ProviderData: Identifiable {
     var fetchedAt: Date? = nil
     var hasData = false            // false until the first successful fetch of this source
     var enabled = true             // switched on in the Accounts window
+    var account = ""               // Antigravity: which Google account (label or email)
 
     /// The quota closest to its limit (what the sidebar ring shows).
     var worst: BarItem? { bars.filter { $0.reported && $0.window > 0 }.max { $0.value < $1.value } }
@@ -161,7 +162,7 @@ struct Attention: Identifiable {
         case critical, warning, info
         static func < (a: Level, b: Level) -> Bool { a.rawValue < b.rawValue }
     }
-    enum Action { case refresh(String, String), loginClaude, loginGoogle, codexReset, claudeReset, accounts, open(Page) }
+    enum Action { case refresh(String, String), refreshMany([String]), loginClaude, loginGoogle, codexReset, claudeReset, accounts, open(Page) }
     let id: String
     let level: Level
     let icon: String
@@ -171,6 +172,8 @@ struct Attention: Identifiable {
     var action: Action? = nil
     var actionTitle: String? = nil
     var page: Page? = nil
+    /// Several buttons instead of `action` (the grouped stale-data card).
+    var actions: [(Action, String, String)] = []     // action, title, help
 }
 
 // MARK: - Store
@@ -180,6 +183,8 @@ final class DashboardStore {
     var claude = ProviderData(id: "claude", name: "Claude", plan: "MAX", logo: "claude", color: .claude)
     var chatgpt = ProviderData(id: "chatgpt", name: "ChatGPT", plan: "PLUS", logo: "openai", color: .openai)
     var agy = ProviderData(id: "antigravity", name: "Antigravity", plan: "AI PRO", logo: "gemini", color: .geminiBlue)
+    /// Extra Antigravity accounts (Accounts window), in their configured order.
+    var agyMore: [ProviderData] = []
     var claudeAPI: ClaudeAPI? = nil
     var claudeResets = 0
     var insights = Insights()
@@ -192,13 +197,20 @@ final class DashboardStore {
     @ObservationIgnored private var cacheMtime: Date? = nil
     @ObservationIgnored private var timer: Timer? = nil
 
-    var subscriptions: [ProviderData] { [claude, chatgpt, agy] }
+    var subscriptions: [ProviderData] { [claude, chatgpt, agy] + agyMore }
     var anyLoading: Bool { !loading.isEmpty }
 
     // UI id -> fetch_one.sh argument
     static let fetchArg: [String: String] = [
         "claude": "claude", "chatgpt": "codex", "antigravity": "agy", "gemini": "gemini", "insights": "insights", "codexhist": "codexhist"
     ]
+    /// Part of a source, refreshed on its own (not part of refreshAll, which already covers them).
+    static let partialArg: [String: String] = ["antigravity-main": "agymain", "antigravity-extra": "agyextra"]
+
+    /// Refresh groups of the stale-data card.
+    static let mainAccounts = ["claude", "chatgpt", "codexhist", "antigravity-main"]
+    static let extraAccounts = ["antigravity-extra"]
+    static let apiMoney = ["gemini", "claude"]
 
     init() {
         load()
@@ -222,7 +234,7 @@ final class DashboardStore {
     }
 
     func refresh(_ ui: String) {
-        guard let arg = Self.fetchArg[ui] else { return }
+        guard let arg = Self.fetchArg[ui] ?? Self.partialArg[ui] else { return }
         loading.insert(ui)
         fetch(ui, arg)
     }
@@ -294,6 +306,7 @@ final class DashboardStore {
     /// fetch scripts already have; every entry says what to do about it.
     func attention(now: Date) -> [Attention] {
         var out: [Attention] = []
+        var stale: [ProviderData] = []
         let short = Self.dayTime
 
         for p in subscriptions where p.enabled {
@@ -311,12 +324,7 @@ final class DashboardStore {
                                      action: p.id == "claude" ? .loginClaude : .accounts, actionTitle: String(localized: "Đăng nhập")))
                 continue
             }
-            if isStaleFetch(p.fetchedAt, asOf: now) {
-                out.append(Attention(id: "stale-\(p.id)", level: .warning, icon: "clock.badge.exclamationmark", tint: .orange,
-                                     title: String(localized: "Số liệu \(p.name) đã cũ"),
-                                     detail: String(localized: "Lần lấy thành công gần nhất: \(p.fetchedAt.map { short.string(from: $0) } ?? "chưa có")."),
-                                     action: .refresh(p.id, p.name), actionTitle: String(localized: "Làm mới"), page: page(for: p.id)))
-            }
+            if isStaleFetch(p.fetchedAt, asOf: now) { stale.append(p) }
             for b in p.bars where b.reported && b.window > 0 && (b.resetDate.map { $0 > now } ?? true) {
                 let reset = b.resetDate.map { shortCountdown(to: $0, from: now) }
                 if b.value >= 95 {
@@ -333,23 +341,32 @@ final class DashboardStore {
             }
         }
 
-        // Limit resets waiting to be spent.
-        let r = codexHist.resets
-        if chatgpt.enabled, r.available > 0 {
-            let exp = r.next?.expires
-            let soon = exp.map { $0.timeIntervalSince(now) < 3 * 86400 } ?? false
-            out.append(Attention(id: "codex-reset", level: soon ? .warning : .info, icon: "arrow.counterclockwise.circle", tint: .openai,
-                                 title: String(localized: "Còn \(r.available) lượt reset Codex"),
-                                 detail: (exp.map { String(localized: "Lượt gần nhất hết hạn \(short.string(from: $0)).") } ?? "")
-                                     + " " + (r.usableNow > 0 ? String(localized: "Dùng được ngay.") : String(localized: "Chỉ dùng được khi đang chạm giới hạn.")),
-                                 action: r.usableNow > 0 ? .codexReset : nil,
-                                 actionTitle: r.usableNow > 0 ? String(localized: "Dùng lượt reset") : nil, page: .codex))
-        }
-        if claude.enabled, claudeResets > 0 {
-            out.append(Attention(id: "claude-reset", level: .info, icon: "arrow.counterclockwise.circle", tint: .claude,
-                                 title: String(localized: "Còn \(claudeResets) lượt reset Claude"),
-                                 detail: String(localized: "Dùng ở mục Limit resets trên trang usage của claude.ai."),
-                                 action: .claudeReset, actionTitle: String(localized: "Mở trang reset"), page: .claude))
+        // Old numbers, all in one card: one button per refresh group that has something old.
+        let geminiStale = config.providers.gemini && gemini.present && isStaleFetch(gemini.fetchedAt, asOf: now)
+        if !stale.isEmpty || geminiStale {
+            let mainStale = stale.filter { !$0.id.hasPrefix("antigravity-") }
+            let extraStale = stale.filter { $0.id.hasPrefix("antigravity-") }
+            var names = stale.map { $0.id.hasPrefix("antigravity-") ? $0.account : $0.name }
+            if geminiStale { names.append("Gemini API") }
+            let oldest = (stale.compactMap(\.fetchedAt) + (geminiStale ? [gemini.fetchedAt].compactMap { $0 } : [])).min()
+            var buttons: [(Attention.Action, String, String)] = []
+            if !mainStale.isEmpty {
+                buttons.append((.refreshMany(Self.mainAccounts), String(localized: "Acc chính"),
+                                String(localized: "Làm mới Claude, ChatGPT và tài khoản Antigravity chính")))
+            }
+            if !extraStale.isEmpty {
+                buttons.append((.refreshMany(Self.extraAccounts), String(localized: "Acc phụ"),
+                                String(localized: "Làm mới các tài khoản Antigravity phụ")))
+            }
+            if geminiStale || mainStale.contains(where: { $0.id == "claude" }) {
+                buttons.append((.refreshMany(Self.apiMoney), String(localized: "Tiền API"),
+                                String(localized: "Làm mới số dư Gemini API và credit Anthropic")))
+            }
+            out.append(Attention(id: "stale", level: .warning, icon: "clock.badge.exclamationmark", tint: .orange,
+                                 title: String(localized: "Số liệu cũ ở \(names.count) nguồn"),
+                                 detail: names.joined(separator: ", ")
+                                     + (oldest.map { ". " + String(localized: "Cũ nhất từ \(short.string(from: $0)).") } ?? ""),
+                                 actions: buttons))
         }
 
         // Money.
@@ -443,21 +460,31 @@ final class DashboardStore {
             BarItem(String(localized: "Tuần"), cx["weekly"] as? Int ?? 0, resetDate: parseISODate(cx["weekly_reset"] as? String)),
         ], fetchedAt: parseISODate(cx["fetched_at"] as? String), hasData: cx["session"] != nil, enabled: p.codex)
 
-        // Antigravity
+        // Antigravity: the account agy is signed in to, then the extra ones.
+        func antigravity(_ g: [String: Any], id: String, name: String, account: String) -> ProviderData {
+            let ver = (g["gemini_ver"] as? String).flatMap { $0.isEmpty ? nil : $0 } ?? ""
+            let gem = ver.isEmpty ? "Gemini" : "Gemini \(ver)"
+            return ProviderData(id: id, name: name, plan: g["plan"] as? String ?? "AI PRO", logo: "gemini", color: .geminiBlue, bars: [
+                BarItem(String(localized: "\(gem) · 5 giờ"), g["gemini_5h"] as? Int ?? 0, gradient: true,
+                        resetDate: parseISODate(g["gemini_5h_reset"] as? String), window: QuotaWindow.fiveHours),
+                BarItem(String(localized: "\(gem) · tuần"), g["gemini_weekly"] as? Int ?? 0, gradient: true,
+                        resetDate: parseISODate(g["gemini_weekly_reset"] as? String)),
+                BarItem(String(localized: "Claude/GPT · 5 giờ"), g["claude_gpt_5h"] as? Int ?? 0,
+                        resetDate: parseISODate(g["claude_gpt_5h_reset"] as? String), window: QuotaWindow.fiveHours),
+                BarItem(String(localized: "Claude/GPT · tuần"), g["claude_gpt_weekly"] as? Int ?? 0,
+                        resetDate: parseISODate(g["claude_gpt_weekly_reset"] as? String)),
+            ], needsLogin: g["needs_login"] as? Bool ?? false, fetchedAt: parseISODate(g["fetched_at"] as? String),
+               hasData: g["gemini_weekly"] != nil || g["gemini_5h"] != nil || g["needs_login"] as? Bool == true,
+               enabled: p.agy, account: account)
+        }
         let g = json["agy"] as? [String: Any] ?? [:]
-        let ver = (g["gemini_ver"] as? String).flatMap { $0.isEmpty ? nil : $0 } ?? ""
-        let gem = ver.isEmpty ? "Gemini" : "Gemini \(ver)"
-        agy = ProviderData(id: "antigravity", name: "Antigravity", plan: g["plan"] as? String ?? "AI PRO", logo: "gemini", color: .geminiBlue, bars: [
-            BarItem(String(localized: "\(gem) · 5 giờ"), g["gemini_5h"] as? Int ?? 0, gradient: true,
-                    resetDate: parseISODate(g["gemini_5h_reset"] as? String), window: QuotaWindow.fiveHours),
-            BarItem(String(localized: "\(gem) · tuần"), g["gemini_weekly"] as? Int ?? 0, gradient: true,
-                    resetDate: parseISODate(g["gemini_weekly_reset"] as? String)),
-            BarItem(String(localized: "Claude/GPT · 5 giờ"), g["claude_gpt_5h"] as? Int ?? 0,
-                    resetDate: parseISODate(g["claude_gpt_5h_reset"] as? String), window: QuotaWindow.fiveHours),
-            BarItem(String(localized: "Claude/GPT · tuần"), g["claude_gpt_weekly"] as? Int ?? 0,
-                    resetDate: parseISODate(g["claude_gpt_weekly_reset"] as? String)),
-        ], fetchedAt: parseISODate(g["fetched_at"] as? String),
-           hasData: g["gemini_weekly"] != nil || g["gemini_5h"] != nil, enabled: p.agy)
+        agy = antigravity(g, id: "antigravity", name: "Antigravity", account: g["email"] as? String ?? "")
+        agyMore = config.agyAccounts.enumerated().map { i, a in
+            let s = json[a.cacheKey] as? [String: Any] ?? [:]
+            let label = !a.name.isEmpty ? a.name : (s["email"] as? String).flatMap { $0.isEmpty ? nil : $0 }
+                ?? String(localized: "Tài khoản \(i + 2)")
+            return antigravity(s, id: "antigravity-" + a.id, name: "Antigravity · " + label, account: label)
+        }
 
         // Codex server history + reset credits
         var ch = CodexHistory()

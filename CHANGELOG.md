@@ -2,6 +2,22 @@
 
 Theo chuẩn [Keep a Changelog](https://keepachangelog.com/vi/1.1.0/) và [SemVer](https://semver.org/lang/vi/). Bản 0.9.0 là bản phát hành công khai đầu tiên (có file cài DMG); các phiên bản trước dùng cá nhân và được tổng hợp lại từ lịch sử commit theo từng mốc phát triển. Bản tiếng Anh: [CHANGELOG.en.md](CHANGELOG.en.md).
 
+## [Chưa phát hành]
+
+### Added
+- Theo dõi tối đa 3 tài khoản Antigravity cùng lúc. Cửa sổ Tài khoản có nút **Thêm tài khoản**; mỗi tài khoản phụ đăng nhập bằng agy trong Terminal. Khi có nhiều tài khoản, mỗi ô hạn mức liệt kê mọi tài khoản ngang hàng: email, phần trăm, thời gian tới reset và thanh có vạch nhịp.
+- Mỗi tài khoản phụ có thư mục và Keychain riêng (`runtime/agy_account.sh`), nên phiên đăng nhập agy đang dùng không bị đụng tới. Xoá tài khoản thì xoá luôn Keychain, thư mục và số liệu của nó.
+- Hiện email Google của tài khoản Antigravity, đọc từ nhật ký của agy.
+- `fetch_one.sh agymain` và `agyextra` làm mới riêng tài khoản chính hoặc các tài khoản phụ.
+
+### Changed
+- Widget thiết kế lại: mỗi hạn mức là một ô (nhãn, đếm ngược, phần trăm và thanh có vạch nhịp), hai cột. Có nhiều tài khoản Antigravity thì thẻ Antigravity thành bảng, mỗi tài khoản một cột ngang hàng; tên tài khoản chuyển cam khi số của nó đã cũ. Đo bằng ImageRenderer: cao 341 trên 345 điểm khi có 3 tài khoản.
+- Các thẻ "Số liệu đã cũ" gom thành một thẻ, kèm nút **Acc chính**, **Acc phụ** và **Tiền API** (chỉ hiện nút của nhóm có số cũ).
+- Bỏ thẻ lượt reset Codex và Claude khỏi dải Cần chú ý: số lượt, hạn dùng và nút dùng lượt reset đã có trong cột của từng hãng.
+
+### Fixed
+- Tài khoản Antigravity chưa đăng nhập không còn làm lần lấy số chờ hết 25 giây: script nhận ra menu đăng nhập và dừng ngay, đánh dấu cần đăng nhập lại.
+
 ## [0.9.0] - 2026-10-28
 Bản phát hành công khai đầu tiên: cài bằng file DMG trên mọi máy, giao diện song ngữ, cửa sổ Tài khoản cho từng nguồn, giao diện một màn hình làm lại hoàn toàn.
 

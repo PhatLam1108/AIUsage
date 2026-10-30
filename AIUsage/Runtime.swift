@@ -13,6 +13,7 @@ enum AppPaths {
     static var support: String { home + "/Library/Application Support/AIUsage" }
     static var bin: String { support + "/bin" }
     static var fetchOne: String { bin + "/fetch_one.sh" }
+    static var agyAccount: String { bin + "/agy_account.sh" }
     static var helperApp: String { support + "/ClaudeUsageHelper.app" }
     static var helper: String { helperApp + "/Contents/MacOS/ClaudeUsageHelper" }
     static var config: String { support + "/config.json" }
@@ -71,6 +72,21 @@ struct RemoteHost: Codable, Equatable, Identifiable {
     }
 }
 
+/// An extra Antigravity account. The agy CLI keeps a single sign-in, so each extra
+/// account runs agy with its own HOME and keychain under Application Support/AIUsage/agy/<id>
+/// (runtime/agy_account.sh). Its numbers land in the cache under "agy_<id>".
+struct AgyAccount: Codable, Equatable, Identifiable {
+    var id = "a" + UUID().uuidString.prefix(8).lowercased()
+    var name = ""        // label on the dashboard; empty = the account's email
+    init() {}
+    init(from d: Decoder) throws {
+        let c = try d.container(keyedBy: CodingKeys.self)
+        id = try c.decode(String.self, forKey: .id)
+        name = try c.decodeIfPresent(String.self, forKey: .name) ?? ""
+    }
+    var cacheKey: String { "agy_" + id }
+}
+
 /// `config.json`, shared with the fetch scripts (they read it with Python, so keys stay snake_case).
 struct AppConfig: Codable, Equatable {
     struct Providers: Codable, Equatable {
@@ -102,11 +118,13 @@ struct AppConfig: Codable, Equatable {
     var providers = Providers()
     var gemini = Gemini()
     var remoteHosts: [RemoteHost] = []
+    /// Antigravity accounts besides the one agy is signed in to (at most 2, for 3 in all).
+    var agyAccounts: [AgyAccount] = []
     var appPath: String? = nil
     /// Set once the user has been through the Accounts window, so first launch opens it by itself.
     var onboarded = false
 
-    enum CodingKeys: String, CodingKey { case providers, gemini, remoteHosts = "remote_hosts", appPath = "app_path", onboarded }
+    enum CodingKeys: String, CodingKey { case providers, gemini, remoteHosts = "remote_hosts", agyAccounts = "agy_accounts", appPath = "app_path", onboarded }
 
     init() {}
     init(from d: Decoder) throws {
@@ -114,6 +132,7 @@ struct AppConfig: Codable, Equatable {
         providers = try c.decodeIfPresent(Providers.self, forKey: .providers) ?? Providers()
         gemini = try c.decodeIfPresent(Gemini.self, forKey: .gemini) ?? Gemini()
         remoteHosts = try c.decodeIfPresent([RemoteHost].self, forKey: .remoteHosts) ?? []
+        agyAccounts = try c.decodeIfPresent([AgyAccount].self, forKey: .agyAccounts) ?? []
         appPath = try c.decodeIfPresent(String.self, forKey: .appPath)
         onboarded = try c.decodeIfPresent(Bool.self, forKey: .onboarded) ?? false
     }
@@ -158,7 +177,7 @@ struct AppConfig: Codable, Equatable {
 /// launch but only does work when the app's version or location changed.
 enum RuntimeInstaller {
     static let labelPrefix = "com.stevenlam.ai-usage-"
-    private static let scripts = ["fetch_one.sh", "fetch_usage.sh", "login.sh", "remote_insights.py"]
+    private static let scripts = ["fetch_one.sh", "fetch_usage.sh", "login.sh", "remote_insights.py", "agy_account.sh"]
 
     static var stamp: String {
         let v = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0"

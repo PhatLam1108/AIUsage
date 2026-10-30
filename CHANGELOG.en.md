@@ -2,6 +2,22 @@
 
 Follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Semantic Versioning](https://semver.org/). 0.9.0 is the first public release (with a DMG installer); earlier versions were for personal use and were reconstructed from the commit history by development milestone. Vietnamese version: [CHANGELOG.md](CHANGELOG.md).
 
+## [Unreleased]
+
+### Added
+- Track up to 3 Antigravity accounts at once. The Accounts window has an **Add account** button; each extra account signs in with agy in Terminal. With several accounts, every quota tile lists all of them as equals: email, percentage, time to reset and a bar with the pace marker.
+- Each extra account has its own folder and keychain (`runtime/agy_account.sh`), so the agy sign-in you use is never touched. Deleting an account removes its keychain, folder and numbers.
+- The Google email of each Antigravity account is shown, read from agy's log.
+- `fetch_one.sh agymain` and `agyextra` refresh only the main account or only the extra accounts.
+
+### Changed
+- Redesigned widget: each quota is a tile (label, countdown, percentage and a bar with the pace marker), in two columns. With several Antigravity accounts the Antigravity card becomes a table, one equal column per account; an account's name turns orange when its numbers are old. Measured with ImageRenderer: 341 of 345 points tall with 3 accounts.
+- The "old numbers" cards are merged into one card with **Main**, **Extra** and **API balance** buttons (only for groups that have old numbers).
+- The Codex and Claude limit reset cards are gone from Needs attention: credits left, expiry and the reset button are already in each company's column.
+
+### Fixed
+- An Antigravity account that is not signed in no longer makes the fetch wait 25 seconds: the script recognises the sign-in menu, stops at once and marks the account as needing sign-in.
+
 ## [0.9.0] - 2026-10-28
 First public release: a DMG installer that works on any Mac, a bilingual interface, an Accounts window with a panel per source, and a completely redesigned single-screen interface.
 

@@ -220,6 +220,15 @@ struct ContentView: View {
                     .buttonStyle(.glass).controlSize(.small)
                     .disabled(busy(action))
             }
+            ForEach(a.actions.indices, id: \.self) { i in
+                let (action, title, help) = a.actions[i]
+                Button { perform(action) } label: {
+                    if busy(action) { ProgressView().controlSize(.mini) } else { Text(title) }
+                }
+                .buttonStyle(.glass).controlSize(.small)
+                .disabled(busy(action))
+                .help(help)
+            }
         }
         .padding(.horizontal, 12).padding(.vertical, 9)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -234,6 +243,7 @@ struct ContentView: View {
     private func busy(_ a: Attention.Action) -> Bool {
         switch a {
         case .refresh(let id, _): return store.loading.contains(id)
+        case .refreshMany(let ids): return ids.contains { store.loading.contains($0) }
         case .loginClaude: return store.loading.contains("claude")
         case .loginGoogle: return store.loading.contains("gemini-login")
         case .codexReset: return store.loading.contains("codex-reset")
@@ -245,6 +255,7 @@ struct ContentView: View {
     private func perform(_ a: Attention.Action) {
         switch a {
         case .refresh(let id, _): store.refresh(id)
+        case .refreshMany(let ids): ids.forEach(store.refresh)
         case .loginClaude: store.loginClaude()
         case .loginGoogle: store.loginGoogle()
         case .codexReset: store.useCodexReset()
@@ -256,7 +267,8 @@ struct ContentView: View {
     // MARK: Column headers
 
     private func header(_ p: ProviderData, now: Date, refresh ids: [String]) -> some View {
-        let loading = ids.contains { store.loading.contains($0) }
+        // "antigravity" also spins while only its main or extra accounts refresh.
+        let loading = store.loading.contains { l in ids.contains { l == $0 || l.hasPrefix($0 + "-") } }
         return HStack(spacing: 8) {
             ProviderMark(logo: p.logo, color: p.color, size: 13)
             Text(p.id == "chatgpt" ? "ChatGPT" : p.name).font(.system(size: 16, weight: .semibold))
@@ -368,8 +380,36 @@ struct ContentView: View {
         }
     }
 
-    private func agyQuotas(now: Date) -> some View {
-        quotas(store.agy, now: now) { EmptyView() }
+    /// One Antigravity account: the usual tiles. Several: each tile lists every account
+    /// the same way (email, percentage, countdown, bar), the signed-in agy account first.
+    @ViewBuilder private func agyQuotas(now: Date) -> some View {
+        let accounts = [store.agy] + store.agyMore
+        if store.agyMore.isEmpty || !store.agy.enabled {
+            quotas(store.agy, now: now) { EmptyView() }
+        } else {
+            let titles = store.agy.bars.filter { $0.window > 0 }.map {
+                // Accounts can sit on different Gemini versions; the tile names the family.
+                $0.label.replacingOccurrences(of: #"Gemini [0-9.]+"#, with: "Gemini", options: .regularExpression)
+            }
+            VStack(alignment: .leading, spacing: 10) {
+                LazyVGrid(columns: Self.tileGrid, spacing: 8) {
+                    ForEach(titles.indices, id: \.self) { i in
+                        MultiAccountTile(title: titles[i], rows: accounts.map { p in
+                            let bars = p.bars.filter { $0.window > 0 }
+                            let label = p.account.isEmpty ? String(localized: "Tài khoản chính") : p.account
+                            let note: String? = p.needsLogin ? String(localized: "cần đăng nhập")
+                                : !p.hasData ? String(localized: "chưa có số") : nil
+                            return AccountQuota(id: p.id, label: label, bar: i < bars.count ? bars[i] : nil, note: note)
+                        }, color: store.agy.color, now: now)
+                    }
+                }
+                // No combined pace line here: it could not say which account it means. The
+                // Needs attention strip reports each account by name.
+            }
+            .padding(.horizontal, 16)
+            .padding(.bottom, 14)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        }
     }
 
     /// "N lượt reset" with the button to spend one. Hidden by the caller when there are none.

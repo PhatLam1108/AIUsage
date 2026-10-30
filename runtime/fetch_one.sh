@@ -1,6 +1,7 @@
 #!/bin/bash
 # Fetch ONE provider's usage and merge it into the combined cache atomically.
-# Usage: fetch_one.sh {claude|codex|codexhist|agy|gemini|insights}
+# Usage: fetch_one.sh {claude|codex|codexhist|agy|agymain|agyextra|gemini|insights}
+# (agymain / agyextra: only the account agy is signed in to, or only the extra accounts)
 # Each provider runs independently so the UI can update whichever finishes first.
 #
 # Runtime layout (installed by the app on first launch, see RuntimeInstaller.swift):
@@ -14,7 +15,7 @@
 export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
 
 PROVIDER="$1"
-[ -z "$PROVIDER" ] && { echo "usage: fetch_one.sh {claude|codex|codexhist|agy|gemini|insights}" >&2; exit 1; }
+[ -z "$PROVIDER" ] && { echo "usage: fetch_one.sh {claude|codex|codexhist|agy|agymain|agyextra|gemini|insights}" >&2; exit 1; }
 
 SELF_DIR="$(cd "$(dirname "$0")" && pwd)"
 AIU_SUPPORT="${AIUSAGE_SUPPORT:-$HOME/Library/Application Support/AIUsage}"
@@ -41,7 +42,8 @@ else: print(d)' "$AIU_CONFIG" "$1" "$2"
 
 # A source switched off in the Accounts window is skipped entirely: the cache
 # keeps whatever it had and the app shows the card as not connected.
-SWITCH="$PROVIDER"; [ "$SWITCH" = "codexhist" ] && SWITCH="codex"
+SWITCH="$PROVIDER"
+case "$SWITCH" in codexhist) SWITCH="codex" ;; agymain|agyextra) SWITCH="agy" ;; esac
 [ "$(cfg "providers.$SWITCH" 1)" = "0" ] && exit 0
 
 # Keep the parser error log bounded (it's appended on every run).
@@ -52,6 +54,47 @@ fi
 
 TMPDIR_USAGE=$(mktemp -d)
 trap "rm -rf $TMPDIR_USAGE" EXIT
+
+# merge_fragment <cache key> < fragment: merge into the combined cache atomically (file-locked).
+# updated_at only advances on a genuinely fresh capture (frag carries \"_fresh\") —
+# a failed fetch that re-merges old numbers must NOT make the clock lie.
+merge_fragment() {
+  python3 -c "
+import json, sys, os, fcntl, time
+provider = sys.argv[1]
+try:
+    frag = json.load(sys.stdin)
+except Exception:
+    frag = {}
+if not frag:
+    sys.exit(0)
+fresh = bool(frag.pop('_fresh', False))
+cache = os.path.expanduser('~/.ai_usage_cache.json')
+lock = cache + '.lock'
+with open(lock, 'w') as lf:
+    fcntl.flock(lf, fcntl.LOCK_EX)
+    try:
+        data = json.load(open(cache))
+    except Exception:
+        data = {}
+    now = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
+    if fresh:
+        # Per-provider freshness: the UI flags each card on its own, so one
+        # broken provider can't hide behind the others' successful fetches.
+        frag['fetched_at'] = now
+        data['updated_at'] = now
+    elif 'fetched_at' not in frag:
+        # Non-fresh fragments (fallbacks) keep the last real fetch time.
+        prev_at = (data.get(provider) or {}).get('fetched_at')
+        if prev_at:
+            frag['fetched_at'] = prev_at
+    data[provider] = frag
+    tmp = cache + '.tmp'
+    json.dump(data, open(tmp, 'w'), indent=2)
+    os.replace(tmp, cache)
+    json.dump(data, open('/tmp/ai_usage_cache.json', 'w'), indent=2)
+" "$1" 2>> /tmp/ai_usage_err.log
+}
 
 FRAGMENT=""
 
@@ -414,27 +457,41 @@ PYEOF
 )
   ;;
 
-agy)
-  # Per-run log path (see the claude note above re concurrent fetches).
-  export AGY_LOG="$TMPDIR_USAGE/agy_usage_raw.log"
-  # Snapshot language servers that already exist (e.g. an agy session the user
-  # has open in a terminal) so the cleanup below never touches them.
+agy|agymain|agyextra)
+  AGY_BIN="$(command -v agy)"
+  [ -z "$AGY_BIN" ] && exit 0
+  export AGY_BIN
   LS_PATTERN="Resources/bin/language_server.*antigravity-cli"
-  LS_BEFORE=" $(pgrep -f "$LS_PATTERN" | tr '\n' ' ') "
-  # Drive the agy CLI exactly like a human: wait until the prompt is ready,
-  # type /usage, and quit the instant the quota panel has rendered.
-  # Pattern-matching (not fixed sleeps) keeps this as fast as doing it by hand (~5s).
-  /usr/bin/expect << 'EXPEOF' > /dev/null 2>&1
+
+  # agy_capture <home> <cache key>: reads one account's quota panel and prints its
+  # cache fragment. The main account runs with the real HOME; extra accounts run with
+  # their own HOME and keychain (see agy_account.sh), so each agy sees one sign-in.
+  agy_capture() {
+    local home="$1" key="$2"
+    # Per-run log path (see the claude note above re concurrent fetches).
+    export AGY_LOG="$TMPDIR_USAGE/agy_$key.log" AGY_KEY="$key" AGY_HOME="$home"
+    # Snapshot language servers that already exist (e.g. an agy session the user
+    # has open in a terminal) so the cleanup below never touches them.
+    local before=" $(pgrep -f "$LS_PATTERN" | tr '\n' ' ') " pid
+    # Drive the agy CLI exactly like a human: wait until the prompt is ready,
+    # type /usage, and quit the instant the quota panel has rendered.
+    # Pattern-matching (not fixed sleeps) keeps this as fast as doing it by hand (~5s).
+    (cd "$home" && HOME="$home" /usr/bin/expect << 'EXPEOF') > /dev/null 2>&1
 set rows 40
 set cols 120
 stty rows $rows columns $cols
-spawn -noecho agy
+spawn -noecho $env(AGY_BIN)
 set agypid [exp_pid]
 stty rows $rows columns $cols < $spawn_out(slave,name)
 log_file -noappend $env(AGY_LOG)
 set timeout 25
-# Wait until agy finished starting up and shows the prompt footer (~2s).
-expect -re "shortcuts"
+# Wait until agy finished starting up and shows the prompt footer (~2s), or the
+# sign-in menu of an account that is not signed in (nothing more to read then).
+# "not signed in" alone is no sign: agy prints it for a moment while it loads the token.
+expect {
+  -re "Select login method" { exec kill -9 $agypid; exit 3 }
+  -re "shortcuts" {}
+}
 # The plan tier "(Google AI Pro)" loads async a moment after sign-in and is
 # painted onto the banner. Wait for it (best-effort) so the parser can read the
 # real plan instead of falling back to a default.
@@ -454,22 +511,30 @@ sleep 1
 exec kill -9 $agypid
 exit 0
 EXPEOF
-  # Reap only the language server(s) THIS fetch spawned (orphaned when expect
-  # kill -9'd agy). A blanket pkill used to kill the user's own agy sessions.
-  for pid in $(pgrep -f "$LS_PATTERN"); do
-    case "$LS_BEFORE" in *" $pid "*) ;; *) kill -9 "$pid" 2>/dev/null ;; esac
-  done
+    # Reap only the language server(s) THIS fetch spawned (orphaned when expect
+    # kill -9'd agy). A blanket pkill used to kill the user's own agy sessions.
+    for pid in $(pgrep -f "$LS_PATTERN"); do
+      case "$before" in *" $pid "*) ;; *) kill -9 "$pid" 2>/dev/null ;; esac
+    done
 
-  FRAGMENT=$(python3 2>> /tmp/ai_usage_err.log << 'PYEOF'
+    python3 2>> /tmp/ai_usage_err.log << 'PYEOF'
 import json, os, re
 from datetime import datetime, timezone, timedelta
 
+KEY = os.environ.get("AGY_KEY", "agy")
 vals = {"gemini_5h": 0, "gemini_weekly": 0, "claude_gpt_5h": 0, "claude_gpt_weekly": 0}
 resets = {"gemini_5h_reset": "", "gemini_weekly_reset": "",
           "claude_gpt_5h_reset": "", "claude_gpt_weekly_reset": ""}
 g_plan = "AI PRO"
 ok = False
+signed_out = False
 matched = set()   # which buckets were actually read from the panel
+
+def cached():
+    try:
+        return json.load(open(os.path.expanduser("~/.ai_usage_cache.json"))).get(KEY, {})
+    except Exception:
+        return {}
 
 def parse_refresh(text):
     # "Refreshes in 93h 49m" / "Refreshes in 3 days, 21 hours" / "45m"
@@ -486,7 +551,18 @@ def parse_refresh(text):
     when = datetime.now(timezone.utc) + timedelta(days=days, hours=hours, minutes=mins)
     return when.strftime('%Y-%m-%dT%H:%M:%SZ')
 
+# Which Google account this agy is signed in to, from the log of the run just made.
+email = ""
+try:
+    cli_log = os.path.join(os.environ.get("AGY_HOME", ""), ".gemini/antigravity-cli/cli.log")
+    with open(cli_log, errors="replace") as f:
+        m = re.findall(r'authenticated successfully as (\S+@\S+)', f.read())
+    email = m[-1] if m else ""
+except Exception:
+    pass
+
 log = os.environ.get("AGY_LOG", "")
+g_ver = ""
 if log and os.path.exists(log) and os.path.getsize(log) > 100:
     raw = open(log, 'rb').read().decode('utf-8', errors='replace')
     clean = re.sub(r'\x1b\[\?[0-9;]*[a-zA-Z$]', '', raw)
@@ -498,6 +574,7 @@ if log and os.path.exists(log) and os.path.getsize(log) > 100:
     clean = re.sub(r'\x1b', '', clean)
     clean = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', clean)
     lines = [l.strip() for l in clean.split('\n') if l.strip()]
+    signed_out = any('select login method' in l.lower() for l in lines)
 
     for line in lines:
         m = re.search(r'\(Google (.+?)\)', line)
@@ -506,18 +583,10 @@ if log and os.path.exists(log) and os.path.getsize(log) > 100:
 
     # Gemini model version, read from the banner ("Gemini 3.7 Flash ...") so the
     # UI label tracks Google's version bumps (3.5 -> 3.7 -> ...) automatically.
-    g_ver = ""
     for line in lines:
         m = re.search(r'Gemini\s+(\d+(?:\.\d+)?)', line)
         if m:
             g_ver = m.group(1); break
-    # Banner is async and occasionally missed — never write an empty version
-    # over a good cached one (an empty string broke the UI label to "Gem  · 5h").
-    if not g_ver:
-        try:
-            g_ver = json.load(open(os.path.expanduser("~/.ai_usage_cache.json"))).get("agy", {}).get("gemini_ver", "")
-        except Exception:
-            pass
 
     group = None
     for i, line in enumerate(lines):
@@ -549,6 +618,12 @@ if log and os.path.exists(log) and os.path.getsize(log) > 100:
                         matched.add(key)
                         ok = True
 
+prev = cached()
+# Banner is async and occasionally missed — never write an empty version
+# over a good cached one (an empty string broke the UI label to "Gem  · 5h").
+g_ver = g_ver or prev.get("gemini_ver", "")
+email = email or prev.get("email", "")
+
 # Accept only a complete-enough capture (both Gemini buckets + the C+G weekly
 # bucket). C+G 5h often shows "Quota available" with no %, so it's optional.
 # A partial capture (parallel runs occasionally render only part of the panel)
@@ -556,15 +631,31 @@ if log and os.path.exists(log) and os.path.getsize(log) > 100:
 complete = {"gemini_weekly", "gemini_5h", "claude_gpt_weekly"}.issubset(matched)
 if ok and complete:
     out = {**vals, **resets, "plan": g_plan, "gemini_ver": g_ver, "_fresh": True}
+    if email:
+        out["email"] = email
     print(json.dumps(out))
+elif signed_out:
+    # Keep the last numbers but say why they stopped updating.
+    print(json.dumps({**prev, "needs_login": True}))
 else:
-    try:
-        prev = json.load(open(os.path.expanduser("~/.ai_usage_cache.json"))).get("agy", {})
-        print(json.dumps(prev))
-    except Exception:
-        print("{}")
+    print(json.dumps(prev) if prev else "{}")
 PYEOF
-)
+  }
+
+  [ "$PROVIDER" != "agyextra" ] && echo "$(agy_capture "$HOME" agy)" | merge_fragment agy
+  # Extra accounts from the Accounts window, one after another: parallel agy runs
+  # occasionally render only part of the panel.
+  [ "$PROVIDER" = "agymain" ] || for ID in $(python3 -c '
+import json, re, sys
+try: d = json.load(open(sys.argv[1]))
+except Exception: d = {}
+print(" ".join(a["id"] for a in d.get("agy_accounts", []) if re.fullmatch(r"[A-Za-z0-9_-]+", str(a.get("id", "")))))' "$AIU_CONFIG"); do
+    ACC_HOME="$AIU_SUPPORT/agy/$ID"
+    [ -d "$ACC_HOME/Library/Keychains" ] || continue   # never signed in
+    "$SELF_DIR/agy_account.sh" prepare "$ID" >/dev/null 2>&1 || continue
+    echo "$(agy_capture "$ACC_HOME" "agy_$ID")" | merge_fragment "agy_$ID"
+  done
+  FRAGMENT=""
   ;;
 
 gemini)
@@ -1093,44 +1184,7 @@ PYEOF
   echo "unknown provider: $PROVIDER" >&2; exit 1 ;;
 esac
 
-# Merge fragment into combined cache atomically (file-locked).
-# updated_at only advances on a genuinely fresh capture (frag carries \"_fresh\") —
-# a failed fetch that re-merges old numbers must NOT make the clock lie.
-echo "$FRAGMENT" | python3 -c "
-import json, sys, os, fcntl, time
-provider = sys.argv[1]
-try:
-    frag = json.load(sys.stdin)
-except Exception:
-    frag = {}
-if not frag:
-    sys.exit(0)
-fresh = bool(frag.pop('_fresh', False))
-cache = os.path.expanduser('~/.ai_usage_cache.json')
-lock = cache + '.lock'
-with open(lock, 'w') as lf:
-    fcntl.flock(lf, fcntl.LOCK_EX)
-    try:
-        data = json.load(open(cache))
-    except Exception:
-        data = {}
-    now = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
-    if fresh:
-        # Per-provider freshness: the UI flags each card on its own, so one
-        # broken provider can't hide behind the others' successful fetches.
-        frag['fetched_at'] = now
-        data['updated_at'] = now
-    elif 'fetched_at' not in frag:
-        # Non-fresh fragments (fallbacks) keep the last real fetch time.
-        prev_at = (data.get(provider) or {}).get('fetched_at')
-        if prev_at:
-            frag['fetched_at'] = prev_at
-    data[provider] = frag
-    tmp = cache + '.tmp'
-    json.dump(data, open(tmp, 'w'), indent=2)
-    os.replace(tmp, cache)
-    json.dump(data, open('/tmp/ai_usage_cache.json', 'w'), indent=2)
-" "$PROVIDER" 2>> /tmp/ai_usage_err.log
+echo "$FRAGMENT" | merge_fragment "$PROVIDER"
 
 # (Widget redraw is handled by the refresh intent's reloadAllTimelines and by the
 # widget's own timeline policy — not by killing the extension, which is unreliable

@@ -185,6 +185,60 @@ final class AccountsModel {
         }
     }
 
+    // MARK: Extra Antigravity accounts
+
+    static let maxAgyAccounts = 2      // plus the main one: 3 in all
+
+    func agyEmail(_ key: String) -> String { section(key)["email"] as? String ?? "" }
+
+    func agyAccountState(_ a: AgyAccount) -> SourceState {
+        let g = section(a.cacheKey)
+        if g["needs_login"] as? Bool == true { return .needsLogin }
+        if g["gemini_weekly"] != nil { return .connected(fetched(a.cacheKey)) }
+        return .notSetUp(String(localized: "Chưa đăng nhập."))
+    }
+
+    /// Adds an account and opens its sign-in right away.
+    func addAgyAccount() {
+        guard config.agyAccounts.count < Self.maxAgyAccounts else { return }
+        let a = AgyAccount()
+        config.agyAccounts.append(a)
+        save()
+        loginAgy(a)
+    }
+
+    /// Opens Terminal on agy running with this account's own HOME and keychain. The
+    /// Google sign-in happens in the browser; the main agy sign-in is not touched.
+    func loginAgy(_ a: AgyAccount) {
+        save()
+        let q: (String) -> String = { "'" + $0.replacingOccurrences(of: "'", with: "'\\''") + "'" }
+        let start = String(localized: "AIUsage: đăng nhập tài khoản Antigravity phụ. Chọn Google OAuth và đăng nhập đúng tài khoản Google muốn thêm. Đăng nhập xong gõ /quit để thoát agy.")
+        let done = String(localized: "Xong. Quay lại AIUsage và bấm làm mới ở khung Antigravity.")
+        Shell.openInTerminal("""
+        echo \(q(start))
+        /bin/bash \(q(AppPaths.agyAccount)) login \(a.id)
+        echo \(q(done))
+        """)
+        note["agy-" + a.id] = String(localized: "Đã mở Terminal. Đăng nhập xong thì bấm làm mới.")
+    }
+
+    /// Asks first, then deletes the account's keychain, folder and numbers.
+    func removeAgy(_ a: AgyAccount) {
+        let alert = NSAlert()
+        let label = a.name.isEmpty ? agyEmail(a.cacheKey) : a.name
+        alert.messageText = String(localized: "Xoá tài khoản Antigravity \(label)?")
+        alert.informativeText = String(localized: "AIUsage xoá phiên đăng nhập và số liệu của tài khoản này trên máy. Tài khoản Google không bị ảnh hưởng.")
+        alert.addButton(withTitle: String(localized: "Xoá"))
+        alert.addButton(withTitle: String(localized: "Huỷ"))
+        guard alert.runModal() == .alertFirstButtonReturn else { return }
+        config.agyAccounts.removeAll { $0.id == a.id }
+        save()
+        DispatchQueue.global().async {
+            Shell.run("/bin/bash", [AppPaths.agyAccount, "remove", a.id], timeout: 30)
+            DispatchQueue.main.async { self.reload() }
+        }
+    }
+
     func addHost() { config.remoteHosts.append(RemoteHost()) }
 
     func removeHost(_ h: RemoteHost) {
@@ -390,7 +444,57 @@ struct AccountsView: View {
                 hint("Lần đầu chạy, agy hướng dẫn đăng nhập Google. Đăng nhập xong thoát agy rồi bấm làm mới.")
             }
             noteText("agy")
+            if model.agyCLI != nil { agyAccounts }
         }
+    }
+
+    /// The main agy sign-in, then the extra accounts, each with its own sign-in.
+    private var agyAccounts: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("Tài khoản").font(.system(size: 11.5, weight: .semibold))
+                Spacer()
+                if model.config.agyAccounts.count < AccountsModel.maxAgyAccounts {
+                    Button { model.addAgyAccount() } label: { Label("Thêm tài khoản", systemImage: "plus") }
+                        .buttonStyle(.glass).controlSize(.small)
+                }
+            }
+            HStack(spacing: 6) {
+                Circle().fill(model.agyState.color).frame(width: 7, height: 7)
+                Text(model.agyEmail("agy").isEmpty ? String(localized: "Tài khoản đang đăng nhập trong agy") : model.agyEmail("agy"))
+                    .font(.system(size: 11.5))
+                Text("chính").font(.system(size: 10.5)).foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 10).padding(.vertical, 7)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(Color.primary.opacity(0.04)))
+            ForEach($model.config.agyAccounts) { $a in agyAccountRow($a) }
+            hint("Mỗi tài khoản phụ có phiên đăng nhập và Keychain riêng trong thư mục của AIUsage, không ảnh hưởng tới agy bạn đang dùng. Tối đa 3 tài khoản.")
+        }
+    }
+
+    private func agyAccountRow(_ a: Binding<AgyAccount>) -> some View {
+        let acc = a.wrappedValue
+        let state = model.agyAccountState(acc)
+        let email = model.agyEmail(acc.cacheKey)
+        return VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 6) {
+                Circle().fill(state.color).frame(width: 7, height: 7)
+                TextField("", text: a.name, prompt: Text("Tên hiển thị (tuỳ chọn)"))
+                    .textFieldStyle(.roundedBorder).frame(width: 170)
+                    .onSubmit { model.save() }
+                Text(email.isEmpty ? String(localized: "Chưa đăng nhập") : email)
+                    .font(.system(size: 11)).foregroundStyle(.secondary).lineLimit(1).truncationMode(.middle)
+                Spacer(minLength: 6)
+                Button(state.isConnected ? "Đăng nhập lại…" : "Đăng nhập…") { model.loginAgy(acc) }
+                    .buttonStyle(.glass).controlSize(.small)
+                Button { model.removeAgy(acc) } label: { Image(systemName: "trash") }
+                    .buttonStyle(.glass).controlSize(.small).help("Xoá tài khoản này")
+            }
+            noteText("agy-" + acc.id)
+        }
+        .padding(10)
+        .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(Color.primary.opacity(0.04)))
     }
 
     private var geminiPanel: some View {

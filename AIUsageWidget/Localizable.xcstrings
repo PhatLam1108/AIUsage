@@ -1,7 +1,6 @@
 {
   "sourceLanguage": "vi",
   "strings": {
-    "": {},
     "%@ còn %lld%%": {
       "localizations": {
         "en": {
@@ -30,6 +29,26 @@
           "stringUnit": {
             "state": "new",
             "value": "%1$@ hết %2$@"
+          }
+        }
+      }
+    },
+    "%@ · 5 giờ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · 5 hours"
+          }
+        }
+      }
+    },
+    "%@ · tuần": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · week"
           }
         }
       }
@@ -83,13 +102,54 @@
       }
     },
     "%lld%%": {},
+    "5 giờ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5 hours"
+          }
+        }
+      }
+    },
     "AI Usage": {},
+    "API credit": {},
+    "C+G 5 giờ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C+G 5h"
+          }
+        }
+      }
+    },
+    "C+G tuần": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "C+G week"
+          }
+        }
+      }
+    },
     "CN": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Sunday"
+          }
+        }
+      }
+    },
+    "Chính": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Main"
           }
         }
       }
@@ -105,6 +165,26 @@
       }
     },
     "Claude · ChatGPT · Antigravity usage": {},
+    "Claude/GPT · 5 giờ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude/GPT · 5 hours"
+          }
+        }
+      }
+    },
+    "Claude/GPT · tuần": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude/GPT · week"
+          }
+        }
+      }
+    },
     "Dư dả": {
       "localizations": {
         "en": {
@@ -136,6 +216,26 @@
       }
     },
     "Fetch latest AI usage data": {},
+    "Gemini 5 giờ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gemini 5h"
+          }
+        }
+      }
+    },
+    "Gemini tuần": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gemini week"
+          }
+        }
+      }
+    },
     "Mở cửa sổ đăng nhập claude.ai": {
       "localizations": {
         "en": {
@@ -147,6 +247,26 @@
       }
     },
     "Refresh AI Usage": {},
+    "Tuần": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week"
+          }
+        }
+      }
+    },
+    "Tài khoản %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account %lld"
+          }
+        }
+      }
+    },
     "chiều %@": {
       "localizations": {
         "en": {
@@ -163,6 +283,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "tomorrow afternoon"
+          }
+        }
+      }
+    },
+    "chưa có số": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "no numbers yet"
+          }
+        }
+      }
+    },
+    "cần đăng nhập": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sign-in needed"
           }
         }
       }
@@ -317,7 +457,7 @@
         }
       }
     },
-    "—": {}
+    "–": {}
   },
   "version": "1.0"
 }

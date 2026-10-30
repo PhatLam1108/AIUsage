@@ -278,6 +278,76 @@ struct QuotaTile: View {
     }
 }
 
+/// One account's reading of a quota, for tiles that compare several accounts.
+struct AccountQuota: Identifiable {
+    let id: String
+    let label: String
+    let bar: BarItem?          // nil: no numbers for this account
+    var note: String? = nil    // shown instead of the bar (signed out, no data yet)
+}
+
+/// A quota across several accounts of one service: every account gets the same row,
+/// none is drawn bigger than the others.
+struct MultiAccountTile: View {
+    let title: String
+    let rows: [AccountQuota]
+    let color: Color
+    let now: Date
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title).font(.system(size: 11.5, weight: .medium)).foregroundStyle(.secondary).lineLimit(1)
+            ForEach(rows) { AccountQuotaRow(row: $0, color: color, now: now) }
+        }
+        .padding(11)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(Color.tileBG))
+    }
+}
+
+struct AccountQuotaRow: View {
+    let row: AccountQuota
+    let color: Color
+    let now: Date
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(row.label).font(.system(size: 11)).foregroundStyle(.secondary)
+                .lineLimit(1).truncationMode(.middle)
+            HStack(alignment: .center, spacing: 7) {
+                if let bar = row.bar, row.note == nil {
+                    UsageBar(value: max(0, bar.value), color: bar.color ?? color, gradient: bar.gradient, height: 5,
+                             pace: bar.reported ? paceFraction(reset: bar.resetDate, window: bar.window, now: now) : nil)
+                    Text(corner(bar)).font(.system(size: 10).monospacedDigit()).foregroundStyle(.tertiary)
+                        .lineLimit(1).fixedSize().frame(minWidth: 50, alignment: .trailing)
+                    Text(bar.reported ? "\(bar.value)%" : "–")
+                        .font(.system(size: 15, weight: .semibold).monospacedDigit())
+                        .foregroundStyle(usagePercentColor(bar.value))
+                        .frame(minWidth: 38, alignment: .trailing)
+                } else {
+                    UsageBar(value: 0, color: color, height: 5)
+                    Text(row.note ?? "").font(.system(size: 10.5)).foregroundStyle(.orange).lineLimit(1).fixedSize()
+                        .frame(minWidth: 95, alignment: .trailing)
+                }
+            }
+        }
+        .help(help)
+    }
+
+    private func corner(_ bar: BarItem) -> String {
+        guard bar.reported, let r = bar.resetDate else { return "" }
+        return r <= now ? String(localized: "đang reset") : shortCountdown(to: r, from: now)
+    }
+
+    private var help: String {
+        guard let bar = row.bar, bar.reported, let r = bar.resetDate else { return row.label }
+        var t = row.label + "\n" + String(localized: "\(bar.label): đã dùng \(bar.value)%, reset lúc \(resetClock(r, now: now)).")
+        let read = quotaRead(bar, now: now)
+        if let s = read.safeRate { t += "\n" + String(localized: "Giữ dưới \(s) để không chạm trần trước giờ reset.") }
+        return t
+    }
+}
+
 // MARK: - Small pieces
 
 struct Metric: View {

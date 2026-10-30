@@ -54,6 +54,9 @@ scripts/                 bundle-runtime.sh (build phase), build-dmg.sh (đóng g
 
 ### Antigravity
 - Chạy `agy` qua `expect`, gửi `/usage`, đọc 4 thanh. Chỉ dừng language server do chính lần chạy này tạo ra.
+- Lúc khởi động agy luôn in "not signed in, Signing in…" trong tích tắc, kể cả khi đã đăng nhập. Dấu hiệu chưa đăng nhập thật là menu "Select login method".
+- agy chỉ giữ một phiên đăng nhập, trong Keychain (service `gemini`, account `antigravity`). Tài khoản phụ (tối đa 2) chạy agy với `HOME` riêng ở `Application Support/AIUsage/agy/<id>`, có Keychain riêng `agy.keychain-db` (`runtime/agy_account.sh`). Lệnh `security` theo `HOME` nên agy của tài khoản phụ không thấy Keychain thật. Không đặt tên keychain là `login.keychain-db`: macOS mở keychain tên "login" bằng mật khẩu máy và bật hộp thoại hỏi. Mật khẩu của keychain riêng nằm trong Keychain thật dưới `aiusage.agy.<id>`.
+- Số của tài khoản phụ nằm trong cache dưới khoá `agy_<id>`; `fetch_one.sh agymain|agyextra` làm mới riêng từng nhóm.
 
 ### Gemini API
 - Số dư, lần nạp, tier: helper mở trang billing của AI Studio; khối số dư là iframe của payments.google.com, đọc bằng `evaluateJavaScript(in: frame)`.

@@ -426,12 +426,32 @@
       }
     },
     "AI Usage": {},
+    "AIUsage xoá phiên đăng nhập và số liệu của tài khoản này trên máy. Tài khoản Google không bị ảnh hưởng.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AIUsage deletes this account's sign-in and numbers on this Mac. The Google account itself is not affected."
+          }
+        }
+      }
+    },
     "AIUsage: cài khoá SSH lên %@. Nhập mật khẩu của máy chủ khi được hỏi.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "AIUsage: installing an SSH key on %@. Type the server password when asked."
+          }
+        }
+      }
+    },
+    "AIUsage: đăng nhập tài khoản Antigravity phụ. Chọn Google OAuth và đăng nhập đúng tài khoản Google muốn thêm. Đăng nhập xong gõ /quit để thoát agy.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AIUsage: sign in to an extra Antigravity account. Choose Google OAuth and sign in with the Google account you want to add. When you are in, type /quit to leave agy."
           }
         }
       }
@@ -443,6 +463,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Anthropic API credit: $%@ left"
+          }
+        }
+      }
+    },
+    "Acc chính": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Main"
+          }
+        }
+      }
+    },
+    "Acc phụ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extra"
           }
         }
       }
@@ -661,12 +701,32 @@
         }
       }
     },
+    "Chưa đăng nhập": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not signed in"
+          }
+        }
+      }
+    },
     "Chưa đăng nhập Codex trên máy này.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Codex is not signed in on this Mac."
+          }
+        }
+      }
+    },
+    "Chưa đăng nhập.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not signed in."
           }
         }
       }
@@ -709,16 +769,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Only usable at a limit"
-          }
-        }
-      }
-    },
-    "Chỉ dùng được khi đang chạm giới hạn.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Only usable while at a limit."
           }
         }
       }
@@ -914,56 +964,22 @@
         }
       }
     },
-    "Còn %lld lượt reset Claude": {
-      "localizations": {
-        "en": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld Claude limit reset left"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld Claude limit resets left"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "Còn %lld lượt reset Codex": {
-      "localizations": {
-        "en": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld Codex limit reset left"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld Codex limit resets left"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "Còn dùng được %@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Room for %@"
+          }
+        }
+      }
+    },
+    "Cũ nhất từ %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oldest from %@."
           }
         }
       }
@@ -1074,26 +1090,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Usable now"
-          }
-        }
-      }
-    },
-    "Dùng được ngay.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Usable now."
-          }
-        }
-      }
-    },
-    "Dùng ở mục Limit resets trên trang usage của claude.ai.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Use it under Limit resets on claude.ai's usage page."
           }
         }
       }
@@ -1401,22 +1397,42 @@
         }
       }
     },
-    "Làm mới": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Refresh"
-          }
-        }
-      }
-    },
     "Làm mới %@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Refresh %@"
+          }
+        }
+      }
+    },
+    "Làm mới Claude, ChatGPT và tài khoản Antigravity chính": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh Claude, ChatGPT and the main Antigravity account"
+          }
+        }
+      }
+    },
+    "Làm mới các tài khoản Antigravity phụ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh the extra Antigravity accounts"
+          }
+        }
+      }
+    },
+    "Làm mới số dư Gemini API và credit Anthropic": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh the Gemini API balance and the Anthropic credit"
           }
         }
       }
@@ -1437,16 +1453,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save"
-          }
-        }
-      }
-    },
-    "Lượt gần nhất hết hạn %@.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The next one expires %@."
           }
         }
       }
@@ -1487,16 +1493,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Last fetch"
-          }
-        }
-      }
-    },
-    "Lần lấy thành công gần nhất: %@.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Last successful fetch: %@."
           }
         }
       }
@@ -1557,6 +1553,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Each server signs in with its own SSH key; no passwords are stored. No key yet? Click Install SSH key: Terminal opens so you can type the server password once. You can enter a name from ~/.ssh/config as the address."
+          }
+        }
+      }
+    },
+    "Mỗi tài khoản phụ có phiên đăng nhập và Keychain riêng trong thư mục của AIUsage, không ảnh hưởng tới agy bạn đang dùng. Tối đa 3 tài khoản.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each extra account has its own sign-in and keychain in the AIUsage folder and does not affect the agy you use. Up to 3 accounts."
           }
         }
       }
@@ -1886,22 +1892,34 @@
         }
       }
     },
-    "Số liệu %@ đã cũ": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ data is stale"
-          }
-        }
-      }
-    },
     "Số liệu Claude Code của máy này đang là số cũ.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Claude Code numbers from this server are old."
+          }
+        }
+      }
+    },
+    "Số liệu cũ ở %lld nguồn": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Old numbers in %lld source"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Old numbers in %lld sources"
+                }
+              }
+            }
           }
         }
       }
@@ -2016,6 +2034,26 @@
         }
       }
     },
+    "Thêm tài khoản": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add account"
+          }
+        }
+      }
+    },
+    "Tiền API": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API balance"
+          }
+        }
+      }
+    },
     "Tiền tệ": {
       "localizations": {
         "en": {
@@ -2056,12 +2094,52 @@
         }
       }
     },
+    "Tài khoản %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account %lld"
+          }
+        }
+      }
+    },
+    "Tài khoản chính": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Main account"
+          }
+        }
+      }
+    },
+    "Tài khoản đang đăng nhập trong agy": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account signed in to agy"
+          }
+        }
+      }
+    },
     "Tên (tuỳ chọn)": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Name (optional)"
+          }
+        }
+      }
+    },
+    "Tên hiển thị (tuỳ chọn)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Display name (optional)"
           }
         }
       }
@@ -2096,12 +2174,52 @@
         }
       }
     },
+    "Xong. Quay lại AIUsage và bấm làm mới ở khung Antigravity.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done. Go back to AIUsage and click refresh in the Antigravity panel."
+          }
+        }
+      }
+    },
+    "Xoá": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        }
+      }
+    },
     "Xoá máy chủ này": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Remove this server"
+          }
+        }
+      }
+    },
+    "Xoá tài khoản Antigravity %@?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete the Antigravity account %@?"
+          }
+        }
+      }
+    },
+    "Xoá tài khoản này": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete this account"
           }
         }
       }
@@ -2160,6 +2278,16 @@
         }
       }
     },
+    "chính": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "main"
+          }
+        }
+      }
+    },
     "chính xác tới %@": {
       "localizations": {
         "en": {
@@ -2176,6 +2304,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "no price yet"
+          }
+        }
+      }
+    },
+    "chưa có số": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "no numbers yet"
           }
         }
       }
@@ -2203,6 +2341,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ left"
+          }
+        }
+      }
+    },
+    "cần đăng nhập": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sign-in needed"
           }
         }
       }
@@ -2608,6 +2756,16 @@
         }
       }
     },
+    "Đã mở Terminal. Đăng nhập xong thì bấm làm mới.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminal is open. Click refresh once you are signed in."
+          }
+        }
+      }
+    },
     "Đã reset giới hạn Codex.": {
       "localizations": {
         "en": {
@@ -2748,12 +2906,32 @@
         }
       }
     },
+    "Đăng nhập lại…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in again…"
+          }
+        }
+      }
+    },
     "Đăng nhập trong Terminal": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Sign in in Terminal"
+          }
+        }
+      }
+    },
+    "Đăng nhập…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in…"
           }
         }
       }
