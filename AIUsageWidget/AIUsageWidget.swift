@@ -28,7 +28,7 @@ struct BarData: Identifiable {
 struct AccountColumn: Identifiable {
     let id: String
     let label: String
-    let bars: [BarData]          // Gemini 5h, Gemini week, Claude/GPT 5h, Claude/GPT week
+    let bars: [BarData]          // Gemini 5h, Gemini week
     var note: String? = nil      // instead of numbers: signed out, no data yet
     var fetchedAt: Date? = nil
 }
@@ -46,6 +46,8 @@ struct ProviderInfo: Identifiable {
     var state: SourceState = .ok
     /// Antigravity with extra accounts: every account, the signed-in one first.
     var accounts: [AccountColumn] = []
+    /// Claude: API credit balance, shown beside the plan badge instead of as a tile.
+    var credit: String? = nil
 }
 
 /// Whether a provider card has numbers to show.
@@ -157,7 +159,7 @@ struct UsageProvider: TimelineProvider {
         let cx = json["codex"]  as? [String: Any] ?? [:]
         let g  = json["agy"]    as? [String: Any] ?? [:]
 
-        let claudePlan = c["plan"]  as? String ?? "MAX 5x"
+        let claudePlan = c["plan"]  as? String ?? "MAX"
         let codexPlan  = cx["plan"] as? String ?? "PLUS"
         let gemPlan    = g["plan"]  as? String ?? "AI PRO"
 
@@ -178,18 +180,15 @@ struct UsageProvider: TimelineProvider {
                 BarData(label: String(localized: "\(gem) · tuần"), value: g["gemini_weekly"] as? Int ?? 0, useGradient: true,
                         resetDate: parseISODate(g["gemini_weekly_reset"] as? String),
                         short: String(localized: "Gemini tuần")),
-                BarData(label: String(localized: "Claude/GPT · 5 giờ"), value: g["claude_gpt_5h"] as? Int ?? 0,
-                        resetDate: parseISODate(g["claude_gpt_5h_reset"] as? String),
-                        short: String(localized: "C+G 5 giờ"), window: QuotaWindow.fiveHours),
-                BarData(label: String(localized: "Claude/GPT · tuần"), value: g["claude_gpt_weekly"] as? Int ?? 0,
-                        resetDate: parseISODate(g["claude_gpt_weekly_reset"] as? String),
-                        short: String(localized: "C+G tuần")),
+                // No Claude/GPT here: almost never used, and the room goes to a third account.
             ]
         }
         // Extra Antigravity accounts (config.json "agy_accounts", cache "agy_<id>").
         func column(_ g: [String: Any], id: String, name: String, fallback: String) -> AccountColumn {
             let email = g["email"] as? String ?? ""
-            let label = !name.isEmpty ? name : (email.isEmpty ? fallback : String(email.split(separator: "@").first ?? ""))
+            // The part before "@" only: the name column is narrow.
+            let raw = !name.isEmpty ? name : email
+            let label = raw.isEmpty ? fallback : String(raw.split(separator: "@").first ?? Substring(raw))
             let note: String? = g["needs_login"] as? Bool == true ? String(localized: "cần đăng nhập")
                 : (g["gemini_weekly"] == nil && g["gemini_5h"] == nil) ? String(localized: "chưa có số") : nil
             return AccountColumn(id: id, label: label, bars: agyBars(g, version: false), note: note,
@@ -203,34 +202,40 @@ struct UsageProvider: TimelineProvider {
         }
         let accounts = extra.isEmpty ? [] : [column(g, id: "main", name: "", fallback: String(localized: "Chính"))] + extra
 
-        var claudeBars = [
-            BarData(label: String(localized: "5 giờ"), value: c["session"] as? Int ?? 0, resetDate: claudeReset,
-                    short: String(localized: "5 giờ"), window: QuotaWindow.fiveHours),
-            BarData(label: String(localized: "Tuần"), value: c["weekly"] as? Int ?? 0, resetDate: claudeWeeklyReset,
-                    short: String(localized: "Tuần")),
-        ]
+        // No "session" means the plan has no 5-hour limit (verified Ultra accounts).
+        var claudeBars: [BarData] = []
+        if let session = c["session"] as? Int {
+            claudeBars.append(BarData(label: String(localized: "5 giờ"), value: session, resetDate: claudeReset,
+                                      short: String(localized: "5 giờ"), window: QuotaWindow.fiveHours))
+        }
+        claudeBars.append(BarData(label: String(localized: "Tuần"), value: c["weekly"] as? Int ?? 0, resetDate: claudeWeeklyReset,
+                                  short: String(localized: "Tuần")))
         // Per-model weekly limits (claude.ai "weekly_scoped", e.g. Fable).
         for s in c["scoped"] as? [[String: Any]] ?? [] {
             guard let label = s["label"] as? String else { continue }
             claudeBars.append(BarData(label: String(localized: "\(label) · tuần"), value: s["pct"] as? Int ?? 0,
                                       resetDate: parseISODate(s["reset"] as? String) ?? claudeWeeklyReset, short: label))
         }
-        // Anthropic Console (API platform) credit: the Max plan grants $200 of API credit
-        // each month, refilled on renewal. The tile shows the balance; the bar is the share
-        // spent. window 0 = no pace tick and no countdown (the renewal date isn't exposed).
-        if let api = c["api"] as? [String: Any], let bal = api["balance"] as? Double {
-            let grant = max(api["grant"] as? Double ?? 200, 1)
-            let used = Int((100 * (grant - bal) / grant).rounded())
-            claudeBars.append(BarData(label: String(localized: "API credit"), value: min(100, max(0, used)), short: "API", window: 0,
-                                      valueText: "$" + String(format: "%.2f", bal)))
+        // Cloud session credits (remote Claude Code sessions): dollars left of a fixed
+        // allowance. The bar is the share spent; no countdown.
+        if let cl = c["cloud"] as? [String: Any], let left = (cl["left"] as? NSNumber)?.doubleValue,
+           let limit = (cl["limit"] as? NSNumber)?.doubleValue, limit > 0 {
+            let used = Int((100 * (limit - left) / limit).rounded())
+            claudeBars.append(BarData(label: String(localized: "Phiên cloud"), value: min(100, max(0, used)), short: "Cloud", window: 0,
+                                      valueText: "$" + String(format: "%.2f", left)))
         }
+        // Anthropic Console (API platform) credit: Max and Ultra grant $200 each month,
+        // refilled on renewal. Just the balance, beside the plan badge: a tile for one
+        // number that barely moves took a whole row.
+        let claudeCredit = (c["api"] as? [String: Any])?["balance"] as? Double
 
         let agyFetched = ([parseISODate(g["fetched_at"] as? String)] + extra.map(\.fetchedAt)).compactMap { $0 }.min()
         return UsageEntry(date: Date(), providers: [
             ProviderInfo(id: "claude", name: "Claude", badge: claudePlan, provider: "claude", color: .claude, bars: claudeBars,
                          resetDate: claudeReset, needsLogin: c["needs_login"] as? Bool ?? false,
                          fetchedAt: parseISODate(c["fetched_at"] as? String),
-                         state: state("claude", has: c["session"] != nil || c["needs_login"] as? Bool == true)),
+                         state: state("claude", has: c["weekly"] != nil || c["needs_login"] as? Bool == true),
+                         credit: claudeCredit.map { "$" + String(format: "%.2f", $0) }),
             ProviderInfo(id: "chatgpt", name: "ChatGPT", badge: codexPlan, provider: "openai", color: .openai, bars: [
                 BarData(label: String(localized: "5 giờ"), value: cx["session"] as? Int ?? 0, resetDate: codexReset,
                         short: String(localized: "5 giờ"), window: QuotaWindow.fiveHours),
@@ -248,12 +253,11 @@ struct UsageProvider: TimelineProvider {
 
     private func sampleData() -> [ProviderInfo] {
         [
-            ProviderInfo(id: "claude", name: "Claude", badge: "MAX 5x", provider: "claude", color: .claude, bars: [
+            ProviderInfo(id: "claude", name: "Claude", badge: "MAX", provider: "claude", color: .claude, bars: [
                 BarData(label: "5 giờ", value: 72, window: QuotaWindow.fiveHours),
                 BarData(label: "Tuần", value: 54),
                 BarData(label: "Fable · tuần", value: 21),
-                BarData(label: "API credit", value: 7, window: 0, valueText: "$186.40"),
-            ], resetDate: Date().addingTimeInterval(3600), fetchedAt: Date()),
+            ], resetDate: Date().addingTimeInterval(3600), fetchedAt: Date(), credit: "$186.40"),
             ProviderInfo(id: "chatgpt", name: "ChatGPT", badge: "PLUS", provider: "openai", color: .openai, bars: [
                 BarData(label: "5 giờ", value: 33, window: QuotaWindow.fiveHours),
                 BarData(label: "Tuần", value: 48),
@@ -261,8 +265,6 @@ struct UsageProvider: TimelineProvider {
             ProviderInfo(id: "antigravity", name: "Antigravity", badge: "AI PRO", provider: "gemini", color: .geminiBlue, bars: [
                 BarData(label: "Gemini · 5 giờ", value: 0, useGradient: true, window: QuotaWindow.fiveHours),
                 BarData(label: "Gemini · tuần", value: 1, useGradient: true),
-                BarData(label: "Claude/GPT · 5 giờ", value: 0, window: QuotaWindow.fiveHours),
-                BarData(label: "Claude/GPT · tuần", value: 34),
             ], resetDate: Date().addingTimeInterval(7200), fetchedAt: Date()),
         ]
     }
@@ -305,6 +307,7 @@ struct QuotaCell: View {
     let bar: BarData
     let color: Color
     let asOf: Date
+    var padV: CGFloat = 3.5
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
@@ -327,56 +330,60 @@ struct QuotaCell: View {
             }
         }
         .padding(.horizontal, 9)
-        .padding(.vertical, 3.5)
+        .padding(.vertical, padV)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(RoundedRectangle(cornerRadius: 8, style: .continuous).fill(Color.primary.opacity(0.055)))
     }
 }
 
-/// Several Antigravity accounts: one column each, all drawn the same, one row per quota.
+/// Several Antigravity accounts: one row each (name, Gemini 5h, Gemini week), all drawn
+/// the same. Gemini only, see agyBars.
 struct AccountTable: View {
     let provider: ProviderInfo
     let asOf: Date
+    var rowGap: CGFloat = 4
     private var accounts: [AccountColumn] { provider.accounts }
     private var color: Color { provider.color }
 
-    private var rows: [String] {
-        [String(localized: "Gemini 5 giờ"), String(localized: "Gemini tuần"),
-         String(localized: "C+G 5 giờ"), String(localized: "C+G tuần")]
+    private var columns: [String] {
+        [String(localized: "Gemini 5 giờ"), String(localized: "Gemini tuần")]
     }
 
     var body: some View {
-        Grid(alignment: .leading, horizontalSpacing: 9, verticalSpacing: 3) {
-            // The card's own header: the logo and plan over the row labels, then each
-            // account's name over its column (orange when that account's numbers are old).
+        Grid(alignment: .leading, horizontalSpacing: 10, verticalSpacing: rowGap) {
+            // The card's own header: the logo and plan over the names, then the quotas.
             GridRow {
                 HStack(spacing: 5) {
                     BrandIcon(provider: provider.provider, color: color, size: 11)
                     PlanBadge(tier: provider.badge, color: color, fontSize: 7.5)
                 }
                 .fixedSize()
-                ForEach(accounts) { a in
-                    Text(a.label).font(.system(size: 10, weight: .semibold))
-                        .foregroundStyle(isStaleFetch(a.fetchedAt, asOf: asOf) ? AnyShapeStyle(.orange) : AnyShapeStyle(.secondary))
-                        .lineLimit(1).truncationMode(.tail)
+                ForEach(columns.indices, id: \.self) { i in
+                    Text(columns[i]).font(.system(size: 10)).foregroundStyle(.secondary).lineLimit(1)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
-            ForEach(rows.indices, id: \.self) { i in
+            ForEach(accounts) { a in
                 GridRow {
-                    Text(rows[i]).font(.system(size: 10)).foregroundStyle(.secondary).lineLimit(1)
-                        .fixedSize()
-                    ForEach(accounts) { a in cell(a, i) }
+                    // Orange when that account's numbers are old.
+                    Text(a.label).font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(isStaleFetch(a.fetchedAt, asOf: asOf) ? AnyShapeStyle(.orange) : AnyShapeStyle(.primary))
+                        .lineLimit(1).truncationMode(.tail)
+                        .frame(maxWidth: 104, alignment: .leading)
+                    if let note = a.note {
+                        Text(note).font(.system(size: 9)).foregroundStyle(.orange).lineLimit(1)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .gridCellColumns(columns.count)
+                    } else {
+                        ForEach(columns.indices, id: \.self) { i in cell(a, i) }
+                    }
                 }
             }
         }
     }
 
     @ViewBuilder private func cell(_ a: AccountColumn, _ i: Int) -> some View {
-        if let note = a.note {
-            Text(i == 0 ? note : "").font(.system(size: 9)).foregroundStyle(.orange).lineLimit(1)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        } else if i < a.bars.count {
+        if i < a.bars.count {
             let bar = a.bars[i]
             VStack(alignment: .leading, spacing: 1) {
                 HStack(alignment: .firstTextBaseline, spacing: 3) {
@@ -388,10 +395,12 @@ struct AccountTable: View {
                         .font(.system(size: 8.5, weight: .medium).monospacedDigit())
                         .foregroundStyle(.tertiary).lineLimit(1)
                 }
-                UsageBar(value: max(0, bar.value), color: bar.color ?? color, gradient: bar.useGradient, height: 3,
+                UsageBar(value: max(0, bar.value), color: bar.color ?? color, gradient: bar.useGradient, height: 5,   // same as QuotaCell
                          pace: bar.value >= 0 ? paceFraction(reset: bar.resetDate, window: bar.window, now: asOf) : nil)
             }
             .frame(maxWidth: .infinity)
+        } else {
+            Color.clear.frame(height: 1)
         }
     }
 }
@@ -401,12 +410,11 @@ struct AccountTable: View {
 struct ProviderCard: View {
     let provider: ProviderInfo
     let asOf: Date
+    var metrics = WidgetMetrics.compact
     // First card only: the refresh button, INSIDE the header row (an overlay
     // with hard-coded offsets collided with the card when padding changed).
     var showRefresh = false
     var clockText: String? = nil   // fetched-at time (first card, beside the refresh button)
-
-    private static let grid = [GridItem(.flexible(), spacing: 5), GridItem(.flexible(), spacing: 5)]
 
     /// Several accounts: the table carries the header itself (logo, plan, account names).
     private var tableOnly: Bool { provider.state == .ok && !provider.needsLogin && !provider.accounts.isEmpty }
@@ -414,7 +422,7 @@ struct ProviderCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             if tableOnly {
-                AccountTable(provider: provider, asOf: asOf)
+                AccountTable(provider: provider, asOf: asOf, rowGap: metrics.rowGap)
             } else {
             HStack(spacing: 7) {
                 BrandIcon(provider: provider.provider, color: provider.color, size: 11)
@@ -422,6 +430,13 @@ struct ProviderCard: View {
                     .font(.system(size: 12, weight: .semibold, design: .rounded))
                     .foregroundStyle(.primary)
                 PlanBadge(tier: provider.badge, color: provider.color, fontSize: 8)
+                if let credit = provider.credit, provider.state == .ok {
+                    HStack(alignment: .firstTextBaseline, spacing: 3) {
+                        Text(credit).font(.system(size: 11.5, weight: .semibold, design: .rounded).monospacedDigit())
+                        Text("credit").font(.system(size: 9.5)).foregroundStyle(.secondary)
+                    }
+                    .lineLimit(1)
+                }
                 Spacer(minLength: 6)
                 // No forecast text in the widget: the pace tick on the bars is enough.
                 // Stale data is a warning, not commentary, so that badge stays.
@@ -468,20 +483,29 @@ struct ProviderCard: View {
                 }
                 .buttonStyle(.plain)
             } else {
-                LazyVGrid(columns: Self.grid, spacing: 5) {
-                    ForEach(provider.bars) { QuotaCell(bar: $0, color: provider.color, asOf: asOf) }
+                TileRows(count: provider.bars.count, spacing: metrics.tileGap) { i in
+                    QuotaCell(bar: provider.bars[i], color: provider.color, asOf: asOf, padV: metrics.tilePadV)
                 }
             }
             }
         }
         .padding(.horizontal, 10)
-        .padding(.vertical, 6)
+        .padding(.vertical, metrics.cardPadV)
         .frame(maxWidth: .infinity, alignment: .topLeading)
         .cardSurface(cornerRadius: 13, brand: provider.color)
     }
 }
 
 // MARK: - Widget View
+
+/// Spacing of the widget. Roomy when the content leaves height to spare (e.g. Claude
+/// Ultra with 3 tiles and Antigravity with Gemini rows only), compact otherwise.
+struct WidgetMetrics {
+    var cardGap: CGFloat = 5, cardPadV: CGFloat = 6, tilePadV: CGFloat = 3.5, tileGap: CGFloat = 5, rowGap: CGFloat = 4
+    static let compact = WidgetMetrics()
+    static let roomy = WidgetMetrics(cardGap: 6, cardPadV: 7, tilePadV: 4.5, tileGap: 6, rowGap: 5)
+    static let spacious = WidgetMetrics(cardGap: 9, cardPadV: 10, tilePadV: 6.5, tileGap: 7, rowGap: 8)
+}
 
 struct SidebarWidgetView: View {
     let entry: UsageEntry
@@ -495,18 +519,26 @@ struct SidebarWidgetView: View {
     }
 
     var body: some View {
-        VStack(spacing: 5) {
+        // The first layout whose height fits wins.
+        ViewThatFits(in: .vertical) {
+            cards(.spacious)
+            cards(.roomy)
+            cards(.compact)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .padding(10)   // our only inset — system content margins are disabled
+    }
+
+    private func cards(_ m: WidgetMetrics) -> some View {
+        VStack(spacing: m.cardGap) {
             ForEach(Array(entry.providers.enumerated()), id: \.element.id) { idx, provider in
-                ProviderCard(provider: provider, asOf: entry.date,
+                ProviderCard(provider: provider, asOf: entry.date, metrics: m,
                              showRefresh: idx == 0,
                              // Clock = fetched-at of the WHOLE widget, so it sits with the
                              // refresh button, not on a provider it seems to belong to.
                              clockText: idx == 0 ? timeString : nil)
             }
-            Spacer(minLength: 0)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .padding(10)   // our only inset — system content margins are disabled
     }
 }
 

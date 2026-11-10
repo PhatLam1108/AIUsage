@@ -43,6 +43,8 @@ scripts/                 bundle-runtime.sh (build phase), build-dmg.sh (đóng g
 
 ### Claude
 - Helper mở `claude.ai/settings/usage` trong WKWebView (cookie lưu trong data store của helper) rồi trả về chữ trên trang, kèm JSON từ API usage của chính trang đó (`/api/organizations/<org>/usage`). JSON cho `five_hour`, `seven_day` và các hạn mức theo model (`weekly_scoped`, ví dụ Fable); phần chữ dùng làm dự phòng và để đọc mục "Limit resets".
+- Từ 2026-11 gói Claude là Max hoặc Ultra. Tài khoản Ultra đã xác minh không có hạn mức 5 giờ: API trả `five_hour: null` và trang không còn "Current session". Khi đó cache ghi `"session": null`, app và widget bỏ ô 5 giờ; đừng coi đó là lấy lỗi. Dấu hiệu đã kết nối của Claude là `weekly`, không phải `session`.
+- Credit phiên cloud (claude.ai/code) nằm trong JSON usage dưới một khoá mã hoá (hiện là `iguana_necktie`), nên script tìm theo hình dạng: mục duy nhất có `limit_dollars` và `remaining_dollars`. Cache: `claude.cloud = {left, limit, expires}`.
 - Không dùng Claude CLI hay OAuth API: CLI đổi tên binary theo phiên bản, còn OAuth token xoay vòng và dễ làm hỏng phiên của Claude Code.
 - API credit (Anthropic Console) đọc từ trang dashboard của Console bằng chế độ `fetch-console` của helper, chạy song song.
 - Hết phiên đăng nhập thì cache ghi `needs_login`, app và widget hiện nút đăng nhập lại. Cửa sổ đăng nhập tự đóng khi thấy trang đã đăng nhập.

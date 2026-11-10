@@ -2,20 +2,34 @@
 
 Follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Semantic Versioning](https://semver.org/). 0.9.0 is the first public release (with a DMG installer); earlier versions were for personal use and were reconstructed from the commit history by development milestone. Vietnamese version: [CHANGELOG.md](CHANGELOG.md).
 
-## [Unreleased]
+## [0.10.0] - 2026-11-10
+Several Antigravity accounts, support for the Claude Max and Ultra plans, and a reworked app and widget layout that is even and compact.
 
 ### Added
-- Track up to 3 Antigravity accounts at once. The Accounts window has an **Add account** button; each extra account signs in with agy in Terminal. With several accounts, every quota tile lists all of them as equals: email, percentage, time to reset and a bar with the pace marker.
-- Each extra account has its own folder and keychain (`runtime/agy_account.sh`), so the agy sign-in you use is never touched. Deleting an account removes its keychain, folder and numbers.
-- The Google email of each Antigravity account is shown, read from agy's log.
+- Track up to 3 Antigravity accounts at once. The Accounts window has an **Add account** button; each extra account signs in with agy in Terminal and gets its own folder and keychain (`runtime/agy_account.sh`), so the agy sign-in you use is never touched. Removing an account deletes its keychain, folder and numbers.
+- The Google email and plan of each Antigravity account, read from agy's log.
 - `fetch_one.sh agymain` and `agyextra` refresh only the main account or only the extra accounts.
+- A **Cloud sessions** tile for Claude: credit left for Claude Code sessions run in the cloud, out of the amount granted, with its expiry date. The tile hides itself when there is no credit.
+- Claude limit resets are split by kind: a Fable reset says it refills only the Fable allowance, with its expiry date.
+- Codex adds a list of recent weeks and shows the last 5 five-hour windows.
+- The Gemini calendar shows each week's total spend in its left column.
 
 ### Changed
-- Redesigned widget: each quota is a tile (label, countdown, percentage and a bar with the pace marker), in two columns. With several Antigravity accounts the Antigravity card becomes a table, one equal column per account; an account's name turns orange when its numbers are old. Measured with ImageRenderer: 341 of 345 points tall with 3 accounts.
-- The "old numbers" cards are merged into one card with **Main**, **Extra** and **API balance** buttons (only for groups that have old numbers).
-- The Codex and Claude limit reset cards are gone from Needs attention: credits left, expiry and the reset button are already in each company's column.
+- Antigravity card in the app: one row per account, name and plan on top, the 5-hour and weekly quota side by side at the same percentage size as the other tiles, plus the pace readings.
+- The Antigravity Claude/GPT limits are gone from the app and the widget (almost never used); only Gemini 5-hour and weekly remain. The script still fetches them, so they can come back when needed.
+- The three app columns are no longer aligned block by block: each column stacks its blocks one after another, so there are no large gaps between sections.
+- The hourly and daily charts share one cell size, the largest the tightest column can hold.
+- Every progress bar has the same height (5 points); rows with a bar (projects, models, 5-hour windows) share one layout, so bars start and end at the same place in all three columns.
+- With an odd number of quota tiles the last one spans the full width instead of leaving an empty cell.
+- Gemini API hides models with no requests.
+- Redesigned widget: each quota is a tile (label, countdown, percentage and a bar with the pace marker). The Antigravity card becomes a table with one row per account (name, Gemini 5-hour, Gemini weekly); a name turns orange when that account's numbers are old. The API credit sits beside the Claude plan badge.
+- The widget spaces itself out when there is height to spare and returns to the compact layout when the content grows; measured with ImageRenderer, it fits the 345-point frame with 3 accounts.
+- The app icon sits beside the AI Usage title in the title bar.
+- The "old numbers" cards are merged into one card with **Main**, **Extra** and **API money** buttons (only for the groups that are old). The Codex and Claude reset cards leave the Needs attention strip, since each column already shows them.
 
 ### Fixed
+- Support for the new Claude plans, Max and Ultra (replacing Max 5x and 20x). A verified Ultra account has no 5-hour limit: the script used to treat the missing 5-hour number as a failed fetch, so the Claude numbers stopped updating. The app now drops the 5-hour tile and keeps updating the weekly limit.
+- The Codex **Use reset** button works whenever a reset is left, as in ChatGPT's own settings. The app used to wait for the server to report a usable reset, but that count stayed 0 even at 98% of the weekly limit, so the button stayed disabled.
 - An Antigravity account that is not signed in no longer makes the fetch wait 25 seconds: the script recognises the sign-in menu, stops at once and marks the account as needing sign-in.
 
 ## [0.9.0] - 2026-10-28

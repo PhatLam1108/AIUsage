@@ -111,7 +111,7 @@ claude)
   RAW="$TMPDIR_USAGE/claude_web_raw.txt"
   HELPER_RC=0
   # The Anthropic Console (API platform) dashboard is read in parallel: it holds
-  # the monthly API credit that comes with the Max plan.
+  # the monthly API credit that comes with the Max and Ultra plans.
   RAW_API="$TMPDIR_USAGE/console_raw.txt"
   API_RC=0
   if [ -x "$HELPER" ]; then
@@ -202,7 +202,8 @@ def grab(label):
                 return pct,reset
     return None,None
 
-# Plan name follows the "Plan usage limits" header (e.g. "Max (5x)", "Pro").
+# Plan name follows the "Plan usage limits" header (e.g. "Max (5x)", "Pro"; since
+# 2026-11 just "Max" or "Ultra").
 plan=""
 for i,l in enumerate(lines):
     if l.lower() in ("plan usage limits","your usage"):  # 2026-09 page: "Your usage" -> "Max (20x)"
@@ -222,9 +223,21 @@ def iso_utc(v):
     try: return datetime.fromisoformat(v.replace("Z", "+00:00")).astimezone(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
     except Exception: return ""
 scoped = []
+cloud = None
 if isinstance(usage, dict):
     fh, sd = usage.get("five_hour") or {}, usage.get("seven_day") or {}
     if fh.get("utilization") is not None: sp, sr = round(fh["utilization"]), iso_utc(fh.get("resets_at") or "")
+    # A verified Ultra account has no 5-hour limit: the API answers five_hour: null
+    # and the page drops "Current session". That is a real reading, not a miss.
+    elif "five_hour" in usage and sd.get("utilization") is not None: sp, sr = None, ""
+    # Cloud session credits (claude.ai/code remote sessions): the one entry with a
+    # dollar limit. Its key is a codename, so find it by shape, not by name.
+    for k, v in usage.items():
+        if k == "extra_usage" or not isinstance(v, dict): continue
+        if v.get("limit_dollars") and v.get("remaining_dollars") is not None:
+            cloud = {"left": round(float(v["remaining_dollars"]), 2), "limit": float(v["limit_dollars"]),
+                     "expires": iso_utc(v.get("resets_at") or "")}
+            break
     if sd.get("utilization") is not None: wp, wr = round(sd["utilization"]), iso_utc(sd.get("resets_at") or "")
     # Per-model weekly limits ("Fable" on Max plans), labelled by the API's display name.
     for l in usage.get("limits") or []:
@@ -237,7 +250,7 @@ if isinstance(usage, dict):
 
 # Anthropic Console dashboard (platform.claude.com): "Organization credits $199.69",
 # "Spend this month $0.31 of $500 tier limit resets Nov 1", prompt-caching hit rate
-# and 7-day token volume. The Max plan grants $200 of API credit every month.
+# and 7-day token volume. Max and Ultra grant $200 of API credit every month.
 API_GRANT = 200.0
 def parse_api():
     p = os.environ.get("CLAUDE_API_RAW", "")
@@ -280,21 +293,36 @@ def parse_resets():
     if "no resets right now" in sec.lower(): return {"available": 0}
     m = re.search(r"(\d+)\s+resets?\b", sec, re.I)
     n = int(m.group(1)) if m else max(1, len(re.findall(r"\bexpires?\b", sec, re.I)))
-    return {"available": n, "detail": " ".join(sec.split())[:200]}
+    # Each grant: "<Kind> reset · Expires Mar 9, 2027 at 2:59 PM GMT+7". Kinds differ in
+    # what they restore: a "Fable reset" refills only the Fable allowance, not the week.
+    grants = []
+    for g in re.finditer(r"([A-Z][\w+.·-]*(?: [\w+.·-]+){0,2}?)\s+reset\b\W*Expires\s+([A-Z][a-z]{2} \d{1,2}, \d{4}) at (\d{1,2}:\d{2}\s*[AP]M)", sec):
+        try:
+            when = datetime.strptime(f"{g.group(2)} {g.group(3).replace(' ', '')}", "%b %d, %Y %I:%M%p")  # page shows local time
+            exp = datetime.fromtimestamp(when.timestamp(), timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+        except ValueError:
+            exp = ""
+        grants.append({"kind": g.group(1).strip(), "expires": exp})
+    out = {"available": n, "detail": " ".join(sec.split())[:200]}
+    if grants: out["grants"] = grants
+    return out
 resets = parse_resets()
 
 rc = os.environ.get("CLAUDE_HELPER_RC","0")
 login_markers = ("continue with google","continue with email","error logging you in","log in to claude")
 needs_login = (rc=="3") or (any(m in low for m in login_markers) and "% used" not in low)
 
-if sp is not None and wp is not None:
+no_session = isinstance(usage, dict) and "five_hour" in usage and not usage.get("five_hour")
+if wp is not None and (sp is not None or no_session):
     # Good capture. "api" is absent until the Console has been signed in once.
     # "_fresh" tells the merge step this is real new data (it bumps updated_at);
     # the prev-cache branches below omit it so the clock never lies.
-    frag={"session":sp,"weekly":wp,"plan":plan or "MAX 5x",
+    # "session" is null when the plan has no 5-hour limit.
+    frag={"session":sp,"weekly":wp,"plan":plan or "MAX",
           "session_reset":sr or "","weekly_reset":wr or "","needs_login":False,
           "_fresh":True}
     if api: frag["api"] = api
+    if cloud: frag["cloud"] = cloud
     if scoped: frag["scoped"] = scoped
     if resets is not None: frag["resets"] = resets
     print(json.dumps(frag))
@@ -1160,7 +1188,6 @@ try:
     ev = [{"kind": e["kind"], "at": e["occurred_at"]} for e in hist.get("events") or []]
     out["resets"] = {
         "available": rc.get("available_count", 0),
-        "usable_now": 0,
         "credits": [{"id": c.get("id"), "title": c.get("title"), "granted": c.get("granted_at"), "expires": c.get("expires_at"), "status": c.get("status")}
                     for c in rc.get("credits") or []],
         "used_30d": sum(1 for e in ev if e["kind"] == "used"),
@@ -1168,10 +1195,6 @@ try:
         "last_used": next((e["at"] for e in ev if e["kind"] == "used"), None),
         "history": ev[:6],
     }
-    try:
-        u = get("/wham/usage").get("rate_limit_reset_credits") or {}
-        out["resets"]["usable_now"] = u.get("applicable_available_count", 0)
-    except Exception: pass
 except Exception as e:
     import sys; print("codexhist resets:", e, file=sys.stderr)
 out["_fresh"] = True

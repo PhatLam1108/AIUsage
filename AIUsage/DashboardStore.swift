@@ -61,6 +61,13 @@ struct ClaudeAPI {
     var needsLogin = false
 }
 
+/// Cloud session credits on claude.ai (remote Claude Code sessions): dollars left of
+/// a fixed allowance that expires on a date.
+struct ClaudeCloud {
+    var left = 0.0, limit = 0.0
+    var expires: Date? = nil
+}
+
 struct Share: Identifiable { let id = UUID(); let name: String; let pct: Int }
 
 struct InsightSide {
@@ -108,7 +115,7 @@ struct CodexCredit: Identifiable {
 }
 
 struct CodexResets {
-    var available = 0, usableNow = 0, used30d = 0, granted30d = 0
+    var available = 0, used30d = 0, granted30d = 0
     var lastUsed: Date? = nil
     var credits: [CodexCredit] = []
     var history: [(kind: String, at: Date)] = []
@@ -186,7 +193,10 @@ final class DashboardStore {
     /// Extra Antigravity accounts (Accounts window), in their configured order.
     var agyMore: [ProviderData] = []
     var claudeAPI: ClaudeAPI? = nil
+    var claudeCloud: ClaudeCloud? = nil
     var claudeResets = 0
+    /// Each banked claude.ai reset by kind ("Fable" refills only the Fable allowance).
+    var claudeResetGrants: [(kind: String, expires: Date?)] = []
     var insights = Insights()
     var codexHist = CodexHistory()
     var gemini = GeminiData()
@@ -392,7 +402,7 @@ final class DashboardStore {
         if let api = claudeAPI, config.providers.console, api.grant > 0, api.balance / api.grant < 0.15 {
             out.append(Attention(id: "api-low", level: .warning, icon: "creditcard", tint: .orange,
                                  title: String(localized: "API credit Anthropic còn $\(String(format: "%.2f", api.balance))"),
-                                 detail: String(localized: "Credit được cấp lại khi gia hạn gói Max."), page: .claude))
+                                 detail: String(localized: "Credit được cấp lại khi gia hạn gói."), page: .claude))
         }
 
         // Machines whose Claude Code numbers are missing this run.
@@ -429,10 +439,12 @@ final class DashboardStore {
         // Claude
         let c = json["claude"] as? [String: Any] ?? [:]
         let weeklyReset = parseISODate(c["weekly_reset"] as? String)
-        var cb = [
-            BarItem(String(localized: "5 giờ"), c["session"] as? Int ?? 0, resetDate: parseISODate(c["session_reset"] as? String), window: QuotaWindow.fiveHours),
-            BarItem(String(localized: "Tuần"), c["weekly"] as? Int ?? 0, resetDate: weeklyReset),
-        ]
+        // No "session" means the plan has no 5-hour limit (verified Ultra accounts).
+        var cb: [BarItem] = []
+        if let session = c["session"] as? Int {
+            cb.append(BarItem(String(localized: "5 giờ"), session, resetDate: parseISODate(c["session_reset"] as? String), window: QuotaWindow.fiveHours))
+        }
+        cb.append(BarItem(String(localized: "Tuần"), c["weekly"] as? Int ?? 0, resetDate: weeklyReset))
         // Per-model weekly limits (claude.ai "weekly_scoped", e.g. Fable).
         for s in c["scoped"] as? [[String: Any]] ?? [] {
             guard let label = s["label"] as? String else { continue }
@@ -442,8 +454,11 @@ final class DashboardStore {
         claude = ProviderData(id: "claude", name: "Claude", plan: c["plan"] as? String ?? "MAX", logo: "claude", color: .claude,
                               bars: cb, needsLogin: c["needs_login"] as? Bool ?? false,
                               fetchedAt: parseISODate(c["fetched_at"] as? String),
-                              hasData: c["session"] != nil || c["needs_login"] as? Bool == true, enabled: p.claude)
+                              hasData: c["weekly"] != nil || c["needs_login"] as? Bool == true, enabled: p.claude)
         claudeResets = (c["resets"] as? [String: Any])?["available"] as? Int ?? 0
+        claudeResetGrants = ((c["resets"] as? [String: Any])?["grants"] as? [[String: Any]] ?? []).map {
+            (kind: $0["kind"] as? String ?? "", expires: parseISODate($0["expires"] as? String))
+        }
         if let a = c["api"] as? [String: Any], let bal = num(a["balance"]), p.console {
             claudeAPI = ClaudeAPI(balance: bal, grant: max(num(a["grant"]) ?? 200, 1), spendMonth: num(a["spend_month"]),
                                   tierLimit: num(a["tier_limit"]), tierResets: parseISODate(a["tier_resets"] as? String),
@@ -451,6 +466,11 @@ final class DashboardStore {
                                   needsLogin: a["needs_login"] as? Bool ?? false)
         } else {
             claudeAPI = nil
+        }
+        if let cl = c["cloud"] as? [String: Any], let left = num(cl["left"]), let limit = num(cl["limit"]), limit > 0 {
+            claudeCloud = ClaudeCloud(left: left, limit: limit, expires: parseISODate(cl["expires"] as? String))
+        } else {
+            claudeCloud = nil
         }
 
         // ChatGPT / Codex
@@ -469,10 +489,7 @@ final class DashboardStore {
                         resetDate: parseISODate(g["gemini_5h_reset"] as? String), window: QuotaWindow.fiveHours),
                 BarItem(String(localized: "\(gem) · tuần"), g["gemini_weekly"] as? Int ?? 0, gradient: true,
                         resetDate: parseISODate(g["gemini_weekly_reset"] as? String)),
-                BarItem(String(localized: "Claude/GPT · 5 giờ"), g["claude_gpt_5h"] as? Int ?? 0,
-                        resetDate: parseISODate(g["claude_gpt_5h_reset"] as? String), window: QuotaWindow.fiveHours),
-                BarItem(String(localized: "Claude/GPT · tuần"), g["claude_gpt_weekly"] as? Int ?? 0,
-                        resetDate: parseISODate(g["claude_gpt_weekly_reset"] as? String)),
+                // Claude/GPT is still fetched (cache claude_gpt_*) but not shown: almost never used.
             ], needsLogin: g["needs_login"] as? Bool ?? false, fetchedAt: parseISODate(g["fetched_at"] as? String),
                hasData: g["gemini_weekly"] != nil || g["gemini_5h"] != nil || g["needs_login"] as? Bool == true,
                enabled: p.agy, account: account)
@@ -505,7 +522,7 @@ final class DashboardStore {
             }
             if let r = h["resets"] as? [String: Any] {
                 var cr = CodexResets()
-                cr.available = r["available"] as? Int ?? 0; cr.usableNow = r["usable_now"] as? Int ?? 0
+                cr.available = r["available"] as? Int ?? 0
                 cr.used30d = r["used_30d"] as? Int ?? 0; cr.granted30d = r["granted_30d"] as? Int ?? 0
                 cr.lastUsed = parseISODate(r["last_used"] as? String)
                 cr.credits = (r["credits"] as? [[String: Any]] ?? []).compactMap { x in

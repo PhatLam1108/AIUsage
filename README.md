@@ -20,7 +20,7 @@
   <b>Tiếng Việt</b> · <a href="README.en.md">English</a> · <a href="CHANGELOG.md">Nhật ký thay đổi</a> · <a href="docs/DEVELOPMENT.md">Ghi chú phát triển</a> · <a href="https://phatdev.net/docs/aiusage">Tài liệu trực tuyến</a>
 </p>
 
-**Phiên bản:** 0.9.0 · **Yêu cầu:** macOS 26 trở lên · **Giao diện:** tiếng Việt và tiếng Anh, theo ngôn ngữ của macOS
+**Phiên bản:** 0.10.0 · **Yêu cầu:** macOS 26 trở lên · **Giao diện:** tiếng Việt và tiếng Anh, theo ngôn ngữ của macOS
 
 ![Bảng điều khiển AIUsage, số liệu mẫu](docs/screenshots/dashboard-dark.png)
 
@@ -41,7 +41,7 @@ Ba nguyên tắc thiết kế:
 | Mảng | Nội dung |
 |---|---|
 | **Cần chú ý** | Dải trên cùng tự liệt kê: hạn mức sắp chạm trần hoặc dự kiến hết trước giờ reset, lượt reset còn lại, nguồn cần đăng nhập lại, số liệu cũ, số dư Gemini chỉ còn ít ngày, chi tiêu bất thường, máy chủ không kết nối được. Mỗi mục có nút xử lý ngay tại chỗ. |
-| **Hạn mức** | Claude (5 giờ, tuần, hạn mức tuần theo model như Fable, API credit 200 USD/tháng của gói Max), ChatGPT/Codex (5 giờ, tuần), Antigravity (Gemini và Claude/GPT, 5 giờ và tuần). Mỗi ô có % đã dùng, thời gian tới reset, vạch nhịp đều, so với nhịp đều (nhanh hay chậm bao nhiêu điểm) và mức còn dùng được mỗi giờ hoặc mỗi ngày để không chạm trần. |
+| **Hạn mức** | Claude (5 giờ, tuần, hạn mức tuần theo model như Fable, API credit 200 USD/tháng của gói Max và Ultra), ChatGPT/Codex (5 giờ, tuần), Antigravity (Gemini 5 giờ và tuần, tối đa 3 tài khoản). Mỗi ô có % đã dùng, thời gian tới reset, vạch nhịp đều, so với nhịp đều (nhanh hay chậm bao nhiêu điểm) và mức còn dùng được mỗi giờ hoặc mỗi ngày để không chạm trần. |
 | **Lượt reset** | Codex: số lượt còn lại, lượt nào dùng được ngay, hạn dùng của từng lượt, nút dùng lượt reset (luôn hỏi xác nhận). Claude: số lượt còn lại và nút mở trang reset của claude.ai. Hết lượt thì nút tự ẩn. |
 | **Phân tích Claude Code** | Tỷ lệ dùng từ phiên chạy liên tục hơn 8 giờ, từ context trên 150k và từ subagent, theo model, theo project, theo giờ. Gộp phiên trên máy này, trong Cowork và trên các máy chủ SSH. |
 | **Codex CLI** | Lượt, token (input, cache, output, reasoning), context cao nhất, kết quả lượt, lệnh và file đã sửa, các khung 5 giờ gần đây theo số liệu máy chủ OpenAI, mức dùng theo ngày và model. |
@@ -52,7 +52,7 @@ Ba nguyên tắc thiết kế:
 
 ## Cài đặt
 
-1. Tải `AIUsage-0.9.0.dmg` ở trang [Releases](https://github.com/PhatLam1108/AIUsage/releases), mở file và kéo **AIUsage** vào thư mục **Applications**. Bản phát hành chạy được trên cả Mac Apple Silicon và Intel.
+1. Tải `AIUsage-0.10.0.dmg` ở trang [Releases](https://github.com/PhatLam1108/AIUsage/releases), mở file và kéo **AIUsage** vào thư mục **Applications**. Bản phát hành chạy được trên cả Mac Apple Silicon và Intel.
 2. Mở AIUsage. Bản này chưa được Apple notarize, nên lần đầu macOS sẽ chặn. Vào **System Settings > Privacy & Security**, kéo xuống và bấm **Open Anyway**, rồi mở lại app. Hoặc chạy lệnh:
 
    ```bash

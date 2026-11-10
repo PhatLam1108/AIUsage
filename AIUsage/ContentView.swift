@@ -23,6 +23,10 @@ struct ContentView: View {
     // only scaled; one real layout happens when the drag ends.
     @State private var frozenLayout: CGSize? = nil
     @State private var lastWindowSize: CGSize = .zero
+    // One row height for all three heat charts: the largest the tightest column allows.
+    @State private var heatRow: CGFloat = 30
+    @State private var heatFit: [Int: HeatFit] = [:]
+    @State private var stripHeight: CGFloat = 0
     @Environment(\.openSettings) private var openSettings
 
     var body: some View {
@@ -32,12 +36,13 @@ struct ContentView: View {
                 let lw = live?.width ?? geo.size.width / scale
                 let lh = live?.height ?? geo.size.height / scale
                 let k = live.map { min(geo.size.width / $0.width, geo.size.height / $0.height) } ?? scale
-                dashboard(now: context.date, width: lw)
+                dashboard(now: context.date, width: lw, height: lh)
                     .frame(width: lw, height: lh, alignment: .top)
                     // Measure the tightest height this width needs on an invisible copy.
                     .background(alignment: .top) {
                         if live == nil {
-                            dashboard(now: context.date, width: lw)
+                            dashboard(now: context.date, width: lw, height: lh, measuring: false)
+                                .environment(\.heatRowHeight, HeatGrid.minRow)
                                 .fixedSize(horizontal: false, vertical: true)
                                 .hidden()
                                 .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { naturalHeight = $0 }
@@ -60,6 +65,14 @@ struct ContentView: View {
         .navigationTitle("AI Usage")
         .navigationSubtitle(updatedLine)
         .toolbar {
+            // App icon before the title. No glass pill: macOS 26 wraps toolbar items in one.
+            ToolbarItem(placement: .navigation) {
+                Image(nsImage: NSApp.applicationIconImage)
+                    .resizable().interpolation(.high)
+                    .frame(width: 34, height: 34)
+                    .accessibilityHidden(true)
+            }
+            .sharedBackgroundVisibility(.hidden)
             ToolbarItem(placement: .primaryAction) {
                 Picker("Khoảng thời gian", selection: $range) {
                     ForEach(InsightRange.allCases) { Text($0.title).tag($0) }
@@ -100,35 +113,29 @@ struct ContentView: View {
 
     // MARK: Layout
 
-    private func dashboard(now: Date, width: CGFloat) -> some View {
+    private func dashboard(now: Date, width: CGFloat, height: CGFloat, measuring: Bool = true) -> some View {
         let col = AppLayout.col(for: width)
         return VStack(spacing: 12) {
             attentionStrip(now: now)
-            VStack(spacing: 0) {
-                Grid(horizontalSpacing: AppLayout.gap, verticalSpacing: 0) {
-                    GridRow {
-                        header(store.claude, now: now, refresh: ["claude"]).frame(width: col)
-                        header(store.chatgpt, now: now, refresh: ["chatgpt", "codexhist"]).frame(width: col)
-                        header(store.agy, now: now, refresh: ["antigravity"]).frame(width: col)
-                    }
-                    GridRow {
-                        claudeQuotas(now: now).frame(width: col)
-                        codexQuotas(now: now).frame(width: col)
-                        agyQuotas(now: now).frame(width: col)
-                    }
-                    GridRow {
-                        claudeCode.frame(width: col)
-                        codexCLI(now: now).frame(width: col)
-                        geminiAPI(now: now).frame(width: col)
-                    }
-                }
-                .fixedSize(horizontal: false, vertical: true)
-                HStack(spacing: AppLayout.gap) {
-                    claudeHourly.frame(width: col)
-                    codexDaily.frame(width: col)
-                    geminiDaily.frame(width: col)
-                }
-                .frame(maxHeight: .infinity)
+                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { if measuring { stripHeight = $0 } }
+            // Each column flows on its own: a short quota block (e.g. Antigravity with
+            // Gemini only) no longer waits for the tallest column, which left big gaps.
+            HStack(alignment: .top, spacing: AppLayout.gap) {
+                column(0, col, measuring) {
+                    header(store.claude, now: now, refresh: ["claude"])
+                    claudeQuotas(now: now)
+                    claudeCode
+                } bottom: { claudeHourly }
+                column(1, col, measuring) {
+                    header(store.chatgpt, now: now, refresh: ["chatgpt", "codexhist"])
+                    codexQuotas(now: now)
+                    codexCLI(now: now)
+                } bottom: { codexDaily }
+                column(2, col, measuring) {
+                    header(store.agy, now: now, refresh: ["antigravity"])
+                    agyQuotas(now: now)
+                    geminiAPI(now: now)
+                } bottom: { geminiDaily }
             }
             .background(alignment: .top) {
                 HStack(spacing: AppLayout.gap) {
@@ -142,6 +149,45 @@ struct ContentView: View {
         .padding(.horizontal, AppLayout.inset)
         .padding(.bottom, 16)
         .frame(width: width)
+        .environment(\.heatWidth, col - 32)   // a section's inner width
+        .onChange(of: HeatInputs(fit: heatFit, height: height, strip: stripHeight)) { _, i in
+            if measuring { fitHeatRow(i) }
+        }
+    }
+
+    /// One column's content at its natural height: the top blocks, then the daily chart
+    /// with the shared heat row height. Measures what that chart could grow to.
+    private func column<Top: View, Bottom: View>(_ id: Int, _ width: CGFloat, _ measuring: Bool, @ViewBuilder top: () -> Top,
+                                                 @ViewBuilder bottom: () -> Bottom) -> some View {
+        VStack(spacing: 0) {
+            VStack(spacing: 0) { top() }
+                .fixedSize(horizontal: false, vertical: true)
+                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { if measuring { heatFit[id, default: HeatFit()].top = $0 } }
+            bottom()
+                .environment(\.heatRowHeight, measuring ? heatRow : HeatGrid.minRow)
+                .fixedSize(horizontal: false, vertical: true)
+                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { if measuring { heatFit[id, default: HeatFit()].bottom = $0 } }
+                .onPreferenceChange(HeatRowsKey.self) { n in if measuring { heatFit[id, default: HeatFit()].rows = n } }
+            Spacer(minLength: 0)
+        }
+        .frame(width: width)
+        .frame(maxHeight: .infinity, alignment: .top)
+    }
+
+    /// The row height at which the tightest chart exactly fills its column. The space
+    /// comes from the window height, never from the measured columns, which grow with
+    /// the rows and would feed back into a runaway.
+    private func fitHeatRow(_ i: HeatInputs) {
+        let gap = HeatGrid.rowGap
+        let column = i.height - i.strip - 12 - 4 - 16   // VStack spacing, top and bottom padding
+        guard column > 200, i.strip > 0 else { return }
+        let rows = i.fit.values.filter { $0.rows > 0 && $0.bottom > 0 }.map { f -> CGFloat in
+            let overhead = f.bottom - CGFloat(f.rows) * (heatRow + gap)   // title, header, legend
+            return (column - f.top - overhead) / CGFloat(f.rows) - gap
+        }
+        guard let tightest = rows.min() else { return }
+        let r = min(HeatGrid.maxRow, max(HeatGrid.minRow, tightest.rounded(.down)))
+        if abs(r - heatRow) >= 1 { heatRow = r }
     }
 
     /// One company's column: a single surface with a faint brand wash at the top.
@@ -295,6 +341,7 @@ struct ContentView: View {
 
     private static let clock: DateFormatter = { let f = DateFormatter(); f.dateFormat = "HH:mm"; f.timeZone = .current; return f }()
     private static let day: DateFormatter = { let f = DateFormatter(); f.dateFormat = "d/M"; f.timeZone = .current; return f }()
+    private static let dayYear: DateFormatter = { let f = DateFormatter(); f.dateFormat = "d/M/yyyy"; f.timeZone = .current; return f }()
 
     // MARK: Quotas
 
@@ -319,10 +366,8 @@ struct ContentView: View {
             } else if !p.hasData {
                 NotConnected(text: "Chưa có số liệu. Đăng nhập trong cửa sổ Tài khoản.")
             } else {
-                LazyVGrid(columns: Self.tileGrid, spacing: 8) {
-                    ForEach(p.bars.filter { $0.window > 0 }) { QuotaTile(bar: $0, color: p.color, now: now) }
-                    ForEach(extraTiles, id: \.0.id) { QuotaTile(bar: $0.0, color: p.color, now: now, footer: $0.1) }
-                }
+                let tiles = p.bars.filter { $0.window > 0 }.map { ($0, [String]?.none) } + extraTiles.map { ($0.0, Optional($0.1)) }
+                TileRows(count: tiles.count) { i in QuotaTile(bar: tiles[i].0, color: p.color, now: now, footer: tiles[i].1) }
                 if let s = paceStatus(p.bars.map(\.paceInput), now: now) { PaceStatusLine(status: s, fontSize: 11.5) }
                 extra()
             }
@@ -334,15 +379,38 @@ struct ContentView: View {
 
     private func claudeQuotas(now: Date) -> some View {
         var extra: [(BarItem, [String])] = []
+        if let cl = store.claudeCloud {
+            let used = Int((100 * (cl.limit - cl.left) / cl.limit).rounded())
+            extra.append((BarItem(String(localized: "Phiên cloud"), min(100, max(0, used)), window: 0,
+                                  valueText: usd(cl.left), note: String(localized: "trên \(usd(cl.limit))")),
+                          [String(localized: "Cho phiên Claude Code trên cloud"),
+                           cl.expires.map { String(localized: "Hết hạn \(DashboardStore.dayTime.string(from: $0))") } ?? " "]))
+        }
         if let api = store.claudeAPI {
             let used = Int((100 * (api.grant - api.balance) / api.grant).rounded())
             extra.append((BarItem(String(localized: "API credit"), min(100, max(0, used)), window: 0,
                                   valueText: usd(api.balance), note: String(localized: "trên \(usd(api.grant))")),
                           [api.spendMonth.map { String(localized: "Chi tháng này \(usd($0))") } ?? " ",
-                           String(localized: "Cấp lại khi gia hạn Max")]))
+                           String(localized: "Cấp lại khi gia hạn gói")]))
         }
         return quotas(store.claude, now: now, extraTiles: extra, login: store.loginClaude) {
-            if store.claudeResets > 0 {
+            if !store.claudeResetGrants.isEmpty {
+                // One line per kind: a Fable reset only refills Fable, not the whole week.
+                let kinds = store.claudeResetGrants.reduce(into: [String]()) { if !$0.contains($1.kind) { $0.append($1.kind) } }
+                VStack(spacing: 8) {
+                    ForEach(kinds, id: \.self) { kind in
+                        let grants = store.claudeResetGrants.filter { $0.kind == kind }
+                        let soonest = grants.compactMap(\.expires).min()
+                        let what = kind.lowercased() == "fable" ? String(localized: "Chỉ hồi hạn mức Fable")
+                            : String(localized: "Dùng trên trang usage của claude.ai")
+                        resetLine(count: grants.count, title: String(localized: "Còn \(grants.count) lượt reset \(kind)"), color: .claude,
+                                  detail: what + (soonest.map { " · " + String(localized: "hết hạn \(Self.dayYear.string(from: $0))") } ?? ""),
+                                  button: String(localized: "Mở trang reset"), enabled: true, loading: store.loading.contains("claude-reset")) {
+                            store.openClaudeResets()
+                        }
+                    }
+                }
+            } else if store.claudeResets > 0 {
                 resetLine(count: store.claudeResets, color: .claude,
                           detail: String(localized: "Dùng trên trang usage của claude.ai"),
                           button: String(localized: "Mở trang reset"), enabled: true, loading: store.loading.contains("claude-reset")) {
@@ -359,8 +427,9 @@ struct ContentView: View {
             VStack(alignment: .leading, spacing: 8) {
                 if r.available > 0 {
                     resetLine(count: r.available, color: .openai,
-                              detail: r.usableNow > 0 ? String(localized: "Dùng được ngay") : String(localized: "Chỉ dùng được khi chạm giới hạn"),
-                              button: String(localized: "Dùng lượt reset"), enabled: r.usableNow > 0,
+                              // Usable any time, as in ChatGPT's own settings (applicable_available_count stays 0 even near the limit).
+                              detail: String(localized: "Đặt lại giới hạn tuần và 5 giờ"),
+                              button: String(localized: "Dùng lượt reset"), enabled: true,
                               loading: store.loading.contains("codex-reset")) { store.useCodexReset() }
                     ForEach(credits) { cr in creditRow(cr, now: now) }
                 } else {
@@ -387,20 +456,17 @@ struct ContentView: View {
         if store.agyMore.isEmpty || !store.agy.enabled {
             quotas(store.agy, now: now) { EmptyView() }
         } else {
-            let titles = store.agy.bars.filter { $0.window > 0 }.map {
-                // Accounts can sit on different Gemini versions; the tile names the family.
-                $0.label.replacingOccurrences(of: #"Gemini [0-9.]+"#, with: "Gemini", options: .regularExpression)
-            }
+            // One row per account, its 5-hour and weekly quota side by side.
             VStack(alignment: .leading, spacing: 10) {
-                LazyVGrid(columns: Self.tileGrid, spacing: 8) {
-                    ForEach(titles.indices, id: \.self) { i in
-                        MultiAccountTile(title: titles[i], rows: accounts.map { p in
-                            let bars = p.bars.filter { $0.window > 0 }
-                            let label = p.account.isEmpty ? String(localized: "Tài khoản chính") : p.account
-                            let note: String? = p.needsLogin ? String(localized: "cần đăng nhập")
-                                : !p.hasData ? String(localized: "chưa có số") : nil
-                            return AccountQuota(id: p.id, label: label, bar: i < bars.count ? bars[i] : nil, note: note)
-                        }, color: store.agy.color, now: now)
+                VStack(spacing: 8) {
+                    ForEach(accounts, id: \.id) { p in
+                        // The part before "@": the name column is narrow.
+                        let label = p.account.isEmpty ? String(localized: "Tài khoản chính")
+                            : String(p.account.split(separator: "@").first ?? Substring(p.account))
+                        let note: String? = p.needsLogin ? String(localized: "cần đăng nhập")
+                            : !p.hasData ? String(localized: "chưa có số") : nil
+                        AccountTile(title: label, plan: p.plan, note: note, bars: p.bars.filter { $0.window > 0 },
+                                    names: [String(localized: "5 giờ"), String(localized: "Tuần")], color: store.agy.color, now: now)
                     }
                 }
                 // No combined pace line here: it could not say which account it means. The
@@ -413,12 +479,12 @@ struct ContentView: View {
     }
 
     /// "N lượt reset" with the button to spend one. Hidden by the caller when there are none.
-    private func resetLine(count: Int, color: Color, detail: String, button: String, enabled: Bool, loading: Bool,
+    private func resetLine(count: Int, title: String? = nil, color: Color, detail: String, button: String, enabled: Bool, loading: Bool,
                            action: @escaping () -> Void) -> some View {
         HStack(spacing: 8) {
             Image(systemName: "ticket.fill").foregroundStyle(color)
             VStack(alignment: .leading, spacing: 1) {
-                Text("Còn \(count) lượt reset").font(.system(size: 12.5, weight: .semibold))
+                Text(title ?? String(localized: "Còn \(count) lượt reset")).font(.system(size: 12.5, weight: .semibold))
                 Text(detail).font(.system(size: 10.5)).foregroundStyle(.secondary)
             }
             Spacer(minLength: 6)
@@ -511,7 +577,7 @@ struct ContentView: View {
             })
         }
         return section("Claude theo giờ", note: peak.map { $0.pct > 0 ? String(localized: "cao nhất \($0.hour)h, \(Int($0.pct.rounded()))%") : String(localized: "24 giờ qua") }) {
-            if store.config.providers.insights { HeatGrid(rows: rows, header: nil, color: .claude, labelWidth: 46) }
+            if store.config.providers.insights { HeatGrid(rows: rows, header: nil, color: .claude) }
         }
     }
 
@@ -557,24 +623,31 @@ struct ContentView: View {
                     }
                 }
                 if five.isEmpty { EmptyNote(text: "Chưa có dữ liệu.") }
-                ForEach(five.prefix(4)) { periodRow($0, now: now) }
+                ForEach(five.prefix(5)) { periodRow($0, now: now) }
+                // The weekly windows too: how full each week ended up.
+                let weeks = store.codexHist.periods.filter(\.weekly)
+                if !weeks.isEmpty {
+                    Divider().padding(.vertical, 2)
+                    Text("Các tuần gần đây").font(.system(size: 11, weight: .semibold)).foregroundStyle(.tertiary)
+                    ForEach(weeks.prefix(3)) { periodRow($0, now: now) }
+                }
             }
         }
     }
 
     private func periodRow(_ p: CodexPeriod, now: Date) -> some View {
-        let f = DateFormatter(); f.timeZone = .current; f.dateFormat = "d/M HH:mm"
-        let t = DateFormatter(); t.timeZone = .current; t.dateFormat = "HH:mm"
+        let f = DateFormatter(); f.timeZone = .current; f.dateFormat = p.weekly ? "d/M" : "d/M HH:mm"
+        let t = DateFormatter(); t.timeZone = .current; t.dateFormat = p.weekly ? "d/M" : "HH:mm"
         let live = p.end > now
-        return HStack(spacing: 8) {
+        return HStack(spacing: ShareRow.gap) {
             Text("\(f.string(from: p.start)) - \(t.string(from: p.end))")
-                .font(.system(size: 11).monospacedDigit()).foregroundStyle(live ? Color.primary : Color.secondary)
-                .frame(width: 118, alignment: .leading).lineLimit(1)
+                .font(.system(size: 12).monospacedDigit()).foregroundStyle(live ? Color.primary : Color.secondary)
+                .frame(width: ShareRow.labelWidth, alignment: .leading).lineLimit(1)
             UsageBar(value: min(100, Int(p.pct.rounded())), color: p.pct >= 99.5 ? .red : .openai, height: 5)
             Text(String(format: p.pct >= 100 ? "%.0f%%" : "%.1f%%", p.pct))
-                .font(.system(size: 11.5, weight: .semibold).monospacedDigit())
+                .font(.system(size: 12, weight: .semibold).monospacedDigit())
                 .foregroundStyle(p.pct >= 99.5 ? Color.red : Color.primary)
-                .frame(width: 46, alignment: .trailing)
+                .frame(width: ShareRow.valueWidth, alignment: .trailing)
         }
         .help(p.models.map { "\($0.0): \(String(format: "%.1f", $0.1))%" }.joined(separator: "\n")
               + "\n" + p.surfaces.map { "\(surfaceName($0.0)) \(String(format: "%.1f", $0.1))%" }.joined(separator: ", "))
@@ -596,7 +669,7 @@ struct ContentView: View {
         }
         return section("Codex theo ngày và model", note: String(localized: "% trên tổng 7 ngày")) {
             if rows.isEmpty { EmptyNote(text: "Chưa có dữ liệu. Bấm làm mới.") }
-            else { HeatGrid(rows: rows, header: days.map { dayLabel($0.day) }, color: .openai, labelWidth: 60) }
+            else { HeatGrid(rows: rows, header: days.map { dayLabel($0.day) }, color: .openai) }
         }
     }
 
@@ -644,13 +717,15 @@ struct ContentView: View {
                     .font(.system(size: 11)).foregroundStyle(.secondary).lineLimit(2).fixedSize(horizontal: false, vertical: true)
                 if let cap = g.tierCap, cap > 0 {
                     VStack(alignment: .leading, spacing: 3) {
-                        UsageBar(value: min(100, Int(g.month / cap * 100)), color: .geminiBlue, height: 4)
+                        UsageBar(value: min(100, Int(g.month / cap * 100)), color: .geminiBlue, height: 5)
                         Text("\(money(g.month)) / \(money(cap)) để lên tier kế tiếp").font(.system(size: 10.5)).foregroundStyle(.tertiary)
                     }
                 }
-                Divider().padding(.vertical, 2)
                 let spent = g.models.filter(\.priced).reduce(0) { $0 + $1.cost }
-                ForEach(g.models.prefix(3)) { m in
+                // Only models with traffic: rows of "0 req, chưa có giá" said nothing.
+                let used = g.models.filter { $0.requests > 0 || $0.cost > 0 }
+                if !used.isEmpty { Divider().padding(.vertical, 2) }
+                ForEach(used.prefix(3)) { m in
                     ShareRow(name: m.id.replacingOccurrences(of: "gemini-", with: ""),
                              pct: spent > 0 && m.priced ? Int((100 * m.cost / spent).rounded()) : 0, color: .geminiPurple,
                              detail: String(localized: "\(m.requests) req, \(tokens(m.input)) vào, \(tokens(m.output)) ra, \(m.priced ? money(m.cost) : String(localized: "chưa có giá"))"))
@@ -675,7 +750,12 @@ struct ContentView: View {
                                   help: "\(dayLabel(d.day)): \(money(d.cost))", isNow: d.day == today))
         }
         while cells.count % 7 != 0 { cells.append(nil) }
-        let rows: [(String, [HeatCell?])] = stride(from: 0, to: cells.count, by: 7).map { ("", Array(cells[$0..<$0 + 7])) }
+        // Each week's total in the label column.
+        let short: (Double) -> String = { $0 <= 0 ? "" : $0 >= 1000 ? String(format: "%.1fk", $0 / 1000) : "\(Int($0.rounded()))" }
+        let rows: [(String, [HeatCell?])] = stride(from: 0, to: cells.count, by: 7).map { i in
+            let week = Array(cells[i..<i + 7])
+            return (short(week.compactMap { $0?.value }.reduce(0, +)), week)
+        }
         return section("Gemini theo ngày", note: data.isEmpty ? nil : String(localized: "30 ngày, \(money(total))")) {
             if store.config.providers.gemini && !data.isEmpty {
                 HeatGrid(rows: rows, header: [String(localized: "T2"), String(localized: "T3"), String(localized: "T4"), String(localized: "T5"),
@@ -693,6 +773,10 @@ enum InsightRange: String, CaseIterable, Identifiable {
 }
 
 private struct FitKey: Equatable { let avail: CGFloat; let natural: CGFloat }
+
+/// One column's heat chart: the blocks above it, the chart itself, its rows.
+struct HeatFit: Equatable { var top: CGFloat = 0, bottom: CGFloat = 0; var rows = 0 }
+private struct HeatInputs: Equatable { let fit: [Int: HeatFit]; let height: CGFloat; let strip: CGFloat }
 
 #Preview {
     ContentView()

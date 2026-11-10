@@ -278,60 +278,53 @@ struct QuotaTile: View {
     }
 }
 
-/// One account's reading of a quota, for tiles that compare several accounts.
-struct AccountQuota: Identifiable {
-    let id: String
-    let label: String
-    let bar: BarItem?          // nil: no numbers for this account
-    var note: String? = nil    // shown instead of the bar (signed out, no data yet)
-}
-
-/// A quota across several accounts of one service: every account gets the same row,
-/// none is drawn bigger than the others.
-struct MultiAccountTile: View {
+/// One account of a service with several (Antigravity): the name and plan on top, then
+/// each quota side by side the way a QuotaTile draws it (name and countdown, the % at
+/// the same size, the bar, the pace).
+struct AccountTile: View {
     let title: String
-    let rows: [AccountQuota]
+    let plan: String
+    let note: String?          // instead of numbers: signed out, no data yet
+    let bars: [BarItem]
+    let names: [String]        // short quota names, by position ("5 giờ", "Tuần")
     let color: Color
     let now: Date
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(title).font(.system(size: 11.5, weight: .medium)).foregroundStyle(.secondary).lineLimit(1)
-            ForEach(rows) { AccountQuotaRow(row: $0, color: color, now: now) }
+        VStack(alignment: .leading, spacing: 9) {
+            HStack(spacing: 7) {
+                Text(title).font(.system(size: 12.5, weight: .semibold)).lineLimit(1).truncationMode(.middle)
+                PlanBadge(tier: plan, color: color, fontSize: 8.5)
+                Spacer(minLength: 4)
+                if let note { Text(note).font(.system(size: 10.5)).foregroundStyle(.orange).lineLimit(1) }
+            }
+            HStack(alignment: .top, spacing: 18) { quotas }
         }
         .padding(11)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(Color.tileBG))
     }
-}
 
-struct AccountQuotaRow: View {
-    let row: AccountQuota
-    let color: Color
-    let now: Date
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 3) {
-            Text(row.label).font(.system(size: 11)).foregroundStyle(.secondary)
-                .lineLimit(1).truncationMode(.middle)
-            HStack(alignment: .center, spacing: 7) {
-                if let bar = row.bar, row.note == nil {
-                    UsageBar(value: max(0, bar.value), color: bar.color ?? color, gradient: bar.gradient, height: 5,
-                             pace: bar.reported ? paceFraction(reset: bar.resetDate, window: bar.window, now: now) : nil)
-                    Text(corner(bar)).font(.system(size: 10).monospacedDigit()).foregroundStyle(.tertiary)
-                        .lineLimit(1).fixedSize().frame(minWidth: 50, alignment: .trailing)
-                    Text(bar.reported ? "\(bar.value)%" : "–")
-                        .font(.system(size: 15, weight: .semibold).monospacedDigit())
-                        .foregroundStyle(usagePercentColor(bar.value))
-                        .frame(minWidth: 38, alignment: .trailing)
-                } else {
-                    UsageBar(value: 0, color: color, height: 5)
-                    Text(row.note ?? "").font(.system(size: 10.5)).foregroundStyle(.orange).lineLimit(1).fixedSize()
-                        .frame(minWidth: 95, alignment: .trailing)
+    @ViewBuilder private var quotas: some View {
+            ForEach(names.indices, id: \.self) { i in
+                let bar = note == nil && i < bars.count ? bars[i] : nil
+                VStack(alignment: .leading, spacing: 5) {
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                        Text(names[i]).font(.system(size: 11.5, weight: .medium)).foregroundStyle(.secondary).lineLimit(1)
+                        Spacer(minLength: 2)
+                        if let bar { Text(corner(bar)).font(.system(size: 10.5).monospacedDigit()).foregroundStyle(.tertiary).lineLimit(1) }
+                    }
+                    Text(bar.map { $0.reported ? "\($0.value)%" : "–" } ?? "–")
+                        .font(.system(size: 25, weight: .semibold).monospacedDigit())
+                        .foregroundStyle(bar.map { usagePercentColor($0.value) } ?? Color.secondary).lineLimit(1)
+                    UsageBar(value: max(0, bar?.value ?? 0), color: bar?.color ?? color, gradient: bar?.gradient ?? false, height: 5,
+                             pace: bar.flatMap { $0.reported ? paceFraction(reset: $0.resetDate, window: $0.window, now: now) : nil })
+                        .padding(.vertical, 2)
+                    paceLine(bar)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .help(bar.map { help($0) } ?? title)
             }
-        }
-        .help(help)
     }
 
     private func corner(_ bar: BarItem) -> String {
@@ -339,9 +332,25 @@ struct AccountQuotaRow: View {
         return r <= now ? String(localized: "đang reset") : shortCountdown(to: r, from: now)
     }
 
-    private var help: String {
-        guard let bar = row.bar, bar.reported, let r = bar.resetDate else { return row.label }
-        var t = row.label + "\n" + String(localized: "\(bar.label): đã dùng \(bar.value)%, reset lúc \(resetClock(r, now: now)).")
+    /// The pace reading of a QuotaTile on one line: ahead or behind, and the rate left.
+    @ViewBuilder private func paceLine(_ bar: BarItem?) -> some View {
+        if let bar, bar.reported, let d = quotaRead(bar, now: now).delta {
+            let rate = quotaRead(bar, now: now).safeRate
+            HStack(spacing: 3) {
+                Image(systemName: d > 5 ? "hare.fill" : d < -5 ? "tortoise.fill" : "equal.circle.fill")
+                Text(d > 5 ? String(localized: "Nhanh \(d) điểm") : d < -5 ? String(localized: "Chậm \(-d) điểm") : String(localized: "Đúng nhịp"))
+                if let rate { Text("· " + String(localized: "còn \(rate)")).foregroundStyle(.tertiary) }
+            }
+            .foregroundStyle(d > 5 ? Color.orange : Color.secondary)
+            .font(.system(size: 10.5)).lineLimit(1).minimumScaleFactor(0.8)
+        } else {
+            Text(" ").font(.system(size: 10.5))
+        }
+    }
+
+    private func help(_ bar: BarItem) -> String {
+        guard bar.reported, let r = bar.resetDate else { return title }
+        var t = title + "\n" + String(localized: "\(bar.label): đã dùng \(bar.value)%, reset lúc \(resetClock(r, now: now)).")
         let read = quotaRead(bar, now: now)
         if let s = read.safeRate { t += "\n" + String(localized: "Giữ dưới \(s) để không chạm trần trước giờ reset.") }
         return t
@@ -367,6 +376,9 @@ struct Metric: View {
 }
 
 struct ShareRow: View {
+    /// Shared by every label-bar-value row (also the Codex 5-hour windows) so the bars
+    /// start and end at the same place in all three columns.
+    static let labelWidth: CGFloat = 132, valueWidth: CGFloat = 46, gap: CGFloat = 10
     let name: String
     let pct: Int
     let color: Color
@@ -374,12 +386,12 @@ struct ShareRow: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
-            HStack(spacing: 10) {
+            HStack(spacing: ShareRow.gap) {
                 Text(name).font(.system(size: 12)).lineLimit(1).truncationMode(.middle)
-                    .frame(minWidth: 120, maxWidth: 220, alignment: .leading)
+                    .frame(width: ShareRow.labelWidth, alignment: .leading)
                 UsageBar(value: pct, color: color, height: 5)
                 Text("\(pct)%").font(.system(size: 12, weight: .semibold).monospacedDigit())
-                    .frame(width: 40, alignment: .trailing)
+                    .frame(width: ShareRow.valueWidth, alignment: .trailing)
             }
             if let detail { Text(detail).font(.system(size: 10.5)).foregroundStyle(.tertiary).lineLimit(1) }
         }
@@ -437,34 +449,58 @@ struct HeatCell {
 }
 
 /// Rows of equal cells whose colour depth tracks the value (sqrt scale so small values still show).
+/// Row height of every heat chart, set by the dashboard so the three match.
+extension EnvironmentValues {
+    @Entry var heatRowHeight: CGFloat = HeatGrid.minRow
+    @Entry var heatWidth: CGFloat = 0     // inner width of a column section; 0 = unknown
+}
+
+/// Rows of the heat chart below, read by the dashboard to size them.
+struct HeatRowsKey: PreferenceKey {
+    static let defaultValue = 0
+    static func reduce(value: inout Int, nextValue: () -> Int) { value += nextValue() }
+}
+
 struct HeatGrid: View {
     let rows: [(String, [HeatCell?])]
     let header: [String]?
     let color: Color
-    var rowHeight: CGFloat? = nil      // nil = rows share whatever height the grid gets
-    var labelWidth: CGFloat = 44
+    @Environment(\.heatRowHeight) private var rowHeight
+    @Environment(\.heatWidth) private var width
+    static let minRow: CGFloat = 22, maxRow: CGFloat = 70, rowGap: CGFloat = 4
+    /// Every chart is laid out as label + 7 cells, so cells match across charts. A row
+    /// with fewer cells (the 6 hours of the Claude chart) gives the rest to its label.
+    static let slots = 7, labelWidth: CGFloat = 60
+
+    private var cellWidth: CGFloat? {
+        width > 0 ? (width - Self.labelWidth - CGFloat(Self.slots) * Self.rowGap) / CGFloat(Self.slots) : nil
+    }
+    private func labelWidth(cells n: Int) -> CGFloat {
+        guard let c = cellWidth else { return Self.labelWidth }
+        return width - CGFloat(n) * (c + Self.rowGap)
+    }
 
     var body: some View {
         let top = max(rows.flatMap { $0.1 }.compactMap { $0?.value }.max() ?? 0, 0.0001)
-        let labelled = rows.contains { !$0.0.isEmpty }
-        VStack(spacing: 4) {
+        VStack(spacing: Self.rowGap) {
             if let header {
-                HStack(spacing: 4) {
-                    if labelled { Color.clear.frame(width: labelWidth, height: 1) }
+                HStack(spacing: Self.rowGap) {
+                    Color.clear.frame(width: labelWidth(cells: header.count), height: 1)
                     ForEach(Array(header.enumerated()), id: \.offset) { _, h in
-                        Text(h).font(.system(size: 10, weight: .medium)).foregroundStyle(.tertiary).frame(maxWidth: .infinity)
+                        Text(h).font(.system(size: 10, weight: .medium)).foregroundStyle(.tertiary)
+                            .frame(width: cellWidth).frame(maxWidth: cellWidth == nil ? .infinity : nil)
                     }
                 }
             }
             ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
-                HStack(spacing: 4) {
-                    if labelled {
-                        Text(row.0).font(.system(size: 10)).foregroundStyle(.tertiary).monospacedDigit()
-                            .frame(width: labelWidth, alignment: .leading).lineLimit(1)
+                HStack(spacing: Self.rowGap) {
+                    Text(row.0).font(.system(size: 10)).foregroundStyle(.tertiary).monospacedDigit()
+                        .frame(width: labelWidth(cells: row.1.count), alignment: .leading).lineLimit(1)
+                    ForEach(Array(row.1.enumerated()), id: \.offset) { _, c in
+                        cell(c, top: top).frame(width: cellWidth).frame(maxWidth: cellWidth == nil ? .infinity : nil)
                     }
-                    ForEach(Array(row.1.enumerated()), id: \.offset) { _, c in cell(c, top: top) }
                 }
-                .frame(minHeight: rowHeight ?? 22, maxHeight: rowHeight ?? .infinity)
+                .frame(height: rowHeight)
             }
             HStack(spacing: 3) {
                 Spacer()
@@ -476,6 +512,7 @@ struct HeatGrid: View {
             }
             .padding(.top, 2)
         }
+        .preference(key: HeatRowsKey.self, value: rows.count)
     }
 
     private func fill(_ t: Double) -> Color { t > 0 ? color.opacity(0.14 + 0.76 * t) : Color.tileBG }
@@ -527,7 +564,7 @@ struct StackedBar: View {
                 .frame(width: geo.size.width, alignment: .leading)
                 .clipShape(Capsule())
             }
-            .frame(height: 8)
+            .frame(height: 5)   // every bar in the app is 5pt tall
             HStack(spacing: 14) {
                 ForEach(Array(parts.enumerated()), id: \.offset) { _, p in
                     HStack(spacing: 5) {

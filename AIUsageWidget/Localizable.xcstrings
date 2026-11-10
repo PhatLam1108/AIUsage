@@ -114,26 +114,6 @@
     },
     "AI Usage": {},
     "API credit": {},
-    "C+G 5 giờ": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "C+G 5h"
-          }
-        }
-      }
-    },
-    "C+G tuần": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "C+G week"
-          }
-        }
-      }
-    },
     "CN": {
       "localizations": {
         "en": {
@@ -165,26 +145,6 @@
       }
     },
     "Claude · ChatGPT · Antigravity usage": {},
-    "Claude/GPT · 5 giờ": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Claude/GPT · 5 hours"
-          }
-        }
-      }
-    },
-    "Claude/GPT · tuần": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Claude/GPT · week"
-          }
-        }
-      }
-    },
     "Dư dả": {
       "localizations": {
         "en": {
@@ -242,6 +202,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open the claude.ai sign-in window"
+          }
+        }
+      }
+    },
+    "Phiên cloud": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloud sessions"
           }
         }
       }

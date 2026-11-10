@@ -79,7 +79,7 @@ final class AccountsModel {
     func probeExistingSignIns() {
         guard !probed else { return }
         probed = true
-        if config.providers.claude, section("claude")["session"] == nil { fetchNow("claude", source: "claude") }
+        if config.providers.claude, section("claude")["weekly"] == nil { fetchNow("claude", source: "claude") }
         if config.providers.codex, section("codex")["session"] == nil,
            FileManager.default.fileExists(atPath: AppPaths.home + "/.codex/auth.json") { fetchNow("codex", source: "codex") }
         if config.providers.agy, section("agy")["gemini_weekly"] == nil, Shell.which("agy") != nil { fetchNow("agy", source: "agy") }
@@ -92,7 +92,7 @@ final class AccountsModel {
         guard config.providers.claude else { return .off }
         let c = section("claude")
         if c["needs_login"] as? Bool == true { return .needsLogin }
-        if c["session"] != nil { return .connected(fetched("claude")) }
+        if c["weekly"] != nil { return .connected(fetched("claude")) }
         return .notSetUp(String(localized: "Đăng nhập claude.ai một lần trong cửa sổ của AIUsage."))
     }
     var consoleState: SourceState {
@@ -391,7 +391,7 @@ struct AccountsView: View {
 
     private var consolePanel: some View {
         panel(icon: AnyView(BrandIcon(provider: "claude", color: .claude, size: 13)), title: "Anthropic Console",
-              subtitle: "Số dư tín dụng API (gói Max tặng 200 USD mỗi tháng), đọc từ platform.claude.com.",
+              subtitle: "Số dư tín dụng API (gói Max và Ultra tặng 200 USD mỗi tháng), đọc từ platform.claude.com.",
               state: model.consoleState, toggle: $model.config.providers.console) {
             HStack(spacing: 8) {
                 if !model.consoleState.isConnected {
@@ -428,7 +428,7 @@ struct AccountsView: View {
 
     private var agyPanel: some View {
         panel(icon: AnyView(BrandIcon(provider: "gemini", color: .geminiBlue, size: 13)), title: "Antigravity",
-              subtitle: "Hạn mức Gemini và Claude+GPT trong Antigravity, đọc bằng lệnh agy.",
+              subtitle: "Hạn mức Gemini trong Antigravity, đọc bằng lệnh agy.",
               state: model.agyState, toggle: $model.config.providers.agy) {
             HStack(spacing: 8) {
                 if model.agyCLI == nil && !model.agyState.isConnected {

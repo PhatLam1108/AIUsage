@@ -20,7 +20,7 @@
   <a href="README.md">Tiếng Việt</a> · <b>English</b> · <a href="CHANGELOG.en.md">Changelog</a> · <a href="docs/DEVELOPMENT.md">Developer notes (Vietnamese)</a> · <a href="https://phatdev.net/en/docs/aiusage">Online docs</a>
 </p>
 
-**Version:** 0.9.0 · **Requires:** macOS 26 or later · **Interface:** English and Vietnamese, following the macOS language
+**Version:** 0.10.0 · **Requires:** macOS 26 or later · **Interface:** English and Vietnamese, following the macOS language
 
 ![AIUsage dashboard with sample data](docs/screenshots/dashboard-en-light.png)
 
@@ -41,7 +41,7 @@ Three design principles:
 | Area | What you get |
 |---|---|
 | **Needs attention** | A strip at the top lists, automatically: quotas close to their limit or projected to run out before the reset, limit resets left, sources that need signing in again, stale data, a Gemini balance that only lasts a few more days, unusual spending, SSH hosts that cannot be reached. Each item has its action button right there. |
-| **Quotas** | Claude (5 hours, week, per-model weekly limits such as Fable, the Max plan's 200 USD monthly API credit), ChatGPT/Codex (5 hours, week), Antigravity (Gemini and Claude/GPT, 5 hours and week). Each tile shows the percentage used, time to reset, an even-pace marker, how far ahead or behind the even pace you are, and the hourly or daily rate that still avoids hitting the limit. |
+| **Quotas** | Claude (5 hours, week, per-model weekly limits such as Fable, the 200 USD monthly API credit of the Max and Ultra plans), ChatGPT/Codex (5 hours, week), Antigravity (Gemini 5 hours and week, up to 3 accounts). Each tile shows the percentage used, time to reset, an even-pace marker, how far ahead or behind the even pace you are, and the hourly or daily rate that still avoids hitting the limit. |
 | **Limit resets** | Codex: credits left, which can be used now, each credit's expiry, and a button to spend one (always confirmed first). Claude: credits left and a button that opens claude.ai's reset page. The button hides when none are left. |
 | **Claude Code analytics** | Share of usage from sessions running more than 8 hours, from contexts above 150k and from subagents, by model, by project and by hour. Combines sessions on this Mac, in Cowork and on SSH hosts. |
 | **Codex CLI** | Turns, tokens (input, cache, output, reasoning), peak context, turn outcomes, commands and file edits, recent 5-hour windows from OpenAI's servers, usage by day and model. |
@@ -52,7 +52,7 @@ Three design principles:
 
 ## Installation
 
-1. Download `AIUsage-0.9.0.dmg` from [Releases](https://github.com/PhatLam1108/AIUsage/releases), open it and drag **AIUsage** into **Applications**. The release runs on both Apple Silicon and Intel Macs.
+1. Download `AIUsage-0.10.0.dmg` from [Releases](https://github.com/PhatLam1108/AIUsage/releases), open it and drag **AIUsage** into **Applications**. The release runs on both Apple Silicon and Intel Macs.
 2. Open AIUsage. This build is not notarized by Apple yet, so macOS blocks the first launch. Go to **System Settings > Privacy & Security**, scroll down, click **Open Anyway**, then open the app again. Or run:
 
    ```bash

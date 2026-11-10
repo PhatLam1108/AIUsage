@@ -188,6 +188,25 @@ struct UsageBar: View {
     }
 }
 
+/// Quota tiles two per row. An odd last tile spans the whole row instead of
+/// leaving an empty cell (e.g. Claude Ultra: weekly, a model's weekly, API credit).
+struct TileRows<Tile: View>: View {
+    let count: Int
+    var spacing: CGFloat = 8
+    @ViewBuilder let tile: (Int) -> Tile
+
+    var body: some View {
+        VStack(spacing: spacing) {
+            ForEach(Array(stride(from: 0, to: count, by: 2)), id: \.self) { i in
+                HStack(alignment: .top, spacing: spacing) {
+                    tile(i).frame(maxWidth: .infinity)
+                    if i + 1 < count { tile(i + 1).frame(maxWidth: .infinity) }
+                }
+            }
+        }
+    }
+}
+
 // MARK: - ISO-8601 helper
 
 func parseISODate(_ str: String?) -> Date? {

@@ -2,21 +2,35 @@
 
 Theo chuẩn [Keep a Changelog](https://keepachangelog.com/vi/1.1.0/) và [SemVer](https://semver.org/lang/vi/). Bản 0.9.0 là bản phát hành công khai đầu tiên (có file cài DMG); các phiên bản trước dùng cá nhân và được tổng hợp lại từ lịch sử commit theo từng mốc phát triển. Bản tiếng Anh: [CHANGELOG.en.md](CHANGELOG.en.md).
 
-## [Chưa phát hành]
+## [0.10.0] - 2026-11-10
+Theo dõi nhiều tài khoản Antigravity, hỗ trợ gói Claude Max và Ultra, giao diện app và widget làm lại cho đều và gọn.
 
 ### Added
-- Theo dõi tối đa 3 tài khoản Antigravity cùng lúc. Cửa sổ Tài khoản có nút **Thêm tài khoản**; mỗi tài khoản phụ đăng nhập bằng agy trong Terminal. Khi có nhiều tài khoản, mỗi ô hạn mức liệt kê mọi tài khoản ngang hàng: email, phần trăm, thời gian tới reset và thanh có vạch nhịp.
-- Mỗi tài khoản phụ có thư mục và Keychain riêng (`runtime/agy_account.sh`), nên phiên đăng nhập agy đang dùng không bị đụng tới. Xoá tài khoản thì xoá luôn Keychain, thư mục và số liệu của nó.
-- Hiện email Google của tài khoản Antigravity, đọc từ nhật ký của agy.
+- Theo dõi tối đa 3 tài khoản Antigravity cùng lúc. Cửa sổ Tài khoản có nút **Thêm tài khoản**; mỗi tài khoản phụ đăng nhập bằng agy trong Terminal, có thư mục và Keychain riêng (`runtime/agy_account.sh`) nên phiên agy đang dùng không bị đụng tới. Xoá tài khoản thì xoá luôn Keychain, thư mục và số liệu của nó.
+- Hiện email Google và gói của từng tài khoản Antigravity, đọc từ nhật ký của agy.
 - `fetch_one.sh agymain` và `agyextra` làm mới riêng tài khoản chính hoặc các tài khoản phụ.
+- Ô **Phiên cloud** cho Claude: số credit còn lại cho phiên Claude Code chạy trên cloud, trên tổng được cấp, kèm ngày hết hạn. Ô tự ẩn khi không còn credit.
+- Lượt reset Claude tách theo loại: lượt reset Fable ghi rõ chỉ hồi hạn mức Fable, kèm ngày hết hạn.
+- Codex có thêm danh sách các tuần gần đây và hiện 5 khung 5 giờ gần nhất.
+- Lịch Gemini ghi tổng chi tiêu của từng tuần ở cột bên trái.
 
 ### Changed
-- Widget thiết kế lại: mỗi hạn mức là một ô (nhãn, đếm ngược, phần trăm và thanh có vạch nhịp), hai cột. Có nhiều tài khoản Antigravity thì thẻ Antigravity thành bảng, mỗi tài khoản một cột ngang hàng; tên tài khoản chuyển cam khi số của nó đã cũ. Đo bằng ImageRenderer: cao 341 trên 345 điểm khi có 3 tài khoản.
-- Các thẻ "Số liệu đã cũ" gom thành một thẻ, kèm nút **Acc chính**, **Acc phụ** và **Tiền API** (chỉ hiện nút của nhóm có số cũ).
-- Bỏ thẻ lượt reset Codex và Claude khỏi dải Cần chú ý: số lượt, hạn dùng và nút dùng lượt reset đã có trong cột của từng hãng.
+- Thẻ Antigravity trong app: mỗi tài khoản một hàng, tên và gói ở trên, 5 giờ và tuần đặt cạnh nhau với số % cùng cỡ các thẻ khác, kèm nhịp dùng.
+- Bỏ hạn mức Claude/GPT của Antigravity trong app và widget (hầu như không dùng), chỉ giữ Gemini 5 giờ và tuần. Script vẫn lấy số này nên có thể hiện lại khi cần.
+- Ba cột trong app không còn ép thẳng hàng theo từng tầng: mỗi cột xếp liền từ trên xuống, nên không còn khoảng trống lớn giữa các mục.
+- Ba biểu đồ theo giờ và theo ngày dùng chung một kích thước ô, lớn nhất mà cột chật nhất còn chứa được.
+- Mọi thanh tiến độ cao bằng nhau (5 điểm); các dòng có thanh (dự án, model, khung 5 giờ) dùng chung một khuôn nên thanh bắt đầu và kết thúc cùng chỗ ở cả ba cột.
+- Số ô hạn mức lẻ thì ô cuối giãn hết chiều ngang thay vì để trống một ô.
+- Gemini API ẩn các model chưa có lượt gọi nào.
+- Widget thiết kế lại: mỗi hạn mức là một ô (nhãn, đếm ngược, phần trăm và thanh có vạch nhịp). Thẻ Antigravity thành bảng, mỗi tài khoản một dòng (tên, Gemini 5 giờ, Gemini tuần); tên chuyển cam khi số của tài khoản đó đã cũ. API credit nằm ngay cạnh nhãn gói Claude.
+- Widget tự giãn khoảng cách khi còn dư chiều cao và quay về bản gọn khi nội dung dày lên; đo bằng ImageRenderer, vừa khung 345 điểm với 3 tài khoản.
+- Logo app nằm cạnh tên AI Usage trên thanh tiêu đề.
+- Các thẻ "Số liệu đã cũ" gom thành một thẻ, kèm nút **Acc chính**, **Acc phụ** và **Tiền API** (chỉ hiện nút của nhóm có số cũ). Thẻ lượt reset Codex và Claude rời khỏi dải Cần chú ý vì đã có trong cột của từng hãng.
 
 ### Fixed
-- Tài khoản Antigravity chưa đăng nhập không còn làm lần lấy số chờ hết 25 giây: script nhận ra menu đăng nhập và dừng ngay, đánh dấu cần đăng nhập lại.
+- Hỗ trợ gói Claude mới Max và Ultra (thay cho Max 5x và 20x). Tài khoản Ultra đã xác minh không còn hạn mức 5 giờ: trước đây script coi việc thiếu số 5 giờ là lấy lỗi nên số Claude đứng yên; nay app bỏ ô 5 giờ và vẫn cập nhật hạn mức tuần.
+- Nút **Dùng lượt reset** của Codex bấm được bất cứ lúc nào còn lượt, giống trang cài đặt của ChatGPT. Trước đây app chờ máy chủ báo lượt dùng được ngay, nhưng số đó vẫn là 0 khi đã dùng 98% hạn mức tuần, nên nút cứ bị khoá.
+- Tài khoản Antigravity chưa đăng nhập không còn làm lần lấy số chờ hết 25 giây: script nhận ra menu đăng nhập, dừng ngay và đánh dấu cần đăng nhập lại.
 
 ## [0.9.0] - 2026-10-28
 Bản phát hành công khai đầu tiên: cài bằng file DMG trên mọi máy, giao diện song ngữ, cửa sổ Tài khoản cho từng nguồn, giao diện một màn hình làm lại hoàn toàn.

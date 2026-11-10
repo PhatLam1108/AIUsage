@@ -591,6 +591,16 @@
         }
       }
     },
+    "Cho phiên Claude Code trên cloud": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For Claude Code cloud sessions"
+          }
+        }
+      }
+    },
     "Chưa có dữ liệu.": {
       "localizations": {
         "en": {
@@ -731,6 +741,16 @@
         }
       }
     },
+    "Chậm %lld điểm": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld pts behind"
+          }
+        }
+      }
+    },
     "Chậm hơn nhịp %lld điểm": {
       "localizations": {
         "en": {
@@ -763,12 +783,12 @@
         }
       }
     },
-    "Chỉ dùng được khi chạm giới hạn": {
+    "Chỉ hồi hạn mức Fable": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Only usable at a limit"
+            "value": "Refills only the Fable allowance"
           }
         }
       }
@@ -825,26 +845,6 @@
         }
       }
     },
-    "Claude/GPT · 5 giờ": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Claude/GPT · 5 hours"
-          }
-        }
-      }
-    },
-    "Claude/GPT · tuần": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Claude/GPT · week"
-          }
-        }
-      }
-    },
     "Codex CLI": {},
     "Codex theo ngày và model": {
       "localizations": {
@@ -866,12 +866,12 @@
         }
       }
     },
-    "Credit được cấp lại khi gia hạn gói Max.": {
+    "Credit được cấp lại khi gia hạn gói.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Credit is refilled when the Max plan renews."
+            "value": "Credit is granted again when the plan renews."
           }
         }
       }
@@ -942,6 +942,16 @@
         }
       }
     },
+    "Các tuần gần đây": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recent weeks"
+          }
+        }
+      }
+    },
     "Còn %lld lượt reset": {
       "localizations": {
         "en": {
@@ -960,6 +970,16 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "Còn %lld lượt reset %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@ resets left: %1$lld"
           }
         }
       }
@@ -984,12 +1004,12 @@
         }
       }
     },
-    "Cấp lại khi gia hạn Max": {
+    "Cấp lại khi gia hạn gói": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Refilled on Max renewal"
+            "value": "Granted again on plan renewal"
           }
         }
       }
@@ -1080,16 +1100,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Used on claude.ai's usage page"
-          }
-        }
-      }
-    },
-    "Dùng được ngay": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Usable now"
           }
         }
       }
@@ -1237,12 +1247,12 @@
         }
       }
     },
-    "Hạn mức Gemini và Claude+GPT trong Antigravity, đọc bằng lệnh agy.": {
+    "Hạn mức Gemini trong Antigravity, đọc bằng lệnh agy.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gemini and Claude+GPT limits in Antigravity, read with the agy command."
+            "value": "Gemini limits in Antigravity, read with the agy command."
           }
         }
       }
@@ -1697,6 +1707,16 @@
         }
       }
     },
+    "Nhanh %lld điểm": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld pts ahead"
+          }
+        }
+      }
+    },
     "Nhanh hơn nhịp %lld điểm": {
       "localizations": {
         "en": {
@@ -1725,6 +1745,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "At an even pace you would be at %lld%% now."
+          }
+        }
+      }
+    },
+    "Phiên cloud": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cloud sessions"
           }
         }
       }
@@ -1882,12 +1912,12 @@
         }
       }
     },
-    "Số dư tín dụng API (gói Max tặng 200 USD mỗi tháng), đọc từ platform.claude.com.": {
+    "Số dư tín dụng API (gói Max và Ultra tặng 200 USD mỗi tháng), đọc từ platform.claude.com.": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "API credit balance (the Max plan grants USD 200 a month), read from platform.claude.com."
+            "value": "API credit balance (Max and Ultra include 200 USD a month), read from platform.claude.com."
           }
         }
       }
@@ -2375,6 +2405,16 @@
         }
       }
     },
+    "hết hạn %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "expires %@"
+          }
+        }
+      }
+    },
     "khác": {
       "localizations": {
         "en": {
@@ -2806,6 +2846,16 @@
         }
       }
     },
+    "Đúng nhịp": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On pace"
+          }
+        }
+      }
+    },
     "Đúng nhịp đều": {
       "localizations": {
         "en": {
@@ -2932,6 +2982,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sign in…"
+          }
+        }
+      }
+    },
+    "Đặt lại giới hạn tuần và 5 giờ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restores the weekly and 5-hour limits"
           }
         }
       }
