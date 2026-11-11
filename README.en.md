@@ -20,7 +20,7 @@
   <a href="README.md">Tiếng Việt</a> · <b>English</b> · <a href="CHANGELOG.en.md">Changelog</a> · <a href="docs/DEVELOPMENT.md">Developer notes (Vietnamese)</a> · <a href="https://phatdev.net/en/docs/aiusage">Online docs</a>
 </p>
 
-**Version:** 0.10.0 · **Requires:** macOS 26 or later · **Interface:** English and Vietnamese, following the macOS language
+**Version:** 0.10.1 · **Requires:** macOS 26 or later · **Interface:** English and Vietnamese, following the macOS language
 
 ![AIUsage dashboard with sample data](docs/screenshots/dashboard-en-light.png)
 
@@ -52,7 +52,7 @@ Three design principles:
 
 ## Installation
 
-1. Download `AIUsage-0.10.0.dmg` from [Releases](https://github.com/PhatLam1108/AIUsage/releases), open it and drag **AIUsage** into **Applications**. The release runs on both Apple Silicon and Intel Macs.
+1. Download `AIUsage-0.10.1.dmg` from [Releases](https://github.com/PhatLam1108/AIUsage/releases), open it and drag **AIUsage** into **Applications**. The release runs on both Apple Silicon and Intel Macs.
 2. Open AIUsage. This build is not notarized by Apple yet, so macOS blocks the first launch. Go to **System Settings > Privacy & Security**, scroll down, click **Open Anyway**, then open the app again. Or run:
 
    ```bash

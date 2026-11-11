@@ -291,18 +291,22 @@ def parse_resets():
         j = sec.find(stop)
         if j >= 0: sec = sec[:j]
     if "no resets right now" in sec.lower(): return {"available": 0}
-    m = re.search(r"(\d+)\s+resets?\b", sec, re.I)
-    n = int(m.group(1)) if m else max(1, len(re.findall(r"\bexpires?\b", sec, re.I)))
-    # Each grant: "<Kind> reset · Expires Mar 9, 2027 at 2:59 PM GMT+7". Kinds differ in
-    # what they restore: a "Fable reset" refills only the Fable allowance, not the week.
+    # Each grant: "<Kind> reset · Expires Mar 9, 2027 at 2:59 PM GMT+7" (no year when it
+    # is this year or next: "Dec 11 at 5:00 AM"). Kinds differ in what they restore:
+    # "Weekly reset" the week, "Fable reset" only the Fable allowance.
     grants = []
-    for g in re.finditer(r"([A-Z][\w+.·-]*(?: [\w+.·-]+){0,2}?)\s+reset\b\W*Expires\s+([A-Z][a-z]{2} \d{1,2}, \d{4}) at (\d{1,2}:\d{2}\s*[AP]M)", sec):
+    for g in re.finditer(r"([A-Z][\w+.·-]*(?: [\w+.·-]+){0,2}?)\s+reset\b\W*Expires\s+([A-Z][a-z]{2} \d{1,2})(?:, (\d{4}))? at (\d{1,2}:\d{2}\s*[AP]M)", sec):
         try:
-            when = datetime.strptime(f"{g.group(2)} {g.group(3).replace(' ', '')}", "%b %d, %Y %I:%M%p")  # page shows local time
+            now = datetime.now()
+            year = int(g.group(3)) if g.group(3) else now.year
+            when = datetime.strptime(f"{g.group(2)} {year} {g.group(4).replace(' ', '')}", "%b %d %Y %I:%M%p")  # page shows local time
+            if not g.group(3) and when < now - timedelta(days=1): when = when.replace(year=year + 1)
             exp = datetime.fromtimestamp(when.timestamp(), timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
         except ValueError:
             exp = ""
         grants.append({"kind": g.group(1).strip(), "expires": exp})
+    m = re.search(r"(\d+)\s+available\b", sec, re.I)
+    n = int(m.group(1)) if m else len(grants) or max(1, len(re.findall(r"\bexpires?\b", sec, re.I)))
     out = {"available": n, "detail": " ".join(sec.split())[:200]}
     if grants: out["grants"] = grants
     return out

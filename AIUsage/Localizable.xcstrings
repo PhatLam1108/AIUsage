@@ -984,6 +984,16 @@
         }
       }
     },
+    "Còn %lld lượt reset tuần": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly resets left: %lld"
+          }
+        }
+      }
+    },
     "Còn dùng được %@": {
       "localizations": {
         "en": {
@@ -2992,6 +3002,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Restores the weekly and 5-hour limits"
+          }
+        }
+      }
+    },
+    "Đặt lại hạn mức tuần": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resets the weekly limit"
           }
         }
       }

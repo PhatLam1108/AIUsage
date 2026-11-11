@@ -20,7 +20,7 @@
   <b>Tiếng Việt</b> · <a href="README.en.md">English</a> · <a href="CHANGELOG.md">Nhật ký thay đổi</a> · <a href="docs/DEVELOPMENT.md">Ghi chú phát triển</a> · <a href="https://phatdev.net/docs/aiusage">Tài liệu trực tuyến</a>
 </p>
 
-**Phiên bản:** 0.10.0 · **Yêu cầu:** macOS 26 trở lên · **Giao diện:** tiếng Việt và tiếng Anh, theo ngôn ngữ của macOS
+**Phiên bản:** 0.10.1 · **Yêu cầu:** macOS 26 trở lên · **Giao diện:** tiếng Việt và tiếng Anh, theo ngôn ngữ của macOS
 
 ![Bảng điều khiển AIUsage, số liệu mẫu](docs/screenshots/dashboard-dark.png)
 
@@ -52,7 +52,7 @@ Ba nguyên tắc thiết kế:
 
 ## Cài đặt
 
-1. Tải `AIUsage-0.10.0.dmg` ở trang [Releases](https://github.com/PhatLam1108/AIUsage/releases), mở file và kéo **AIUsage** vào thư mục **Applications**. Bản phát hành chạy được trên cả Mac Apple Silicon và Intel.
+1. Tải `AIUsage-0.10.1.dmg` ở trang [Releases](https://github.com/PhatLam1108/AIUsage/releases), mở file và kéo **AIUsage** vào thư mục **Applications**. Bản phát hành chạy được trên cả Mac Apple Silicon và Intel.
 2. Mở AIUsage. Bản này chưa được Apple notarize, nên lần đầu macOS sẽ chặn. Vào **System Settings > Privacy & Security**, kéo xuống và bấm **Open Anyway**, rồi mở lại app. Hoặc chạy lệnh:
 
    ```bash

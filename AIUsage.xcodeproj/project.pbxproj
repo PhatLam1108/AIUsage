@@ -246,7 +246,7 @@
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "AIUsage connects over SSH to the servers you add in Accounts to read Claude Code and Codex session statistics.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LE_SWIFT_VERSION = 5.0;
-				MARKETING_VERSION = 0.10.0;
+				MARKETING_VERSION = 0.10.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.stevenlam.AIUsage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -356,7 +356,7 @@
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "AIUsage connects over SSH to the servers you add in Accounts to read Claude Code and Codex session statistics.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LE_SWIFT_VERSION = 5.0;
-				MARKETING_VERSION = 0.10.0;
+				MARKETING_VERSION = 0.10.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.stevenlam.AIUsage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -375,7 +375,7 @@
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = AIUsageWidget/Info.plist;
 				LE_SWIFT_VERSION = 5.0;
-				MARKETING_VERSION = 0.10.0;
+				MARKETING_VERSION = 0.10.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.stevenlam.AIUsage.AIUsageWidgetV2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -395,7 +395,7 @@
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = AIUsageWidget/Info.plist;
 				LE_SWIFT_VERSION = 5.0;
-				MARKETING_VERSION = 0.10.0;
+				MARKETING_VERSION = 0.10.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.stevenlam.AIUsage.AIUsageWidgetV2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

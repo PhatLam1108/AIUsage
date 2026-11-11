@@ -396,14 +396,20 @@ struct ContentView: View {
         return quotas(store.claude, now: now, extraTiles: extra, login: store.loginClaude) {
             if !store.claudeResetGrants.isEmpty {
                 // One line per kind: a Fable reset only refills Fable, not the whole week.
+                // The weekly reset first: it restores more than a per-model one.
                 let kinds = store.claudeResetGrants.reduce(into: [String]()) { if !$0.contains($1.kind) { $0.append($1.kind) } }
+                    .sorted { ($0.lowercased() == "weekly" ? 0 : 1) < ($1.lowercased() == "weekly" ? 0 : 1) }
                 VStack(spacing: 8) {
                     ForEach(kinds, id: \.self) { kind in
                         let grants = store.claudeResetGrants.filter { $0.kind == kind }
                         let soonest = grants.compactMap(\.expires).min()
-                        let what = kind.lowercased() == "fable" ? String(localized: "Chỉ hồi hạn mức Fable")
+                        let weekly = kind.lowercased() == "weekly"
+                        let what = weekly ? String(localized: "Đặt lại hạn mức tuần")
+                            : kind.lowercased() == "fable" ? String(localized: "Chỉ hồi hạn mức Fable")
                             : String(localized: "Dùng trên trang usage của claude.ai")
-                        resetLine(count: grants.count, title: String(localized: "Còn \(grants.count) lượt reset \(kind)"), color: .claude,
+                        let title = weekly ? String(localized: "Còn \(grants.count) lượt reset tuần")
+                            : String(localized: "Còn \(grants.count) lượt reset \(kind)")
+                        resetLine(count: grants.count, title: title, color: .claude,
                                   detail: what + (soonest.map { " · " + String(localized: "hết hạn \(Self.dayYear.string(from: $0))") } ?? ""),
                                   button: String(localized: "Mở trang reset"), enabled: true, loading: store.loading.contains("claude-reset")) {
                             store.openClaudeResets()

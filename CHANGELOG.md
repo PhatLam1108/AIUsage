@@ -2,6 +2,11 @@
 
 Theo chuẩn [Keep a Changelog](https://keepachangelog.com/vi/1.1.0/) và [SemVer](https://semver.org/lang/vi/). Bản 0.9.0 là bản phát hành công khai đầu tiên (có file cài DMG); các phiên bản trước dùng cá nhân và được tổng hợp lại từ lịch sử commit theo từng mốc phát triển. Bản tiếng Anh: [CHANGELOG.en.md](CHANGELOG.en.md).
 
+## [0.10.1] - 2026-11-11
+
+### Fixed
+- Lượt reset Claude không ghi năm hết hạn (ví dụ "Weekly reset, Expires Dec 11") bị bỏ sót, nên app chỉ hiện lượt reset Fable; số lượt tổng cũng bị đọc sai. Nay mỗi loại hiện một dòng, lượt reset tuần đứng trước.
+
 ## [0.10.0] - 2026-11-10
 Theo dõi nhiều tài khoản Antigravity, hỗ trợ gói Claude Max và Ultra, giao diện app và widget làm lại cho đều và gọn.
 

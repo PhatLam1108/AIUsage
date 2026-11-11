@@ -2,6 +2,11 @@
 
 Follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Semantic Versioning](https://semver.org/). 0.9.0 is the first public release (with a DMG installer); earlier versions were for personal use and were reconstructed from the commit history by development milestone. Vietnamese version: [CHANGELOG.md](CHANGELOG.md).
 
+## [0.10.1] - 2026-11-11
+
+### Fixed
+- Claude limit resets whose expiry has no year (for example "Weekly reset, Expires Dec 11") were skipped, so the app only showed the Fable reset, and the total count was misread. Each kind now gets its own line, with the weekly reset first.
+
 ## [0.10.0] - 2026-11-10
 Several Antigravity accounts, support for the Claude Max and Ultra plans, and a reworked app and widget layout that is even and compact.
 
