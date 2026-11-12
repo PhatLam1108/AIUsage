@@ -18,6 +18,8 @@ struct AIUsageApp: App {
         // Copy the bundled scripts and helper into Application Support and register the
         // background jobs; a no-op unless this build or its location is new.
         DispatchQueue.global(qos: .utility).async { RuntimeInstaller.installIfNeeded() }
+        // Show the dashboard on the Cast display again if it was on when the app quit.
+        DispatchQueue.main.async { CastController.shared.resume() }
     }
 
     var body: some Scene {

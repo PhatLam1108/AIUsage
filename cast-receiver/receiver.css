@@ -1,0 +1,170 @@
+/* AIUsage Cast receiver: the top of the Mac app's dashboard, laid out on a 900x527 stage (the
+   Nest Hub's 1024x600 shape, drawn about 14% larger) and scaled to fit any Cast display. One column
+   per company on neutral dark surfaces; the brand colour only marks things (a thin line on top of
+   the column, box titles, plan badge, bars). Inter stands in for SF Pro, which Cast devices lack. */
+:root {
+  --bg: #0b0c10;
+  --card: #16181e;
+  --tile: rgba(255, 255, 255, 0.05);
+  --edge: rgba(255, 255, 255, 0.09);
+  --track: rgba(255, 255, 255, 0.12);
+  --text: #f5f7fc;
+  --muted: rgba(226, 232, 250, 0.66);
+  --faint: rgba(226, 232, 250, 0.44);
+  --orange: #ff9f45;
+  --red: #ff6b6b;
+  --green: #34c77b;
+  --claude: #f07d52;
+  --openai: #1abd94;
+  --gemini: #6b9eff;
+  --gemini-api: #a883dc;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+  font-family: Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-feature-settings: "tnum" 1, "cv11" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+.stage {
+  position: absolute; left: 50%; top: 50%;
+  width: 900px; height: 527px;
+  transform-origin: center center;
+  padding: 12px 12px 12px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+/* ---------- Header ---------- */
+.top { display: flex; align-items: center; gap: 11px; height: 50px; padding: 0 4px; }
+.top > div:nth-child(2) { flex: none; }
+.top img { width: 36px; height: 36px; border-radius: 9px; }
+.app-name { font-size: 18px; font-weight: 700; letter-spacing: -0.2px; line-height: 1.1; }
+.sync { font-size: 14.5px; font-weight: 500; color: var(--muted); }
+.sync.old { color: var(--orange); }
+.clock { flex: none; margin-left: auto; text-align: right; line-height: 1; }
+.time { font-size: 38px; font-weight: 700; letter-spacing: -1px; }
+.date { margin-top: 3px; font-size: 14.5px; font-weight: 500; color: var(--muted); }
+.date::first-letter { text-transform: uppercase; }
+
+/* ---------- Attention: one strip between the app name and the clock ---------- */
+.alert-slot { flex: 1; min-width: 0; margin: 0 12px 0 16px; }
+.alert {
+  display: flex; align-items: center; gap: 11px;
+  height: 50px; padding: 0 14px; border-radius: 12px;
+  background: linear-gradient(90deg, rgba(255, 159, 69, 0.22), rgba(255, 159, 69, 0.06));
+  border: 1px solid rgba(255, 159, 69, 0.48);
+}
+.alert.critical { background: linear-gradient(90deg, rgba(255, 107, 107, 0.24), rgba(255, 107, 107, 0.06)); border-color: rgba(255, 107, 107, 0.5); }
+.alert-mark {
+  flex: none; width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center;
+  background: var(--orange); color: #1a1006; font-size: 15px; font-weight: 800;
+}
+.alert.critical .alert-mark { background: var(--red); color: #1a0808; }
+.alert-text { min-width: 0; }
+.alert-title { font-size: 16.5px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.alert-detail { margin-top: 1px; font-size: 14.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ---------- Columns ---------- */
+.cols { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.col {
+  position: relative; min-width: 0; min-height: 0; overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--edge); border-top: 3px solid var(--brand); border-radius: 16px;
+  padding: 12px 12px 12px;
+  display: flex; flex-direction: column; gap: 9px;
+}
+/* --rgb: the brand as numbers for tints; --hi: a lighter shade for fills and box titles */
+.claude { --brand: var(--claude); --rgb: 240, 125, 82; --hi: #ffb48e; }
+.openai { --brand: var(--openai); --rgb: 26, 189, 148; --hi: #6ff0cc; }
+.gemini { --brand: var(--gemini); --rgb: 107, 158, 255; --hi: #a9c8ff; }
+
+.c-head { display: flex; align-items: center; gap: 8px; min-height: 28px; }
+.c-head img { width: 30px; height: 30px; border-radius: 7px; flex: none; }
+.c-name { font-size: 20px; font-weight: 700; letter-spacing: -0.2px; white-space: nowrap; }
+.badge {
+  flex: none; font-size: 11px; font-weight: 750; letter-spacing: 0.6px; text-transform: uppercase;
+  color: #0c0f16; padding: 2px 8px; border-radius: 99px; background: var(--hi);
+}
+.c-time { display: none; margin-left: auto; font-size: 14px; font-weight: 500; color: var(--faint); white-space: nowrap; }
+.c-time.old { color: var(--orange); font-weight: 650; }
+
+/* Bars (Antigravity quotas, Claude API credit) */
+.bar { position: relative; height: 9px; margin-top: 8px; border-radius: 99px; background: var(--track); }
+.bar > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 99px; background: linear-gradient(90deg, var(--brand), var(--hi)); }
+.bar.grad > i { background: linear-gradient(90deg, #5b9bff, #b086f0, #ff8a95); }
+.bar > u {
+  position: absolute; top: -4px; bottom: -4px; width: 2.5px; margin-left: -1.25px; border-radius: 2px;
+  background: #ffffff; box-shadow: 0 0 0 1.5px rgba(10, 12, 18, 0.9);
+}
+
+/* The one line under a company's tiles */
+.status { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 600; color: var(--muted); white-space: nowrap; overflow: hidden; }
+.status i { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+.status.fast { color: var(--orange); } .status.fast i { background: var(--orange); }
+.status.critical { color: var(--red); } .status.critical i { background: var(--red); }
+.status span { overflow: hidden; text-overflow: ellipsis; }
+
+/* Stats block under the boxes: Claude Code, Codex CLI, Gemini API */
+.sec { border-top: 1px solid var(--edge); padding-top: 9px; display: flex; flex-direction: column; gap: 7px; }
+.sec-title { color: var(--hi); display: flex; align-items: center; gap: 8px; font-size: 16.5px; font-weight: 700; }
+.sec-title em { margin-left: auto; font-style: normal; font-size: 11.5px; font-weight: 500; color: var(--faint); }
+.metrics.three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.metric b { display: block; font-size: 30px; font-weight: 750; letter-spacing: -0.8px; line-height: 1.1; white-space: nowrap; }
+.metric small { display: block; font-size: 14.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Antigravity: one row per account, 5 hours and week side by side */
+.accts { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 7px; }
+.acct {
+  flex: 1; min-height: 0; border-radius: 11px; padding: 3px 11px 4px;
+  background: var(--tile);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.acct-head { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.acct-name { color: var(--hi); line-height: 1.2; font-size: 16px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.acct-msg { margin-left: auto; font-size: 15px; font-weight: 600; color: var(--orange); white-space: nowrap; }
+.acct-row { margin-top: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.m-top { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; }
+.m-label { white-space: nowrap; font-size: 15px; font-weight: 550; color: var(--muted); }
+.m-val { font-size: 32px; font-weight: 750; letter-spacing: -1px; line-height: 1; }
+.m-val.warn { color: var(--orange); } .m-val.crit { color: var(--red); } .m-val.none { color: var(--faint); }
+.mini .bar { height: 6px; margin-top: 5px; }
+.mini .bar > u { top: -3px; bottom: -3px; width: 2px; margin-left: -1px; }
+.m-line { margin-top: 3px; line-height: 1.2; font-size: 15px; font-weight: 500; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m-line b { font-weight: 600; color: var(--muted); }
+.m-line b.fast { color: var(--orange); }
+/* Same height as a bar, for cells without one, so numbers line up across boxes */
+.bar-gap { height: 6px; margin-top: 5px; }
+.box-text { margin-top: 4px; font-size: 17px; font-weight: 600; line-height: 1.3; color: var(--muted); }
+.box-text.fast { color: var(--orange); }
+.box-text.critical { color: var(--red); }
+
+.gem-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; }
+.gem-bal b { display: block; font-size: 30px; font-weight: 750; letter-spacing: -0.6px; line-height: 1.1; }
+.gem-bal small, .gem-run small { display: block; font-size: 15px; color: var(--muted); }
+.gem-run { text-align: right; }
+.gem-run b { display: block; font-size: 30px; font-weight: 750; line-height: 1.1; }
+.gem-run.warn b { color: var(--orange); }
+.gem-badge { --hi: #cdb2f5; }
+
+.login { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center; }
+.login b { font-size: 19px; color: var(--orange); }
+.login span { font-size: 15px; color: var(--muted); }
+
+
+/* ---------- Waiting / no data ---------- */
+.waiting {
+  position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  background: var(--bg);
+}
+.waiting img { width: 92px; height: 92px; border-radius: 22px; }
+.w-title { font-size: 28px; font-weight: 750; letter-spacing: -0.5px; }
+.w-text { font-size: 16px; color: var(--muted); }
+body.is-waiting .waiting { display: flex; }
+
+/* No night dimming here: the Nest Hub adjusts its own brightness to the room (ambient light sensor). */

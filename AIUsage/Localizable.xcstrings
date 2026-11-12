@@ -530,6 +530,16 @@
         }
       }
     },
+    "Bảng số liệu gọn cho Nest Hub và màn hình Google Cast trong cùng mạng. Số liệu đi thẳng từ máy Mac tới màn hình.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A compact dashboard for a Nest Hub or another Google Cast display on the same network. The numbers go straight from this Mac to the screen."
+          }
+        }
+      }
+    },
     "Bấm \"Thêm khoá service account…\" ở trên và chọn file đó. AIUsage cất khoá vào Keychain và tự điền Project ID; sau đó xoá file JSON trong Downloads.": {
       "localizations": {
         "en": {
@@ -597,6 +607,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "For Claude Code cloud sessions"
+          }
+        }
+      }
+    },
+    "Chưa có App ID của receiver": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No receiver App ID set"
           }
         }
       }
@@ -1004,6 +1024,16 @@
         }
       }
     },
+    "Còn lại": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Left"
+          }
+        }
+      }
+    },
     "Cũ nhất từ %@.": {
       "localizations": {
         "en": {
@@ -1144,6 +1174,16 @@
         }
       }
     },
+    "Dừng hiển thị": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop showing"
+          }
+        }
+      }
+    },
     "Dữ liệu cũ: lần lấy số thành công gần nhất của nguồn này": {
       "localizations": {
         "en": {
@@ -1213,6 +1253,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Google AI Studio needs signing in again"
+          }
+        }
+      }
+    },
+    "Hiển thị trên màn hình Cast": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show on a Cast display"
+          }
+        }
+      }
+    },
+    "Hiển thị trên màn hình Cast (Nest Hub)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show on a Cast display (Nest Hub)"
           }
         }
       }
@@ -1367,12 +1427,32 @@
         }
       }
     },
+    "Không dò được mạng nội bộ": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cannot browse the local network"
+          }
+        }
+      }
+    },
     "Không kết nối được máy %@": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Could not reach %@"
+          }
+        }
+      }
+    },
+    "Không mở được AIUsage (%@)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not open AIUsage (%@)"
           }
         }
       }
@@ -1553,6 +1633,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Remote servers (SSH)"
+          }
+        }
+      }
+    },
+    "Mất kết nối (%@), đang thử lại": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connection lost (%@), retrying"
+          }
+        }
+      }
+    },
+    "Mất kết nối, đang thử lại": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connection lost, retrying"
           }
         }
       }
@@ -2054,6 +2154,26 @@
         }
       }
     },
+    "Thiết bị chưa được đăng ký cho App ID này": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This display is not registered for this App ID"
+          }
+        }
+      }
+    },
+    "Thiết bị không mở được AIUsage": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The display could not open AIUsage"
+          }
+        }
+      }
+    },
     "Thêm khoá service account…": {
       "localizations": {
         "en": {
@@ -2505,6 +2625,26 @@
         }
       }
     },
+    "phiên": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sessions"
+          }
+        }
+      }
+    },
+    "request": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "requests"
+          }
+        }
+      }
+    },
     "sáng %@": {
       "localizations": {
         "en": {
@@ -2726,12 +2866,42 @@
         }
       }
     },
+    "Đang hiển thị trên %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Showing on %@"
+          }
+        }
+      }
+    },
+    "Đang kết nối tới %@…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecting to %@…"
+          }
+        }
+      }
+    },
     "Đang lấy số liệu…": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Fetching data…"
+          }
+        }
+      }
+    },
+    "Đang mở AIUsage trên %@…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opening AIUsage on %@…"
           }
         }
       }
@@ -2746,12 +2916,42 @@
         }
       }
     },
+    "Đang tìm màn hình trong mạng…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Looking for displays on the network…"
+          }
+        }
+      }
+    },
+    "Đang tìm màn hình đã chọn…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Looking for the chosen display…"
+          }
+        }
+      }
+    },
     "Đang tắt. Bật và nhập khoá service account trong cửa sổ Tài khoản (có hướng dẫn từng bước).": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Off. Turn it on and add a service account key in the Accounts window (step-by-step guide included)."
+          }
+        }
+      }
+    },
+    "Đang tắt. Chọn một màn hình để bắt đầu.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off. Pick a display to start."
           }
         }
       }

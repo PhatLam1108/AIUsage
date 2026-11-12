@@ -21,6 +21,9 @@
 		5A11ED000000000000000003 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A11ED000000000000000001 /* Shared.swift */; };
 		5A11ED000000000000000012 /* Runtime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A11ED000000000000000011 /* Runtime.swift */; };
 		5A11ED000000000000000022 /* AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A11ED000000000000000021 /* AccountsView.swift */; };
+		5A11ED000000000000000072 /* CastChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A11ED000000000000000071 /* CastChannel.swift */; };
+		5A11ED000000000000000074 /* CastController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A11ED000000000000000073 /* CastController.swift */; };
+		5A11ED000000000000000076 /* CastPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A11ED000000000000000075 /* CastPopover.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -52,6 +55,10 @@
 		B945657F95EB49DFBFDEB943 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5A11ED000000000000000011 /* Runtime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runtime.swift; sourceTree = "<group>"; };
 		5A11ED000000000000000021 /* AccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsView.swift; sourceTree = "<group>"; };
+		5A11ED000000000000000071 /* CastChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastChannel.swift; sourceTree = "<group>"; };
+		5A11ED000000000000000073 /* CastController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastController.swift; sourceTree = "<group>"; };
+		5A11ED000000000000000075 /* CastPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastPopover.swift; sourceTree = "<group>"; };
+		5A11ED000000000000000077 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -63,6 +70,10 @@
 				5A11ED000000000000000001 /* Shared.swift */,
 				5A11ED000000000000000011 /* Runtime.swift */,
 				5A11ED000000000000000021 /* AccountsView.swift */,
+				5A11ED000000000000000071 /* CastChannel.swift */,
+				5A11ED000000000000000073 /* CastController.swift */,
+				5A11ED000000000000000075 /* CastPopover.swift */,
+				5A11ED000000000000000077 /* Info.plist */,
 				5A11ED000000000000000053 /* Components.swift */,
 				5A11ED000000000000000051 /* DashboardStore.swift */,
 				B945657F95EB49DFBFDEB943 /* Assets.xcassets */,
@@ -217,6 +228,9 @@
 				5A11ED000000000000000002 /* Shared.swift in Sources */,
 				5A11ED000000000000000012 /* Runtime.swift in Sources */,
 				5A11ED000000000000000022 /* AccountsView.swift in Sources */,
+				5A11ED000000000000000072 /* CastChannel.swift in Sources */,
+				5A11ED000000000000000074 /* CastController.swift in Sources */,
+				5A11ED000000000000000076 /* CastPopover.swift in Sources */,
 				5A11ED000000000000000054 /* Components.swift in Sources */,
 				5A11ED000000000000000052 /* DashboardStore.swift in Sources */,
 			);
@@ -243,7 +257,8 @@
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "AIUsage connects over SSH to the servers you add in Accounts to read Claude Code and Codex session statistics.";
+				INFOPLIST_FILE = AIUsage/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "AIUsage connects over SSH to the servers you add in Accounts to read Claude Code and Codex session statistics, and to the Cast display (such as a Nest Hub) you choose to show the dashboard on.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LE_SWIFT_VERSION = 5.0;
 				MARKETING_VERSION = 0.10.1;
@@ -353,7 +368,8 @@
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "AIUsage connects over SSH to the servers you add in Accounts to read Claude Code and Codex session statistics.";
+				INFOPLIST_FILE = AIUsage/Info.plist;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "AIUsage connects over SSH to the servers you add in Accounts to read Claude Code and Codex session statistics, and to the Cast display (such as a Nest Hub) you choose to show the dashboard on.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LE_SWIFT_VERSION = 5.0;
 				MARKETING_VERSION = 0.10.1;

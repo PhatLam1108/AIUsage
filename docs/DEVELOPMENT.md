@@ -33,10 +33,15 @@ AIUsage/                 app
   AccountsView.swift     cửa sổ Tài khoản (một khung cho từng nguồn)
   Runtime.swift          đường dẫn, config, cài phần chạy nền, Shell, Keychain, lượt reset Codex
   Shared.swift           dùng chung với widget: màu, thanh usage, logo, dự báo theo nhịp
+  CastChannel.swift      giao thức Google Cast (TLS cổng 8009, khung protobuf CastMessage)
+  CastController.swift   dò màn hình Cast, mở receiver, gửi snapshot số liệu
+  CastPopover.swift      nút TV trên thanh công cụ và popover chọn màn hình
 AIUsageWidget/           widget systemLarge, nút làm mới và đăng nhập (AppIntent)
 ClaudeHelper/            mã nguồn helper WKWebView (được build trong lúc build app)
 runtime/                 fetch_one.sh, fetch_usage.sh, login.sh, remote_insights.py
-scripts/                 bundle-runtime.sh (build phase), build-dmg.sh (đóng gói bản phát hành)
+cast-receiver/           trang receiver chạy trên Nest Hub (HTML, CSS, JS tĩnh)
+scripts/                 bundle-runtime.sh (build phase), build-dmg.sh (đóng gói bản phát hành),
+                         deploy-cast-receiver.sh (đưa trang receiver lên máy chủ web)
 ```
 
 ## Nguồn dữ liệu
@@ -78,6 +83,25 @@ scripts/                 bundle-runtime.sh (build phase), build-dmg.sh (đóng g
 - Ô hạn mức: % đã dùng, thanh có vạch nhịp đều (chỗ lẽ ra đang ở nếu dùng đều cả chu kỳ), so với nhịp đều, và mức dùng tối đa để không chạm trần trước giờ reset. Logic dự báo ở `Shared.swift` (`paceFraction`, `projectedRunOut`, `paceStatus`) và `Components.swift` (`quotaRead`).
 - "Cần chú ý" (`DashboardStore.attention`) chỉ dựng từ số liệu đã có: hạn mức sắp chạm trần hoặc dự kiến hết trước giờ reset, lượt reset còn lại, cần đăng nhập lại, số liệu cũ, số dư Gemini còn ít ngày, chi bất thường, máy chủ không kết nối được.
 - Màu hãng chỉ để nhận diện; cam và đỏ chỉ dùng cho số và chữ trạng thái.
+
+## Màn hình Cast (Nest Hub)
+
+Nút TV trên thanh công cụ đưa một bảng số liệu gọn lên Nest Hub hoặc màn hình Google Cast trong cùng mạng.
+
+```
+AIUsage.app ── TLS :8009 (CASTV2) ──► Nest Hub ── tải ──► https://phatdev.net/cast/aiusage/
+ CastController                        receiver AIUsage (App ID 46040F28)
+   snapshot JSON trên namespace urn:x-cast:net.phatdev.aiusage
+```
+
+- **Receiver** là trang tĩnh trong `cast-receiver/`, dùng Cast Application Framework. Nó chỉ vẽ: đếm ngược, đồng hồ và vạch nhịp tự tính từ mốc thời gian tuyệt đối, nên màn hình vẫn đúng giữa hai lần gửi. Vẽ trên khung 900x527 (đúng tỉ lệ 1024x600 của Nest Hub, phóng to khoảng 14%) rồi co giãn theo màn hình. Ba cột theo hãng dùng chung một khuôn: ba ô, mỗi ô hai con số (hạn mức có thanh và vạch nhịp, lượt reset, API credit hoặc dự báo; Antigravity mỗi ô một tài khoản), dưới cùng một khối thống kê (Claude Code, Codex CLI, Gemini API). Cùng một khuôn nên ba cột cùng cỡ chữ; chữ nhỏ nhất khoảng 16px trên màn hình để đọc được từ xa. Không lưu gì trên thiết bị; số trong snapshot bị ép kiểu trước khi đưa vào HTML vì bất kỳ sender nào trong mạng cũng gửi được vào namespace này. Mở trang bằng trình duyệt thường (hoặc thêm `?demo`, `?lang=en`) là thấy bản dữ liệu giả; `?snapshot=<url>` nạp một snapshot thật (bật `defaults write com.stevenlam.AIUsage castSaveSnapshot -bool true` để app ghi `cast-snapshot.json`, quyền 600, tắt đi là file tự xoá).
+- **App ID** đăng ký trong Google Cast SDK Developer Console, loại Custom Receiver, URL trỏ tới trang trên. App chưa Publish chỉ mở được trên thiết bị đã khai số serial trong Console (sau khi Ready phải khởi động lại thiết bị); thiết bị lạ trả `LAUNCH_ERROR NOT_FOUND`. Ghi đè để thử: `defaults write com.stevenlam.AIUsage castAppID <id>`.
+- **Sender** tự viết theo giao thức vì Google không có SDK sender cho macOS: TLS tới cổng 8009 (chứng chỉ tự ký, không kiểm), mỗi khung là độ dài 4 byte big-endian rồi protobuf `CastMessage`. Trình tự: CONNECT tới `receiver-0`, GET_STATUS, LAUNCH nếu app chưa chạy, CONNECT tới `transportId` của app, rồi gửi `{"type":"snapshot"}`. PING mỗi 5 giây; 20 giây không nghe gì thì đóng và thử lại (5 giây, gấp đôi dần tới 60 giây).
+- **Snapshot** dựng trong `CastSnapshot.build` từ một `DashboardStore` riêng của `CastController`, nên đóng cửa sổ app vẫn tiếp tục gửi. Gửi khi số đổi (kiểm mỗi 15 giây) và ít nhất 5 phút một lần; receiver báo "Mac ngắt kết nối" sau 20 phút im lặng. Chữ đã dịch sẵn theo ngôn ngữ của app.
+- **Tôn trọng người đứng trước màn hình:** app AIUsage biến khỏi RECEIVER_STATUS (tắt bằng giọng nói, chạm, hay cast thứ khác lên) thì app tự tắt chế độ Cast, không mở lại. Chỉ lần người dùng chọn màn hình mới được LAUNCH; mở lại app trên Mac và các lần nối lại sau khi rớt mạng chỉ nối vào phiên đang chạy, không còn phiên thì tắt.
+- **Bảo mật:** Cast dùng chứng chỉ TLS tự ký và app không làm bước xác thực thiết bị của Google, nên một máy khác trong cùng mạng có thể giả làm Nest Hub đã chọn và nhận snapshot (tên tài khoản rút gọn, phần trăm hạn mức, số dư). Chấp nhận được cho mạng nhà; bộ giải mã protobuf kiểm biên trước mọi phép chuyển kiểu để khung tin xấu không làm app sập.
+- **Dò thiết bị** bằng Bonjour `_googlecast._tcp` (khai trong `AIUsage/Info.plist`, ghép với Info.plist sinh tự động), chỉ hiện thiết bị có bit 0 của TXT `ca` (có màn hình). Chỉ dò khi mở popover hoặc khi đang bật (đóng popover lúc đang tắt thì dừng dò), để người không dùng tính năng này không bị hỏi quyền mạng nội bộ.
+- Cập nhật trang receiver: sửa `cast-receiver/`, tăng `?v=` của CSS và JS trong `index.html`, chạy `CAST_DEPLOY_TARGET=<host>:<thư mục> scripts/deploy-cast-receiver.sh`. Nest Hub chỉ tải lại trang khi app được mở lại (Dừng hiển thị rồi chọn lại).
 
 ## Song ngữ
 
@@ -160,3 +184,6 @@ screencapture -o -x -l <windowID> shot.png
 - **Tách trường bằng tab trong bash:** `read` gộp các tab liền nhau, trường trống làm lệch cột. Script dùng ký tự `\x1f` làm dấu phân cách.
 - **Material trong suốt:** nền mờ thành xám đục khi phía sau là cửa sổ sáng; app và widget dùng nền đặc.
 - **Title bar:** dùng toolbar gốc của macOS, không tự vẽ header đè lên hàng nút cửa sổ.
+- **CONNECT trơn bị Nest Hub huỷ LAUNCH:** gói CONNECT chỉ có `type` thì lệnh LAUNCH nhận `LAUNCH_ERROR CANCELLED`. Gửi kèm `origin`, `userAgent` và `senderInfo` như SDK chính thức thì mở được.
+- **Sự kiện của kết nối Cast đã đóng:** tin đã xếp hàng từ kết nối cũ vẫn tới sau khi ngắt; xử lý chúng khiến app báo "Đang mở AIUsage" khi đã tắt. `CastController` gắn số thế hệ cho mỗi kết nối và bỏ qua sự kiện của thế hệ cũ.
+- **Build trong thư mục Documents đồng bộ iCloud:** Debug build ở `build/` lặp lại lần hai thì báo "detritus" khi ký helper vì File Provider gắn FinderInfo vào gói `.app`. Đặt `-derivedDataPath` ngoài Documents (ví dụ `/tmp/AIUsage_build`).

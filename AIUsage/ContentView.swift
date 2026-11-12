@@ -89,6 +89,9 @@ struct ContentView: View {
                 .help("Làm mới tất cả nguồn")
             }
             ToolbarItem(placement: .primaryAction) {
+                CastToolbarButton()
+            }
+            ToolbarItem(placement: .primaryAction) {
                 SettingsLink { Image(systemName: "person.crop.circle") }.help("Tài khoản")
             }
         }
