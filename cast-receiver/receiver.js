@@ -352,12 +352,65 @@
     if (typeof data === "string") { try { data = JSON.parse(data); } catch (e) { return; } }
     if (data && data.type === "snapshot") {
       apply(data.snapshot, Date.now());
+    } else if (data && data.type === "keepalive") {
+      keepAlive();
     }
   });
 
+  // Keep the screen. A Nest Hub closes a cast app and goes back to its photo frame about 10 minutes
+  // after anything stopped playing, even with disableIdleTimeout. A still image (what Home Assistant's
+  // receiver loads) sits PAUSED and was not enough here (2026-11-13). So a silent black video plays
+  // in a hidden <cast-media-player>, 10 minutes long and loaded again as it ends: the player is
+  // always PLAYING. A check every minute restarts it if anything else stopped it.
+  var playerManager = context.getPlayerManager();
+  var loading = false;
+  function keepAlive() {
+    if (loading) return;
+    loading = true;
+    try {
+      var req = new cast.framework.messages.LoadRequestData();
+      req.media = new cast.framework.messages.MediaInformation();
+      req.media.contentId = new URL("media/keepalive.mp4", location.href).href;
+      req.media.contentType = "video/mp4";
+      req.media.streamType = cast.framework.messages.StreamType.BUFFERED;
+      req.media.metadata = new cast.framework.messages.GenericMediaMetadata();
+      req.media.metadata.title = "AIUsage";
+      req.autoplay = true;
+      var p = playerManager.load(req);
+      var done = function (ok, why) { loading = false; report(ok, why); };
+      if (p && p.then) {
+        p.then(function () { done(true, ""); }, function (e) { done(false, String(e && (e.detailedErrorCode || e.reason || e.type) || e)); });
+      } else {
+        loading = false;
+      }
+    } catch (e) { loading = false; report(false, String(e)); }
+  }
+  // Tells connected senders how the last keep-alive went (the Mac app ignores it; useful when testing).
+  function report(ok, why) {
+    try { context.sendCustomMessage(NS, undefined, { type: "keepalive", ok: ok, error: why, state: playerManager.getPlayerState() }); } catch (e) { /* no sender */ }
+  }
+  context.addEventListener(cast.framework.system.EventType.READY, function () {
+    keepAlive();
+    setInterval(function () {
+      var st = playerManager.getPlayerState();
+      if (st !== "PLAYING" && st !== "BUFFERING") keepAlive();
+    }, 60 * 1000);
+  });
+  // The video ended (or failed): start it again right away.
+  playerManager.addEventListener(cast.framework.events.EventType.MEDIA_STATUS, function (event) {
+    var st = event.mediaStatus;
+    if (st && st.playerState === "IDLE" && st.idleReason && st.idleReason !== "INTERRUPTED") {
+      setTimeout(keepAlive, 500);
+    }
+  });
+  // The framework adds media touch controls for the player; this page has nothing to control.
+  new MutationObserver(function () {
+    var els = document.getElementsByTagName("touch-controls");
+    for (var i = els.length - 1; i >= 0; i--) els[i].parentNode.removeChild(els[i]);
+  }).observe(document.documentElement, { childList: true, subtree: true });
+
   var options = new cast.framework.CastReceiverOptions();
   options.disableIdleTimeout = true;        // a dashboard, not a player: stay on screen
-  options.skipPlayersLoad = true;           // no media playback, don't load the players
   options.maxInactivity = 3600;             // keep the sender through short Wi-Fi drops
   options.customNamespaces = {};
   options.customNamespaces[NS] = cast.framework.system.MessageType.JSON;

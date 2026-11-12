@@ -167,4 +167,7 @@ html, body {
 .w-text { font-size: 16px; color: var(--muted); }
 body.is-waiting .waiting { display: flex; }
 
+/* Media player pieces for the keep-alive video (receiver.js): never shown. */
+cast-media-player, touch-controls { display: none !important; }
+
 /* No night dimming here: the Nest Hub adjusts its own brightness to the room (ambient light sensor). */

@@ -8,6 +8,7 @@ Theo chuẩn [Keep a Changelog](https://keepachangelog.com/vi/1.1.0/) và [SemVe
 - Hiển thị bảng số liệu lên Nest Hub hoặc màn hình Google Cast trong cùng mạng: nút TV trên thanh công cụ, chọn màn hình là bắt đầu. Mỗi hãng một cột, cùng một khuôn và cùng cỡ chữ để đọc từ xa: hạn mức với thanh có vạch nhịp và đếm ngược tới giờ reset (từng giây trong giờ cuối), lượt reset, dự báo, thống kê Claude Code và Codex CLI trong 24 giờ, mỗi tài khoản Antigravity một ô, số dư Gemini API. Mục cần chú ý gấp nhất nằm trên cùng, cạnh đồng hồ.
 - Số liệu đi thẳng từ Mac tới màn hình trong mạng nội bộ, không qua máy chủ trung gian. Đóng cửa sổ app vẫn tiếp tục cập nhật; mở lại app thì tự nối lại. Mac ngủ quá 20 phút thì màn hình giữ số cũ và ghi rõ giờ mất kết nối.
 - Tắt AIUsage ngay trên Nest Hub (giọng nói, chạm, hay cast thứ khác lên) thì app trên Mac cũng tự tắt, không giành lại màn hình.
+- Màn hình AIUsage đứng yên trên Nest Hub, không bị Khung ảnh thay sau khoảng 10 phút.
 
 ## [0.10.1] - 2026-11-11
 

@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="receiver.css?v=10">
+<link rel="stylesheet" href="receiver.css?v=12">
 <!-- Cast Application Framework. On a non-Cast browser the page runs in demo mode and never starts the context. -->
 <script src="https://www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
 </head>
@@ -32,6 +32,8 @@
     <div id="waiting-text" class="w-text"></div>
   </div>
 </div>
-<script src="receiver.js?v=9"></script>
+<!-- Hidden media element for the keep-alive video (receiver.js); never shown. -->
+<cast-media-player id="player"></cast-media-player>
+<script src="receiver.js?v=13"></script>
 </body>
 </html>
