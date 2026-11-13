@@ -122,15 +122,17 @@ struct UsageProvider: TimelineProvider {
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<UsageEntry>) -> Void) {
         // Emit one entry per minute (same data, re-rendered each minute) so the
-        // reset countdowns tick down on their own, then reload after 5 min.
+        // reset countdowns tick down on their own. New numbers arrive through the
+        // refresh job, which reloads the widget right after each fetch; the reload
+        // after 15 min here is only the fallback if that job is not running.
         let base = loadEntry()
         let now = Date()
         var entries: [UsageEntry] = []
-        for i in 0..<6 {
+        for i in 0..<16 {
             let d = Calendar.current.date(byAdding: .minute, value: i, to: now)!
             entries.append(UsageEntry(date: d, providers: base.providers, updatedAt: base.updatedAt))
         }
-        let next = Calendar.current.date(byAdding: .minute, value: 5, to: now)!
+        let next = Calendar.current.date(byAdding: .minute, value: 15, to: now)!
         let resets = base.providers.flatMap { $0.bars.compactMap(\.resetDate) + $0.accounts.flatMap { $0.bars.compactMap(\.resetDate) } }
             .filter { $0 > now && $0 < next }
         for r in Set(resets) {

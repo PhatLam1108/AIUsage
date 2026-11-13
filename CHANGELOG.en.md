@@ -10,6 +10,7 @@ Follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Semantic V
 - Stopping AIUsage on the Nest Hub itself (by voice, by touch, or by casting something else) turns it off on the Mac too, so the Mac never takes the screen back.
 - AIUsage stays on the Nest Hub screen instead of giving way to the photo frame after about 10 minutes.
 - The Nest Hub now updates together with the widget even after the app is quit: after every fetch (every 5 minutes, or on refresh), the background job sends the new numbers to the display showing AIUsage. It only updates; it never opens AIUsage on the Nest Hub by itself.
+- The widget now changes as soon as a fetch finishes, together with the Nest Hub. It used to re-read on its own 5-minute clock and could show a new number almost 5 minutes late.
 
 ## [0.10.1] - 2026-11-11
 

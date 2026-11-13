@@ -10,6 +10,7 @@ Theo chuẩn [Keep a Changelog](https://keepachangelog.com/vi/1.1.0/) và [SemVe
 - Tắt AIUsage ngay trên Nest Hub (giọng nói, chạm, hay cast thứ khác lên) thì app trên Mac cũng tự tắt, không giành lại màn hình.
 - Màn hình AIUsage đứng yên trên Nest Hub, không bị Khung ảnh thay sau khoảng 10 phút.
 - Nest Hub cập nhật cùng lúc với widget kể cả khi đã thoát app: sau mỗi lần lấy số (5 phút một lần, hoặc khi bấm làm mới), tác vụ nền gửi số mới lên màn hình đang hiện AIUsage. Tác vụ này chỉ cập nhật, không bao giờ tự mở AIUsage trên Nest Hub.
+- Widget đổi số ngay khi lấy số xong, cùng lúc với Nest Hub. Trước đây widget tự đọc lại theo nhịp 5 phút riêng nên có lúc chậm gần 5 phút so với số mới.
 
 ## [0.10.1] - 2026-11-11
 

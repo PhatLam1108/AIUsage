@@ -5,6 +5,10 @@
 DIR="$(cd "$(dirname "$0")" && pwd)"
 ONE="$DIR/fetch_one.sh"
 
+# When the cache was last written, to tell afterwards whether this run brought anything new.
+stamp() { python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("updated_at",""))' "$HOME/.ai_usage_cache.json" 2>/dev/null; }
+BEFORE="$(stamp)"
+
 bash "$ONE" claude &
 bash "$ONE" codex &
 bash "$ONE" agy &
@@ -15,11 +19,12 @@ wait
 
 cat "$HOME/.ai_usage_cache.json" 2>/dev/null
 
-# Force a widget redraw ONLY for on-demand refreshes (widget/app button via the
-# trigger LaunchAgent). The scheduled 5-min run passes --scheduled and skips it:
-# 288 forced reloads/day would blow WidgetKit's ~40-70/day budget and freeze the
-# widget (the chronod trap in the README). The widget's own timeline re-reads
-# the cache every 5 min anyway, so scheduled data still shows up on its own.
+# Redraw the widget right after every run that brought new data, so the widget and the Cast
+# display change together. The widget's own timeline only re-reads the cache every 15 minutes as
+# a fallback: left to its own 5-minute clock it ran out of step with this job and showed each new
+# number up to 5 minutes late. Measured on macOS 27 (chronod log): 316 reloads a day served,
+# none refused, so one reload per run (288 a day) stays below what the widget already did.
+# A scheduled run that fetched nothing new (offline, every source off) skips the reload.
 #
 # NOT backgrounded: under the trigger LaunchAgent, launchd kills whatever is
 # left in the job's process group the moment this script exits, and the
@@ -32,7 +37,7 @@ APP_PATH="$(python3 -c 'import json,os,sys; print(json.load(open(sys.argv[1])).g
             "$HOME/Library/Application Support/AIUsage/config.json" 2>/dev/null)"
 APP="${APP_PATH:-/Applications/AIUsage.app}/Contents/MacOS/AIUsage"
 
-if [ "$1" != "--scheduled" ]; then
+if [ "$1" != "--scheduled" ] || [ "$(stamp)" != "$BEFORE" ]; then
   [ -x "$APP" ] && "$APP" --reload-widget >/dev/null 2>&1
 fi
 
