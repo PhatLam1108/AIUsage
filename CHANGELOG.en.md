@@ -12,6 +12,9 @@ Follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Semantic V
 - The Nest Hub now updates together with the widget even after the app is quit: after every fetch (every 5 minutes, or on refresh), the background job sends the new numbers to the display showing AIUsage. It only updates; it never opens AIUsage on the Nest Hub by itself.
 - The widget now changes as soon as a fetch finishes, together with the Nest Hub. It used to re-read on its own 5-minute clock and could show a new number almost 5 minutes late.
 
+### Changed
+- Each company's colour in the app is deeper and matches the Cast display: Claude orange, OpenAI green, Google blue. Antigravity and Gemini bars and rings use a blue gradient instead of blue, purple and pink. The Claude logo is redrawn in the new colour.
+
 ## [0.10.1] - 2026-11-11
 
 ### Fixed

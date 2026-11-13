@@ -16,18 +16,17 @@ extension Color {
         })
     }
 
-    // Brand palette — deeper in light mode (contrast on white), more vivid in
-    // dark mode (pop on black).
-    static let claude = Color(light: Color(red: 0.851, green: 0.467, blue: 0.341),
-                              dark:  Color(red: 0.940, green: 0.490, blue: 0.320))
-    static let openai = Color(light: Color(red: 0.063, green: 0.639, blue: 0.498),
-                              dark:  Color(red: 0.100, green: 0.740, blue: 0.580))
-    static let geminiBlue = Color(light: Color(red: 0.259, green: 0.522, blue: 0.957),
-                                  dark:  Color(red: 0.400, green: 0.620, blue: 1.000))
-    static let geminiPurple = Color(light: Color(red: 0.569, green: 0.408, blue: 0.753),
-                                    dark:  Color(red: 0.660, green: 0.510, blue: 0.860))
-    static let geminiPink = Color(light: Color(red: 0.851, green: 0.396, blue: 0.439),
-                                  dark:  Color(red: 0.960, green: 0.480, blue: 0.550))
+    // Brand palette: deeper in light mode (contrast on white), vivid in dark
+    // mode. Dark values match the Cast receiver, tuned so they don't wash out.
+    static let claude = Color(light: Color(red: 0.910, green: 0.353, blue: 0.118),   // #e85a1e
+                              dark:  Color(red: 1.000, green: 0.416, blue: 0.169))   // #ff6a2b
+    static let openai = Color(light: Color(red: 0.000, green: 0.639, blue: 0.443),   // #00a371
+                              dark:  Color(red: 0.000, green: 0.788, blue: 0.553))   // #00c98d
+    static let geminiBlue = Color(light: Color(red: 0.122, green: 0.431, blue: 1.000), // #1f6eff
+                                  dark:  Color(red: 0.239, green: 0.522, blue: 1.000)) // #3d85ff
+    // Lighter blue for the Antigravity / Gemini gradients (was purple and pink).
+    static let geminiSky = Color(light: Color(red: 0.302, green: 0.596, blue: 1.000),  // #4d98ff
+                                 dark:  Color(red: 0.416, green: 0.639, blue: 1.000))  // #6aa3ff
 
     // Neutral bar track — brand-tinted tracks turned muddy on the dark glass.
     static let barTrack    = Color(light: Color.black.opacity(0.09), dark: Color.white.opacity(0.10))
@@ -163,7 +162,7 @@ struct UsageBar: View {
             let fillPath = Path(roundedRect: CGRect(x: 0, y: 0, width: fillW, height: h), cornerRadius: r)
             if gradient {
                 ctx.fill(fillPath, with: .linearGradient(
-                    Gradient(colors: [.geminiBlue, .geminiPurple, .geminiPink]),
+                    Gradient(colors: [.geminiBlue, .geminiSky]),
                     startPoint: .zero, endPoint: CGPoint(x: size.width, y: 0)))
             } else {
                 ctx.fill(fillPath, with: .color(color))

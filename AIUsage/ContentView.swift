@@ -736,7 +736,7 @@ struct ContentView: View {
                 if !used.isEmpty { Divider().padding(.vertical, 2) }
                 ForEach(used.prefix(3)) { m in
                     ShareRow(name: m.id.replacingOccurrences(of: "gemini-", with: ""),
-                             pct: spent > 0 && m.priced ? Int((100 * m.cost / spent).rounded()) : 0, color: .geminiPurple,
+                             pct: spent > 0 && m.priced ? Int((100 * m.cost / spent).rounded()) : 0, color: .geminiBlue,
                              detail: String(localized: "\(m.requests) req, \(tokens(m.input)) vào, \(tokens(m.output)) ra, \(m.priced ? money(m.cost) : String(localized: "chưa có giá"))"))
                 }
             }
@@ -769,7 +769,7 @@ struct ContentView: View {
             if store.config.providers.gemini && !data.isEmpty {
                 HeatGrid(rows: rows, header: [String(localized: "T2"), String(localized: "T3"), String(localized: "T4"), String(localized: "T5"),
                                               String(localized: "T6"), String(localized: "T7"), String(localized: "calendar.sun", defaultValue: "CN", comment: "Sunday column of the spending calendar")],
-                         color: .geminiPurple)
+                         color: .geminiBlue)
             }
         }
     }

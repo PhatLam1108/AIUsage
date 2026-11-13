@@ -17,7 +17,6 @@
   --claude: #ff6a2b;
   --openai: #00c98d;
   --gemini: #3d85ff;
-  --gemini-api: #a883dc;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -98,7 +97,7 @@ html, body {
 /* Bars (Antigravity quotas, Claude API credit) */
 .bar { position: relative; height: 9px; margin-top: 8px; border-radius: 99px; background: var(--track); }
 .bar > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 99px; background: linear-gradient(90deg, var(--brand), var(--hi)); }
-.bar.grad > i { background: linear-gradient(90deg, #5b9bff, #b086f0, #ff8a95); }
+.bar.grad > i { background: linear-gradient(90deg, #3d85ff, #6aa3ff); }
 .bar > u {
   position: absolute; top: -4px; bottom: -4px; width: 2.5px; margin-left: -1.25px; border-radius: 2px;
   background: #ffffff; box-shadow: 0 0 0 1.5px rgba(10, 12, 18, 0.9);
@@ -151,7 +150,7 @@ html, body {
 .gem-run { text-align: right; }
 .gem-run b { display: block; font-size: 30px; font-weight: 750; line-height: 1.1; }
 .gem-run.warn b { color: var(--orange); }
-.gem-badge { --hi: #b48cff; }
+.gem-badge { --hi: #6aa3ff; }
 
 .login { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center; }
 .login b { font-size: 19px; color: var(--orange); }

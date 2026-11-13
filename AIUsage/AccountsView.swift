@@ -742,7 +742,7 @@ struct GeminiMark: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: size * 0.29, style: .continuous)
-                .fill(LinearGradient(colors: [.geminiBlue, .geminiPurple, .geminiPink], startPoint: .topLeading, endPoint: .bottomTrailing))
+                .fill(LinearGradient(colors: [.geminiSky, .geminiBlue], startPoint: .topLeading, endPoint: .bottomTrailing))
             Image(systemName: "sparkles").font(.system(size: size * 0.52, weight: .bold)).foregroundStyle(.white)
         }
         .frame(width: size, height: size)

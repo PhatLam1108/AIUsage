@@ -181,7 +181,7 @@ struct RingGauge: View {
             if value > 0 {
                 Circle()
                     .trim(from: 0, to: v)
-                    .stroke(gradient ? AnyShapeStyle(AngularGradient(colors: [.geminiBlue, .geminiPurple, .geminiPink, .geminiBlue], center: .center))
+                    .stroke(gradient ? AnyShapeStyle(AngularGradient(colors: [.geminiBlue, .geminiSky, .geminiBlue], center: .center))
                                      : AnyShapeStyle(color),
                             style: StrokeStyle(lineWidth: line, lineCap: .round))
                     .rotationEffect(.degrees(-90))

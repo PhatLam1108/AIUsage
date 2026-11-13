@@ -12,6 +12,9 @@ Theo chuẩn [Keep a Changelog](https://keepachangelog.com/vi/1.1.0/) và [SemVe
 - Nest Hub cập nhật cùng lúc với widget kể cả khi đã thoát app: sau mỗi lần lấy số (5 phút một lần, hoặc khi bấm làm mới), tác vụ nền gửi số mới lên màn hình đang hiện AIUsage. Tác vụ này chỉ cập nhật, không bao giờ tự mở AIUsage trên Nest Hub.
 - Widget đổi số ngay khi lấy số xong, cùng lúc với Nest Hub. Trước đây widget tự đọc lại theo nhịp 5 phút riêng nên có lúc chậm gần 5 phút so với số mới.
 
+### Changed
+- Màu của từng hãng trong app đậm hơn và khớp với màn hình Cast: cam Claude, xanh lá OpenAI, xanh dương Google. Thanh và vòng của Antigravity, Gemini dùng dải xanh dương thay cho dải xanh, tím, hồng. Logo Claude vẽ lại theo màu mới.
+
 ## [0.10.1] - 2026-11-11
 
 ### Fixed
