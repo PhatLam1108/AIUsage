@@ -166,6 +166,8 @@ screencapture -o -x -l <windowID> shot.png
 
 - `AIUSAGE_HOME` trỏ tới thư mục chứa `.ai_usage_cache.json` mẫu; ở chế độ này app không cài LaunchAgent và không chạy script lấy số, nên không ghi đè gì.
 - Chạy thẳng tệp thực thi thì không có cửa sổ; phải mở bằng `open -n`.
+- Bản sao dùng chung `defaults` với app thật: thêm `--args -castEnabled NO` để nó không gửi số mẫu lên màn hình Cast đang bật.
+- Ảnh màn hình Cast: `AIUSAGE_HOME=/thư/mục/mẫu AIUsage --cast-snapshot mau.json` xuất đúng snapshot mà màn hình Cast sẽ nhận, rồi mở `cast-receiver/index.html?demo&snapshot=<url của file>` ở cỡ 1024x600.
 - Quét lại ảnh và cache mẫu để chắc không còn tên máy, địa chỉ, ID project hay tên thư mục thật.
 
 ## Widget và các bẫy của chronod

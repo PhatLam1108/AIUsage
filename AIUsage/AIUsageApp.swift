@@ -21,6 +21,14 @@ struct AIUsageApp: App {
             CastOneShot.run()
             exit(0)
         }
+        // Screenshot tooling: `--cast-snapshot <file>` writes the snapshot the Cast display would get
+        // (with AIUSAGE_HOME, from sample data) for cast-receiver/index.html?demo&snapshot=<url>.
+        if let i = CommandLine.arguments.firstIndex(of: "--cast-snapshot"), i + 1 < CommandLine.arguments.count {
+            let snap = CastSnapshot.message(DashboardStore(), now: Date())
+            let data = try? JSONSerialization.data(withJSONObject: snap, options: [.prettyPrinted, .sortedKeys])
+            FileManager.default.createFile(atPath: CommandLine.arguments[i + 1], contents: data, attributes: [.posixPermissions: 0o600])
+            exit(data == nil ? 1 : 0)
+        }
         // Copy the bundled scripts and helper into Application Support and register the
         // background jobs; a no-op unless this build or its location is new.
         DispatchQueue.global(qos: .utility).async { RuntimeInstaller.installIfNeeded() }
