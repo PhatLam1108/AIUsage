@@ -14,9 +14,9 @@
   --orange: #ff9f45;
   --red: #ff6b6b;
   --green: #34c77b;
-  --claude: #f07d52;
-  --openai: #1abd94;
-  --gemini: #6b9eff;
+  --claude: #ff6a2b;
+  --openai: #00c98d;
+  --gemini: #3d85ff;
   --gemini-api: #a883dc;
 }
 
@@ -79,10 +79,11 @@ html, body {
   padding: 12px 12px 12px;
   display: flex; flex-direction: column; gap: 9px;
 }
-/* --rgb: the brand as numbers for tints; --hi: a lighter shade for fills and box titles */
-.claude { --brand: var(--claude); --rgb: 240, 125, 82; --hi: #ffb48e; }
-.openai { --brand: var(--openai); --rgb: 26, 189, 148; --hi: #6ff0cc; }
-.gemini { --brand: var(--gemini); --rgb: 107, 158, 255; --hi: #a9c8ff; }
+/* --rgb: the brand as numbers for tints; --hi: a brighter shade for fills and box titles.
+   Kept saturated: the Nest Hub panel washes pastel tints out to near white. */
+.claude { --brand: var(--claude); --rgb: 255, 106, 43; --hi: #ff8a50; }
+.openai { --brand: var(--openai); --rgb: 0, 201, 141; --hi: #1ee3a4; }
+.gemini { --brand: var(--gemini); --rgb: 61, 133, 255; --hi: #6aa3ff; }
 
 .c-head { display: flex; align-items: center; gap: 8px; min-height: 28px; }
 .c-head img { width: 30px; height: 30px; border-radius: 7px; flex: none; }
@@ -150,7 +151,7 @@ html, body {
 .gem-run { text-align: right; }
 .gem-run b { display: block; font-size: 30px; font-weight: 750; line-height: 1.1; }
 .gem-run.warn b { color: var(--orange); }
-.gem-badge { --hi: #cdb2f5; }
+.gem-badge { --hi: #b48cff; }
 
 .login { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center; }
 .login b { font-size: 19px; color: var(--orange); }

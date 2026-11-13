@@ -136,7 +136,7 @@
 
   function headHTML(c, brand, now) {
     var old = c.stale || (c.fetched && now - c.fetched > STALE_FETCH_MS);
-    return '<div class="c-head"><img src="img/' + brand + '.png" alt="">' +
+    return '<div class="c-head"><img src="img/' + brand + '.png?v=' + assetVersion() + '" alt="">' +
       '<div class="c-name">' + esc(c.name) + "</div>" +
       (c.plan ? '<div class="badge">' + esc(c.plan) + "</div>" : "") +
       (c.fetched ? '<div class="c-time' + (old ? " old" : "") + '">' + hhmm(c.fetched) + "</div>" : "") + "</div>";
@@ -324,11 +324,35 @@
     render();
   }
 
+  // ---------- Live update ----------
+  // The keep-alive video keeps this page open for days, and reopening the Mac app only rejoins it,
+  // so a deployed style change would never show. Poll index.html and swap in a newer stylesheet;
+  // the logos follow the stylesheet's version.
+  function assetVersion() {
+    var link = document.querySelector('link[href^="receiver.css"]');
+    var m = link && /v=(\d+)/.exec(link.getAttribute("href"));
+    return m ? m[1] : "0";
+  }
+
+  function checkUpdate() {
+    fetch("index.html?t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.text() : ""; })
+      .then(function (html) {
+        var m = /receiver\.css\?v=(\d+)/.exec(html);
+        var link = document.querySelector('link[href^="receiver.css"]');
+        if (!m || !link || m[1] === assetVersion()) return;
+        link.setAttribute("href", "receiver.css?v=" + m[1]);
+        if (snap) render();
+      })
+      .catch(function () {});
+  }
+
   // ---------- Start ----------
   fit();
   render();
   setInterval(tick, 1000);
   setInterval(function () { if (snap) render(); }, 60 * 1000);
+  setInterval(checkUpdate, 3 * 60 * 1000);
 
   if (demo) {
     // ?snapshot=<url>: a snapshot the Mac app saved (cast-snapshot.json), to design with real numbers.
