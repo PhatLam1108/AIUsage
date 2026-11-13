@@ -177,10 +177,15 @@
       '<div class="bar-gap"></div><div class="m-line">' + esc(line || "") + "&nbsp;</div></div>";
   }
 
-  function moneyCell(label, value, fraction, line) {
-    var f = Math.max(0, Math.min(1, Number(fraction) || 0));
-    return '<div class="mini"><div class="m-top"><span class="m-label">' + esc(label) + '</span><span class="m-val">' + esc(value) + "</span></div>" +
-      '<div class="bar"><i style="width:' + (f * 100).toFixed(1) + '%"></i></div><div class="m-line">' + esc(line || "") + "&nbsp;</div></div>";
+  // An amount of money with its caption underneath (API credit); fraction null means no bar.
+  function amountCell(value, fraction, line, small) {
+    var bar = '<div class="bar-gap"></div>';
+    if (fraction !== null) {
+      var f = Math.max(0, Math.min(1, Number(fraction) || 0));
+      bar = '<div class="bar"><i style="width:' + (f * 100).toFixed(1) + '%"></i></div>';
+    }
+    return '<div class="mini"><div class="m-top"><span class="m-val' + (small ? " sm" : "") + '">' + esc(value) + "</span></div>" +
+      bar + '<div class="m-line">' + esc(line || "") + "&nbsp;</div></div>";
   }
 
   function textBox(title, text, level) {
@@ -206,8 +211,11 @@
       boxes.push(box(t("resets"), cells));
     }
     if (c.credit && boxes.length < 3) {
-      boxes.push(box(c.credit.label, moneyCell(t("left"), c.credit.value, c.credit.fraction, c.credit.of) +
-        (c.credit.spent ? plainCell(c.credit.spentLabel || t("spent"), c.credit.spent, "") : '<div class="mini"></div>')));
+      // Two amounts side by side do not fit next to labels ("$186.40" beside "$13.60"), so here the
+      // amount stands alone on the top line and its label goes underneath; long pairs get smaller type.
+      var small = (String(c.credit.value) + String(c.credit.spent || "")).length > 13;
+      boxes.push(box(c.credit.label, amountCell(c.credit.value, c.credit.fraction, c.credit.of, small) +
+        (c.credit.spent ? amountCell(c.credit.spent, null, c.credit.spentLabel || t("spent"), small) : '<div class="mini"></div>'), "money"));
     }
     if (boxes.length < 3 && c.status && c.status.text) boxes.push(textBox(t("forecast"), c.status.text, c.status.level));
     return boxes.join("");

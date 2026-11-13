@@ -133,6 +133,10 @@ html, body {
 .m-label { white-space: nowrap; font-size: 15px; font-weight: 550; color: var(--muted); }
 .m-val { font-size: 32px; font-weight: 750; letter-spacing: -1px; line-height: 1; }
 .m-val.warn { color: var(--orange); } .m-val.crit { color: var(--red); } .m-val.none { color: var(--faint); }
+/* API credit: the balance takes the width it needs, the month's spend gets the rest */
+.acct.money .acct-row { grid-template-columns: auto minmax(0, 1fr); }
+.acct.money .m-val { white-space: nowrap; }
+.acct.money .m-val.sm { font-size: 26px; line-height: 32px; }
 .mini .bar { height: 6px; margin-top: 5px; }
 .mini .bar > u { top: -3px; bottom: -3px; width: 2px; margin-left: -1px; }
 .m-line { margin-top: 3px; line-height: 1.2; font-size: 15px; font-weight: 500; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
