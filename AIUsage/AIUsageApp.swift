@@ -15,6 +15,12 @@ struct AIUsageApp: App {
             RunLoop.main.run(until: Date().addingTimeInterval(1.8))
             exit(0)
         }
+        // Headless Cast mode: the refresh job runs this after each fetch so the Nest Hub follows the
+        // widget while the app is closed. Joins the session already on screen, sends, exits.
+        if CommandLine.arguments.contains("--cast-push") {
+            CastOneShot.run()
+            exit(0)
+        }
         // Copy the bundled scripts and helper into Application Support and register the
         // background jobs; a no-op unless this build or its location is new.
         DispatchQueue.global(qos: .utility).async { RuntimeInstaller.installIfNeeded() }

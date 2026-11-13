@@ -9,6 +9,7 @@ Follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Semantic V
 - The numbers go straight from the Mac to the display over the local network, with no server in between. Closing the app window keeps the display updating; reopening the app reconnects on its own. When the Mac sleeps for more than 20 minutes the display keeps the last numbers and says when the connection was lost.
 - Stopping AIUsage on the Nest Hub itself (by voice, by touch, or by casting something else) turns it off on the Mac too, so the Mac never takes the screen back.
 - AIUsage stays on the Nest Hub screen instead of giving way to the photo frame after about 10 minutes.
+- The Nest Hub now updates together with the widget even after the app is quit: after every fetch (every 5 minutes, or on refresh), the background job sends the new numbers to the display showing AIUsage. It only updates; it never opens AIUsage on the Nest Hub by itself.
 
 ## [0.10.1] - 2026-11-11
 

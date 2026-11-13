@@ -26,7 +26,7 @@ AIUsage.app (SwiftUI)            Widget (WidgetKit, sandbox)
 
 ```
 AIUsage/                 app
-  AIUsageApp.swift       @main; chế độ --reload-widget; gọi RuntimeInstaller
+  AIUsageApp.swift       @main; chế độ --reload-widget và --cast-push; gọi RuntimeInstaller
   ContentView.swift      bảng điều khiển một màn hình + ScreenHugger (cửa sổ cao bằng màn hình)
   DashboardStore.swift   đọc cache, hành động (làm mới, đăng nhập, dùng lượt reset), mục "Cần chú ý"
   Components.swift       ô hạn mức, heat grid, các khối dùng chung, định dạng số và tiền
@@ -98,6 +98,7 @@ AIUsage.app ── TLS :8009 (CASTV2) ──► Nest Hub ── tải ──► 
 - **App ID** đăng ký trong Google Cast SDK Developer Console, loại Custom Receiver, URL trỏ tới trang trên. App chưa Publish chỉ mở được trên thiết bị đã khai số serial trong Console (sau khi Ready phải khởi động lại thiết bị); thiết bị lạ trả `LAUNCH_ERROR NOT_FOUND`. Ghi đè để thử: `defaults write com.stevenlam.AIUsage castAppID <id>`.
 - **Sender** tự viết theo giao thức vì Google không có SDK sender cho macOS: TLS tới cổng 8009 (chứng chỉ tự ký, không kiểm), mỗi khung là độ dài 4 byte big-endian rồi protobuf `CastMessage`. Trình tự: CONNECT tới `receiver-0`, GET_STATUS, LAUNCH nếu app chưa chạy, CONNECT tới `transportId` của app, rồi gửi `{"type":"snapshot"}`. PING mỗi 5 giây; 20 giây không nghe gì thì đóng và thử lại (5 giây, gấp đôi dần tới 60 giây).
 - **Snapshot** dựng trong `CastSnapshot.build` từ một `DashboardStore` riêng của `CastController`, nên đóng cửa sổ app vẫn tiếp tục gửi. Gửi khi số đổi (kiểm mỗi 15 giây) và ít nhất 5 phút một lần; receiver báo "Mac ngắt kết nối" sau 20 phút im lặng. Chữ đã dịch sẵn theo ngôn ngữ của app.
+- **Khi đã thoát app:** `fetch_usage.sh` chạy `AIUsage --cast-push` sau mỗi lần lấy số (cả lần chạy theo lịch 5 phút), nếu `castEnabled` đang bật. `CastOneShot` dò đúng `castDeviceID`, CONNECT, GET_STATUS; chỉ khi receiver AIUsage đang chạy mới nối vào `transportId`, gửi một snapshot rồi thoát (thường dưới 2 giây, tối đa 15 giây). Không LAUNCH, không đổi thiết lập, nên màn hình người khác đã tắt vẫn tắt. Kết quả in ra stderr một dòng (`cast-push: sent`, `AIUsage not on screen, nothing sent`, `display not found`...), chạy tay để kiểm. Không chạy nền bằng `&` vì launchd giết cả nhóm tiến trình khi script thoát.
 - **Tôn trọng người đứng trước màn hình:** app AIUsage biến khỏi RECEIVER_STATUS (tắt bằng giọng nói, chạm, hay cast thứ khác lên) thì app tự tắt chế độ Cast, không mở lại. Chỉ lần người dùng chọn màn hình mới được LAUNCH; mở lại app trên Mac và các lần nối lại sau khi rớt mạng chỉ nối vào phiên đang chạy, không còn phiên thì tắt.
 - **Bảo mật:** Cast dùng chứng chỉ TLS tự ký và app không làm bước xác thực thiết bị của Google, nên một máy khác trong cùng mạng có thể giả làm Nest Hub đã chọn và nhận snapshot (tên tài khoản rút gọn, phần trăm hạn mức, số dư). Chấp nhận được cho mạng nhà; bộ giải mã protobuf kiểm biên trước mọi phép chuyển kiểu để khung tin xấu không làm app sập.
 - **Dò thiết bị** bằng Bonjour `_googlecast._tcp` (khai trong `AIUsage/Info.plist`, ghép với Info.plist sinh tự động), chỉ hiện thiết bị có bit 0 của TXT `ca` (có màn hình). Chỉ dò khi mở popover hoặc khi đang bật (đóng popover lúc đang tắt thì dừng dò), để người không dùng tính năng này không bị hỏi quyền mạng nội bộ.

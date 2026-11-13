@@ -9,6 +9,7 @@ Theo chuẩn [Keep a Changelog](https://keepachangelog.com/vi/1.1.0/) và [SemVe
 - Số liệu đi thẳng từ Mac tới màn hình trong mạng nội bộ, không qua máy chủ trung gian. Đóng cửa sổ app vẫn tiếp tục cập nhật; mở lại app thì tự nối lại. Mac ngủ quá 20 phút thì màn hình giữ số cũ và ghi rõ giờ mất kết nối.
 - Tắt AIUsage ngay trên Nest Hub (giọng nói, chạm, hay cast thứ khác lên) thì app trên Mac cũng tự tắt, không giành lại màn hình.
 - Màn hình AIUsage đứng yên trên Nest Hub, không bị Khung ảnh thay sau khoảng 10 phút.
+- Nest Hub cập nhật cùng lúc với widget kể cả khi đã thoát app: sau mỗi lần lấy số (5 phút một lần, hoặc khi bấm làm mới), tác vụ nền gửi số mới lên màn hình đang hiện AIUsage. Tác vụ này chỉ cập nhật, không bao giờ tự mở AIUsage trên Nest Hub.
 
 ## [0.10.1] - 2026-11-11
 

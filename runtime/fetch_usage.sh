@@ -27,10 +27,18 @@ cat "$HOME/.ai_usage_cache.json" 2>/dev/null
 # reload was killed every time — the widget only showed fresh data on a SECOND
 # press (WidgetKit reloads the timeline after any button intent, and by then
 # the cache from the first press was already fresh).
+# The installer records where the app lives (it may not be in /Applications).
+APP_PATH="$(python3 -c 'import json,os,sys; print(json.load(open(sys.argv[1])).get("app_path",""))' \
+            "$HOME/Library/Application Support/AIUsage/config.json" 2>/dev/null)"
+APP="${APP_PATH:-/Applications/AIUsage.app}/Contents/MacOS/AIUsage"
+
 if [ "$1" != "--scheduled" ]; then
-  # The installer records where the app lives (it may not be in /Applications).
-  APP_PATH="$(python3 -c 'import json,os,sys; print(json.load(open(sys.argv[1])).get("app_path",""))' \
-              "$HOME/Library/Application Support/AIUsage/config.json" 2>/dev/null)"
-  APP="${APP_PATH:-/Applications/AIUsage.app}/Contents/MacOS/AIUsage"
   [ -x "$APP" ] && "$APP" --reload-widget >/dev/null 2>&1
+fi
+
+# Keep the Cast display (Nest Hub) in step with the widget, on every run, app open or not: when
+# casting is on, the app joins the AIUsage session already on the display, sends the new numbers
+# and quits. It never launches anything there. Not backgrounded, for the launchd reason above.
+if [ "$(defaults read com.stevenlam.AIUsage castEnabled 2>/dev/null)" = "1" ]; then
+  [ -x "$APP" ] && "$APP" --cast-push >/dev/null 2>&1
 fi

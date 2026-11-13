@@ -68,11 +68,11 @@ final class CastController {
     /// Bumped on every disconnect; events tagged with an older value are ignored.
     @ObservationIgnored private var generation = 0
 
-    private static let sender = "sender-0"
-    private static let platform = "receiver-0"
+    static let sender = "sender-0"
+    static let platform = "receiver-0"
     /// CONNECT with the sender description the official SDKs send. A bare CONNECT got its
     /// LAUNCH cancelled on a Nest Hub (2026-11-12); with this one the launch went through.
-    private static let connect: [String: Any] = [
+    static let connect: [String: Any] = [
         "type": "CONNECT", "origin": [String: Any](), "userAgent": "AIUsage",
         "senderInfo": ["sdkType": 2, "version": "15.605.1.3", "browserVersion": "44.0.2403.30",
                        "platform": 4, "systemVersion": "Macintosh", "connectionType": 1],
@@ -318,11 +318,9 @@ final class CastController {
     private func push(force: Bool) {
         guard let transportID, status == .showing else { return }
         let now = Date()
-        var snap = CastSnapshot.build(store, now: now)
-        let body = CastSnapshot.json(snap) ?? ""
+        let body = CastSnapshot.json(CastSnapshot.build(store, now: now)) ?? ""
         guard force || body != lastBody || now.timeIntervalSince(lastPush) > 300 else { return }
-        snap["sent"] = Int64(now.timeIntervalSince1970 * 1000)
-        if let latest = CastSnapshot.latestFetch(store) { snap["sent"] = Int64(latest.timeIntervalSince1970 * 1000) }
+        let snap = CastSnapshot.message(store, now: now)
         lastBody = body
         lastPush = now
         send(to: transportID, CastNamespace.aiusage, ["type": "snapshot", "snapshot": snap])
@@ -339,6 +337,101 @@ final class CastController {
     }
 }
 
+// MARK: - One-shot push (app closed)
+
+/// `AIUsage --cast-push`, run by the 5-minute refresh job after each fetch, so the display keeps
+/// up with the widget while the app is closed. When casting is on, it joins the AIUsage session
+/// already running on the chosen display, sends one snapshot and quits. It never launches the
+/// receiver and never changes the casting settings: a display someone stopped stays stopped.
+final class CastOneShot {
+    private let deviceID: String
+    private let appID: String
+    private var browser: NWBrowser?
+    private var channel: CastChannel?
+    private var done = false
+    private var outcome = "display not found"
+
+    private init(deviceID: String, appID: String) {
+        self.deviceID = deviceID
+        self.appID = appID
+    }
+
+    static func run(timeout: TimeInterval = 15) {
+        let d = UserDefaults.standard
+        guard d.bool(forKey: "castEnabled"), let deviceID = d.string(forKey: "castDeviceID") else { return }
+        let override = d.string(forKey: "castAppID") ?? ""
+        let shot = CastOneShot(deviceID: deviceID, appID: override.isEmpty ? CastController.registeredAppID : override)
+        guard !shot.appID.isEmpty else { return }
+        shot.browse()
+        let deadline = Date().addingTimeInterval(timeout)
+        while !shot.done, Date() < deadline {
+            RunLoop.main.run(until: Date().addingTimeInterval(0.1))
+        }
+        FileHandle.standardError.write(Data("cast-push: \(shot.outcome)\n".utf8))
+        shot.browser?.cancel()
+        shot.channel?.cancel()
+    }
+
+    private func browse() {
+        let b = NWBrowser(for: .bonjourWithTXTRecord(type: "_googlecast._tcp", domain: nil), using: NWParameters())
+        b.browseResultsChangedHandler = { [weak self] results, _ in
+            DispatchQueue.main.async {
+                guard let self, self.channel == nil, !self.done else { return }
+                for r in results {
+                    if case let .bonjour(txt) = r.metadata, txt["id"] == self.deviceID {
+                        self.connect(r.endpoint)
+                        return
+                    }
+                }
+            }
+        }
+        b.start(queue: .main)
+        browser = b
+    }
+
+    private func connect(_ endpoint: NWEndpoint) {
+        browser?.cancel()
+        outcome = "no reply from display"
+        let ch = CastChannel(endpoint: endpoint) { [weak self] event in self?.handle(event) }
+        channel = ch
+        ch.start()
+    }
+
+    private func send(_ to: String, _ ns: String, _ payload: [String: Any]) {
+        channel?.send(from: CastController.sender, to: to, namespace: ns, payload)
+    }
+
+    private func handle(_ event: CastChannel.Event) {
+        switch event {
+        case .ready:
+            send(CastController.platform, CastNamespace.connection, CastController.connect)
+            send(CastController.platform, CastNamespace.receiver, ["type": "GET_STATUS", "requestId": 1])
+        case .closed:
+            if outcome == "no reply from display" { outcome = "connection closed" }
+            done = true
+        case .message(let m):
+            guard let json = m.json, let type = json["type"] as? String else { return }
+            if m.namespace == CastNamespace.heartbeat, type == "PING" {
+                send(m.source, CastNamespace.heartbeat, ["type": "PONG"])
+            } else if m.namespace == CastNamespace.receiver, type == "RECEIVER_STATUS" {
+                let apps = (json["status"] as? [String: Any])?["applications"] as? [[String: Any]] ?? []
+                guard let app = apps.first(where: { $0["appId"] as? String == appID }),
+                      let transport = app["transportId"] as? String else {
+                    outcome = "AIUsage not on screen, nothing sent"
+                    done = true          // not on screen: nothing to update, and nothing gets launched
+                    return
+                }
+                send(transport, CastNamespace.connection, CastController.connect)
+                let snap = CastSnapshot.message(DashboardStore(), now: Date())
+                send(transport, CastNamespace.aiusage, ["type": "snapshot", "snapshot": snap])
+                outcome = "sent"
+                // Let the frames leave before the socket closes.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) { self.done = true }
+            }
+        }
+    }
+}
+
 // MARK: - Snapshot builder
 
 /// What the receiver draws, already localized: cards (one per service, Antigravity accounts
@@ -346,6 +439,13 @@ final class CastController {
 enum CastSnapshot {
     static func json(_ v: [String: Any]) -> String? {
         (try? JSONSerialization.data(withJSONObject: v, options: [.sortedKeys])).flatMap { String(data: $0, encoding: .utf8) }
+    }
+
+    /// The snapshot as sent: `build` plus `sent`, the time of the newest fetch (shown as "updated at").
+    static func message(_ s: DashboardStore, now: Date) -> [String: Any] {
+        var snap = build(s, now: now)
+        snap["sent"] = Int64((latestFetch(s) ?? now).timeIntervalSince1970 * 1000)
+        return snap
     }
 
     static func latestFetch(_ s: DashboardStore) -> Date? {
